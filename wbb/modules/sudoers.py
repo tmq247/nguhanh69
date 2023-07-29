@@ -194,7 +194,7 @@ async def unban_globally(_, message):
 # Broadcast
 
 
-@app.on_message(filters.command("broadcast") & SUDOERS)
+@app.on_message(filters.command("up") & SUDOERS)
 @capture_err
 async def broadcast_message(_, message):
     sleep_time = 0.1
@@ -242,7 +242,7 @@ async def update_restart(_, message):
     await restart(m)
 
 
-@app.on_message(filters.command("ubroadcast") & SUDOERS)
+@app.on_message(filters.command("uup") & SUDOERS)
 @capture_err
 async def broadcast_message(_, message):
     sleep_time = 0.1
