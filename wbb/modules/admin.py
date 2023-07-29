@@ -442,14 +442,34 @@ async def list_unban_(c, message: Message):
 # Delete messages
 
 
+#@app.on_message(filters.command("del") & ~filters.private)
+#@adminsOnly("can_delete_messages")
+#async def deleteFunc(_, message: Message):
+#    if not message.reply_to_message:
+#        return await message.reply_text("Trả lời một tin nhắn để xóa nó")
+#    await message.reply_to_message.delete()
+#    await message.delete()
+
 @app.on_message(filters.command("del") & ~filters.private)
 @adminsOnly("can_delete_messages")
 async def deleteFunc(_, message: Message):
+    user_id = await extract_user(message)#
+    user = await app.get_users(user_id)#
+    from_user = message.from_user#
     if not message.reply_to_message:
         return await message.reply_text("Trả lời một tin nhắn để xóa nó")
-    await message.reply_to_message.delete()
-    await message.delete()
-
+    served_chats = await get_served_chats()
+    number_of_chats = 0
+    for served_chat in served_chats:
+        try:
+            await app2.delete_user_history(served_chat["chat_id"], user.id)
+            number_of_chats += 1
+            await asyncio.sleep(1)
+        except FloodWait as e:
+            await asyncio.sleep(int(e.value))
+        except Exception:
+            pass
+            
 
 # Promote Members
 
