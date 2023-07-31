@@ -49,9 +49,8 @@ __HELP__ = """[UPVOTE] - Sử dụng các từ khóa ủng hộ như "+", "+1", 
 Trả lời tin nhắn bằng /nghiep để kiểm tra nghiệp lực của người dùng
 Gửi /nghiep mà không trả lời bất kỳ tin nhắn nào để kiểm tra danh sách 10 người dùng hàng đầu"""
 
-regex_upvote = r"^(\++|\+1|tks|nice|iu|Iu|thankyou|thank you|giỏi|thanks|pro|cool|good|like|dú lép|Dú lép|👍|\++ .+)$"
-regex_downvote = r"^(-+|-1|Gay|bê đê|Bê đê|gay|non|Non|👎|gà|Gà|Lỏ|lỏ|Thằng lỏ|Chê|chê|-+ .+)$"
-
+regex_upvote = r"^(-+|-1|Gay|bê đê|Bê đê|gay|non|Non|👎|gà|Gà|Lỏ|lỏ|Thằng lỏ|Chê|chê|-+ .+)$"
+regex_downvote = r"^(\++|\+1|tks|nice|iu|Iu|thankyou|thank you|giỏi|thanks|pro|cool|good|like|dú lép|Dú lép|👍|\++ .+)$"
 
 @app.on_message(
     filters.text
