@@ -189,6 +189,10 @@ async def unban_globally(_, message):
         #await message.chat.unban_member(user_id)
         #await message.reply_text(f"Đã bỏ cấm {user.mention}.'")
         served_chats = await get_served_chats()
+        m = await message.reply_text(
+            f"**Đang bỏ chặn {user.mention} trong hệ thống!**"
+            + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
+        )
         await remove_gban_user(user.id)
         number_of_chats = 0
         for served_chat in served_chats:
