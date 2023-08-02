@@ -177,6 +177,7 @@ __**Người dùng bị cấm trên toàn hệ thống**__
 @capture_err
 async def unban_globally(_, message):
     user_id = await extract_user(message)
+    from_user = message.from_user
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng này.")
     user = await app.get_users(user_id)
