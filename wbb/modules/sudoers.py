@@ -185,9 +185,45 @@ async def unban_globally(_, message):
     if not is_gbanned:
         await message.reply_text("Tôi không nhớ đã cấm người này trên toàn hệ thống.")
     else:
+        #await remove_gban_user(user.id)
+        #await message.chat.unban_member(user_id)
+        #await message.reply_text(f"Đã bỏ cấm {user.mention}.'")
+        served_chats = await get_served_chats()
         await remove_gban_user(user.id)
-        await message.chat.unban_member(user_id)
-        await message.reply_text(f"Đã bỏ cấm {user.mention}.'")
+        number_of_chats = 0
+        for served_chat in served_chats:
+            try:
+                await app.unban_chat_member(served_chat["chat_id"], user.id)
+                number_of_chats += 1
+                await asyncio.sleep(1)
+            except FloodWait as e:
+                await asyncio.sleep(int(e.value))
+            except Exception:
+                pass
+        await m.edit(f"Đã bỏ chặn {user.mention} trên toàn hệ thống!")
+        mute_text = f"""
+__**Người dùng được bỏ chặn**__
+**Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention}
+**Mở chặn người dùng:** {user.mention}
+**ID người dùng đã mở chặn:** `{user_id}`
+**Số nhóm:** `{number_of_chats}`"""
+        try:
+            m2 = await app.send_message(
+                FMUTE_LOG_GROUP_ID,
+                text=mute_text,
+                disable_web_page_preview=True,
+            )
+            await m.edit(
+                f"Đã bỏ chặn {user.mention} trên toàn hệ thống!\n Bởi: {from_user.mention}",
+                disable_web_page_preview=True,
+            )
+        except Exception:
+            await message.reply_text(
+                "Người dùng đã được bỏ chặn, nhưng hành động này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
+            )
+
+
 
 
 
