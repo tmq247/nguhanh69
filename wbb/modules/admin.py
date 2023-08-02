@@ -851,8 +851,10 @@ __**Người dùng được xác nhận**__
             await message.reply_text(
                 "Người dùng đã được xác nhận, nhưng hành động này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
             )
-#huy xacnhan
-@app.on_message(filters.command("huy") & ~filters.private)
+
+
+#huyxacnhan
+@app.on_message(filters.command("huy") & SUDOERS)
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def unmute_globally(_, message):
@@ -943,7 +945,7 @@ async def warn_user(_, message: Message):
 **Số cảnh báo:** {warns + 1}/3"""
         await message.reply_text(msg, reply_markup=keyboard)
         await add_warn(chat_id, await int_to_alpha(user_id), warn)
-
+        
 
 @app.on_callback_query(filters.regex("unwarn_"))
 async def remove_warning(_, cq: CallbackQuery):
