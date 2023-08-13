@@ -783,11 +783,10 @@ __**Người dùng bị cấm chat toàn hệ thống bằng chế độ im lặ
 
 #out
 @app.on_message(filters.command("out") & ~filters.private)
-@adminsOnly("can_restrict_members")
 #@capture_err
 async def out(_, message: Message):
     from_user = message.from_user
-    await message.reply_text("from_user đã rời khỏi nhóm.")
+    await message.reply_text("{from_user.mention} đã rời khỏi nhóm.")
 
 # Unfmute
 
