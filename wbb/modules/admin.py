@@ -916,7 +916,8 @@ async def check(_, message: Message):
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def xacnhan(_, message):
-    user_id = await extract_user(message)
+    user_id, reason = await extract_user_and_reason(message)
+    from_user = message.from_user
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng này.")
     user = await app.get_users(user_id)
@@ -934,12 +935,11 @@ async def xacnhan(_, message):
         #await message.reply_text(f"Đã xác nhận {user.mention}.'")
         #await m.edit(f"Đã xác nhận {user.mention} trên toàn hệ thống!")
         mute_text = f"""
-__**Người dùng được xác nhận**__
+__**Người dùng được xác nhận **__
 **Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention}
 **Xác nhận người dùng:** {user.mention}
 **Note:** __{reason or 'None.'}__
-**Số nhóm:** `{number_of_chats}`"""
         try:
             await app.send_message(
                 FMUTE_LOG_GROUP_ID,
