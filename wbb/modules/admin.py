@@ -884,7 +884,7 @@ async def huyxacnhan(_, message):
         return await message.reply_text("Tôi không nhớ đã xác nhận người này trên hệ thống.")
     else:
         await remove_active_user(user.id)
-        await message.reply_text(f"Đã huỷ xác nhận {user.mention}.'")
+        await message.reply_text(f"Đã huỷ xác nhận {user.mention}. ")
     await app.send_message(
                 FMUTE_LOG_GROUP_ID,
                 f"""
@@ -944,7 +944,7 @@ async def xacnhan(_, message):
     else:
         await add_active_user(user.id)
         #await remove_active_user(user.id)
-        await message.reply_text(f"Đã xác nhận {user.mention}.'")
+        await message.reply_text(f"Đã xác nhận {user.mention}. ")
     await app.send_message(
                 FMUTE_LOG_GROUP_ID,
                 f"""
