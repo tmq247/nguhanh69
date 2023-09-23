@@ -891,7 +891,7 @@ async def huyxacnhan(_, message):
 __**Người dùng đã bị hủy xác nhận**__
 **Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention}
-**Xác nhận người dùng:** {user.mention}
+**Hủy xác nhận người dùng:** {user.mention}
 **ID người dùng bị hủy xác nhận:** `{user_id}`
 **Note:** __{reason or 'None.'}__""",
                 disable_web_page_preview=True,
@@ -952,7 +952,7 @@ __**Người dùng được xác nhận bằng lệnh**__
 **Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention}
 **Xác nhận người dùng:** {user.mention}
-**ID người dùng đã mở chat:** `{user_id}`
+**ID người dùng được xác nhận:** `{user_id}`
 **Note:** __{reason or 'None.'}__""",
                 disable_web_page_preview=True,
             )
