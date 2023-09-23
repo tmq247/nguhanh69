@@ -941,7 +941,7 @@ __**Người dùng được xác nhận**__
 **Lúc:** __{reason or 'None.'}__
 **Số nhóm:** `{number_of_chats}`"""
         try:
-            m2 = await app.send_message(
+        await app.send_message(
                 FMUTE_LOG_GROUP_ID,
                 text=mute_text,
                 disable_web_page_preview=True,
