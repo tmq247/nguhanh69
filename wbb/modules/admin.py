@@ -900,14 +900,14 @@ async def check(_, message: Message):
     if not is_fmuted:
         await message.reply_text("Người này chưa được xác nhận.")
 
-    if user_id in is_fmuted:
+    if is_fmuted:
         await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
 
     is_actived = await is_actived_user(user.id)
-    if not is_fmuted:
+    if not is_actived:
         await message.reply_text("Người này chưa được xác nhận.")
 
-    if user_id in is_actived_user:
+    if is_actived_user:
         await message.reply_text("Người này đã được xác nhận.")
 
 
@@ -921,12 +921,12 @@ async def xacnhan(_, message):
         return await message.reply_text("Tôi không thể tìm thấy người dùng này.")
     user = await app.get_users(user_id)
 
-     is_fmuted = await is_fmuted_user(user.id)
-    if user_id in is_fmuted:
+    is_fmuted = await is_fmuted_user(user.id)
+    if is_fmuted:
         await message.reply_text("Người này đã bị cấm chat và đang đợi xác nhận.")
 
     is_actived = await is_actived_user(user.id)
-    if user_id in is_actived:
+    if is_actived:
         await message.reply_text("Người này đã được xác nhận, không cần xác nhận lại.")
     else:
         await add_active_user(user.id)
