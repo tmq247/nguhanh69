@@ -667,10 +667,10 @@ async def mute_globally(_, message: Message):
         return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
     
     if is_fmuted:
-        return await message.reply_text(f"**Người dùng id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
+        return await message.reply_text(f"**Người có id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
 
     if is_actived:
-        return await message.reply_text(f"**Người dùng id {user_id} đã được xác nhận.**")
+        return await message.reply_text(f"**Người có id {user_id} đã được xác nhận.**")
         
     served_chats = await get_served_chats()
     m = await message.reply_text(
@@ -696,9 +696,9 @@ async def mute_globally(_, message: Message):
         #)
     try:
         await app2.send_message(
+            user.mention,
             f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
             f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
-            user.id,
         )
     except Exception:
         pass
