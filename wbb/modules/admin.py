@@ -695,8 +695,8 @@ async def mute_globally(_, message: Message):
             #f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
         #)
     try:
-        await app2.send_message(
-            user_id,
+        await app.send_message(
+            user.id,
             f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
             f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
         )
@@ -789,7 +789,7 @@ __**Người dùng bị cấm chat toàn hệ thống bằng chế độ im lặ
 
 #out
 @app.on_message(filters.command("out") & ~filters.private)
-@adminsOnly("can_restrict_members")
+#@adminsOnly("can_restrict_members")
 async def out(_, message: Message):
     user_id = await extract_user(message)
     if not user_id:
@@ -836,7 +836,7 @@ async def unmute_globally(_, message: Message):
             except Exception:
                 pass
         try:
-            await app2.send_message(
+            await app.send_message(
                 user.id,
                 f"Xin chào, Bạn đã được {from_user.mention} bỏ cấm chat trên toàn hệ thống,"
                 + " Hãy tham gia trò chuyện cùng chúng tôi tại https://t.me/addlist/7WPWA3xQCGQ3NTlh .",
@@ -870,9 +870,9 @@ __**Người dùng được xác nhận**__
 
 #huyxacnhan
 @app.on_message(filters.command("huy") & SUDOERS)
-@adminsOnly("can_restrict_members")
+#@adminsOnly("can_restrict_members")
 #@capture_err
-async def unmute_globally(_, message):
+async def huyxacnhan(_, message):
     user_id = await extract_user(message)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng này.")
@@ -885,6 +885,54 @@ async def unmute_globally(_, message):
         await remove_active_user(user.id)
         await message.reply_text(f"Đã huỷ xác nhận {user.mention}.'")
 
+#check
+@app.on_message(filters.command("check") & ~filters.private)
+#@adminsOnly("can_restrict_members")
+#@capture_err
+async def check(_, message: Message):
+    user_id = await extract_user(message)
+    from_user = message.from_user
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
+    user = await app.get_users(user_id)
+
+    is_fmuted = await is_fmuted_user(user.id)
+    if not is_fmuted:
+        await message.reply_text("Người này chưa được xác nhận.")
+
+    if user_id in is_fmuted:
+        await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
+
+    is_actived = await is_actived_user(user.id)
+    if not is_fmuted:
+        await message.reply_text("Người này chưa được xác nhận.")
+
+    if user_id in is_actived_user:
+        await message.reply_text("Người này đã được xác nhận.")
+
+
+#xacnhan
+@app.on_message(filters.command("xacnhan") & SUDOERS)
+#@adminsOnly("can_restrict_members")
+#@capture_err
+async def xacnhan(_, message):
+    user_id = await extract_user(message)
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng này.")
+    user = await app.get_users(user_id)
+
+     is_fmuted = await is_fmuted_user(user.id)
+    if user_id in is_fmuted:
+        await message.reply_text("Người này đã bị cấm chat và đang đợi xác nhận.")
+
+    is_actived = await is_actived_user(user.id)
+    if user_id in is_actived:
+        await message.reply_text("Người này đã được xác nhận, không cần xác nhận lại.")
+    else:
+        await add_active_user(user.id)
+        #await remove_active_user(user.id)
+        await message.reply_text(f"Đã xác nhận {user.mention}.'")
+    
 
 
 # Ban deleted accounts
