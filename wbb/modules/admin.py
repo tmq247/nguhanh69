@@ -873,7 +873,8 @@ __**Người dùng được xác nhận**__
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def huyxacnhan(_, message):
-    user_id = await extract_user(message)
+    user_id, reason = await extract_user_and_reason(message)
+    from_user = message.from_user
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng này.")
     user = await app.get_users(user_id)
