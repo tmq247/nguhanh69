@@ -931,20 +931,28 @@ async def xacnhan(_, message):
     else:
         await add_active_user(user.id)
         #await remove_active_user(user.id)
-        await message.reply_text(f"Đã xác nhận {user.mention}.'")
+        #await message.reply_text(f"Đã xác nhận {user.mention}.'")
+        await m.edit(f"Đã xác nhận {user.mention} trên toàn hệ thống!")
         mute_text = f"""
 __**Người dùng được xác nhận**__
 **Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention}
-**Mở chat người dùng:** {user.mention}
-**ID người dùng đã mở chat:** `{user_id}`
-**Lúc:** __{reason or 'None.'}__
+**Xác nhận người dùng:** {user.mention}
+**Note:** __{reason or 'None.'}__
 **Số nhóm:** `{number_of_chats}`"""
         try:
-        await app.send_message(
+            m2 = await app.send_message(
                 FMUTE_LOG_GROUP_ID,
                 text=mute_text,
                 disable_web_page_preview=True,
+            )
+            await m.edit(
+                f"Đã xác nhận {user.mention} trên toàn hệ thống!\n Bởi: {from_user.mention}",
+                disable_web_page_preview=True,
+            )
+        except Exception:
+            await message.reply_text(
+                "Người dùng đã được xác nhận, nhưng hành động này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
             )
     
 
