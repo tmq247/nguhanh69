@@ -688,11 +688,17 @@ async def mute_globally(_, message: Message):
             await asyncio.sleep(int(e.value))
         except Exception:
             pass
+    #try:
+       # await app2.send_message(
+            #user.id,
+            #f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
+            #f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
+        #)
     try:
         await app2.send_message(
-            user.id,
             f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
             f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
+            user.id,
         )
     except Exception:
         pass
