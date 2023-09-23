@@ -870,7 +870,7 @@ __**Người dùng được xác nhận**__
 
 #huyxacnhan
 @app.on_message(filters.command("huy") & SUDOERS)
-#@adminsOnly("can_restrict_members")
+@adminsOnly("can_restrict_members")
 #@capture_err
 async def huyxacnhan(_, message):
     user_id = await extract_user(message)
@@ -880,7 +880,7 @@ async def huyxacnhan(_, message):
 
     is_actived = await is_actived_user(user.id)
     if not is_actived:
-        await message.reply_text("Tôi không nhớ đã xác nhận người này trên hệ thống.")
+        return await message.reply_text("Tôi không nhớ đã xác nhận người này trên hệ thống.")
     else:
         await remove_active_user(user.id)
         await message.reply_text(f"Đã huỷ xác nhận {user.mention}.'")
@@ -901,11 +901,11 @@ async def check(_, message: Message):
     #   await message.reply_text("Người này chưa được xác nhận.")
 
     if is_fmuted:
-        await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
+        return await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
 
     is_actived = await is_actived_user(user.id)
     if is_actived:
-        await message.reply_text("Người này đã được xác nhận.")
+        return await message.reply_text("Người này đã được xác nhận.")
 
     else:
         await message.reply_text("Người này chưa được xác nhận.")
@@ -913,7 +913,7 @@ async def check(_, message: Message):
 
 #xacnhan
 @app.on_message(filters.command("xacnhan") & SUDOERS)
-#@adminsOnly("can_restrict_members")
+@adminsOnly("can_restrict_members")
 #@capture_err
 async def xacnhan(_, message):
     user_id = await extract_user(message)
@@ -923,15 +923,29 @@ async def xacnhan(_, message):
 
     is_fmuted = await is_fmuted_user(user.id)
     if is_fmuted:
-        await message.reply_text("Người này đã bị cấm chat và đang đợi xác nhận.")
+        return await message.reply_text("Người này đã bị cấm chat và đang đợi xác nhận.")
 
     is_actived = await is_actived_user(user.id)
     if is_actived:
-        await message.reply_text("Người này đã được xác nhận, không cần xác nhận lại.")
+        return await message.reply_text("Người này đã được xác nhận, không cần xác nhận lại.")
     else:
         await add_active_user(user.id)
         #await remove_active_user(user.id)
         await message.reply_text(f"Đã xác nhận {user.mention}.'")
+        mute_text = f"""
+__**Người dùng được xác nhận**__
+**Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention}
+**Mở chat người dùng:** {user.mention}
+**ID người dùng đã mở chat:** `{user_id}`
+**Lúc:** __{reason or 'None.'}__
+**Số nhóm:** `{number_of_chats}`"""
+        try:
+            m2 = await app.send_message(
+                FMUTE_LOG_GROUP_ID,
+                text=mute_text,
+                disable_web_page_preview=True,
+            )
     
 
 
