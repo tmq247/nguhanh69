@@ -794,7 +794,7 @@ async def out(_, message: Message):
     user_id = await extract_user(message)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
-    await message.chat.unban_member(user_id)
+    #await message.chat.unban_member(user_id)
     umention = (await app.get_users(user_id)).mention
     await message.reply_text(f"{umention} đã rời khỏi nhóm")
 
@@ -897,18 +897,18 @@ async def check(_, message: Message):
     user = await app.get_users(user_id)
 
     is_fmuted = await is_fmuted_user(user.id)
-    if not is_fmuted:
-        await message.reply_text("Người này chưa được xác nhận.")
+    #if not is_fmuted:
+    #   await message.reply_text("Người này chưa được xác nhận.")
 
     if is_fmuted:
         await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
 
     is_actived = await is_actived_user(user.id)
-    if not is_actived:
-        await message.reply_text("Người này chưa được xác nhận.")
-
-    if is_actived_user:
+    if is_actived:
         await message.reply_text("Người này đã được xác nhận.")
+
+    else:
+        await message.reply_text("Người này chưa được xác nhận.")
 
 
 #xacnhan
