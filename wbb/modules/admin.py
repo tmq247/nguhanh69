@@ -664,13 +664,13 @@ async def mute_globally(_, message: Message):
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
 
     if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS:
-        return await message.reply_text("Tôi không thể tắt tiếng người dùng đó.")
+        return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
     
     if is_fmuted:
-        return await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
+        return await message.reply_text("Người dùng id {user_id} đã bị cấm chat và đang đợi admin xác nhận .")
 
     if is_actived:
-        return await message.reply_text("Người này đã được xác nhận.")
+        return await message.reply_text("Người dùng id {user_id} đã được xác nhận.")
         
     served_chats = await get_served_chats()
     m = await message.reply_text(
@@ -689,9 +689,9 @@ async def mute_globally(_, message: Message):
         except Exception:
             pass
     try:
-        await app.send_message(
+        await app2.send_message(
             user.id,
-            f"Xin chào, Bạn đã bị cấm chat toàn hệ thống bởi {from_user.mention},"
+            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
             f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
         )
     except Exception:
@@ -739,13 +739,13 @@ async def mute_globally(_, message: Message):
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
 
     if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS:
-        return await message.reply_text("Tôi không thể tắt tiếng người dùng đó.")
+        return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
     
     if is_fmuted:
-        #return await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
-        return await app.copy_message(FMUTE_LOG_GROUP_ID, user.id)
+        return await message.reply_text("Người này id {user_id} đã bị cấm chat và đang đợi admin xác nhận .")
+        
     if is_actived:
-        return await message.reply_text("Người này đã được xác nhận.")
+        return await message.reply_text("Người này id {user_id} đã được xác nhận.")
         
     served_chats = await get_served_chats()
     await add_fmute_user(user_id)
@@ -830,10 +830,10 @@ async def unmute_globally(_, message: Message):
             except Exception:
                 pass
         try:
-            await app.send_message(
+            await app2.send_message(
                 user.id,
                 f"Xin chào, Bạn đã được {from_user.mention} bỏ cấm chat trên toàn hệ thống,"
-                + " Hãy tham gia trò chuyện cùng chúng tôi tại @nguhanh69 .",
+                + " Hãy tham gia trò chuyện cùng chúng tôi tại https://t.me/addlist/7WPWA3xQCGQ3NTlh .",
             )
         except Exception:
             pass
