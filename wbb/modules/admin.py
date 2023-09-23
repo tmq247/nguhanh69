@@ -743,7 +743,7 @@ async def mute_globally(_, message: Message):
     
     if is_fmuted:
         #return await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
-        return await app.copy_message(to_chat, FMUTE_LOG_GROUP_ID, user.id)
+        return await app.copy_message(chat.id, FMUTE_LOG_GROUP_ID, user.id)
     if is_actived:
         return await message.reply_text("Người này đã được xác nhận.")
         
