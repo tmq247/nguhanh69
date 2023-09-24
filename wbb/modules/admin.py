@@ -692,8 +692,8 @@ async def mute_globally(_, message: Message):
     try:
         await app.send_message(
             user.id,
-            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
-            f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
+            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason},"
+            f" Bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.",
         )
     except Exception:
         pass
@@ -776,7 +776,7 @@ async def mute_globally(_, message: Message):
         await app.send_message(
             user.id,
             f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
-            f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
+            f" Bạn hãy gửi ib cho admin {reason or from_user.mention} để mở chat.",
         )
     except Exception:
         pass
