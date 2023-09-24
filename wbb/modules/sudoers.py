@@ -161,7 +161,7 @@ __**Người dùng bị cấm trên toàn hệ thống**__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"""Đã cấm {user.mention} trên toàn hệ thống bởi {from_user.mention}!!!""",
+            f"""Đã cấm {user.mention} trên toàn hệ thống bởi {from_user.mention}!!! Lý do: {reason}""",
             disable_web_page_preview=True,
         )
     except Exception:
