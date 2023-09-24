@@ -699,7 +699,7 @@ async def mute_globally(_, message: Message):
         pass
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
-__**Người dùng bị cấm chat toàn hệ thống**__
+__**Người dùng bị fmute toàn hệ thống **__
 **Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention}
 **Người dùng bị cấm chat:** {user.mention}
@@ -713,7 +713,8 @@ __**Người dùng bị cấm chat toàn hệ thống**__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"""**Người dùng {user.mention} bị cấm chat toàn hệ thống . Bởi : {from_user.mention} . Lý do : __{reason}__ . **""",
+            f"""**Người dùng** {user.mention} **bị cấm chat toàn hệ thống.** 
+            **Bởi:** {from_user.mention}**. Lý do: __{reason}__ . **""",
             disable_web_page_preview=True,
         )
     except Exception:
