@@ -140,8 +140,8 @@ async def ban_globally(_, message):
     try:
         await app.send_message(
             user.id,
-            f"Xin chào, Bạn đã bị cấm trên toàn hệ thống bởi {from_user.mention},"
-            f" Bạn có thể khiếu nại lệnh cấm này bằng cách nói chuyện với {from_user.mention}.",
+            f"Xin chào, Bạn đã bị cấm ở {message.chat.title} bởi {from_user.mention} với lý do: {reason},"
+            f" Bạn có thể khiếu nại lệnh cấm này bằng cách ib cho {from_user.mention}.",
         )
     except Exception:
         pass
