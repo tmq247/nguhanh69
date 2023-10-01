@@ -712,10 +712,12 @@ __**Người dùng bị fmute toàn hệ thống **__
             text=mute_text,
             disable_web_page_preview=True,
         )
+        lydo_text = f"""
+**🔥Người dùng {user.mention} đã bị đeo rọ mõm 👙.**
+**Bởi: {from_user.mention}.**
+**Lý do: __{reason}__.**"""
         await m.edit(
-            f"""**🔥Người dùng {user.mention} đã bị đeo rọ mõm 👙.**"""
-            f"""**Bởi: {from_user.mention}.**"""
-            f"""**Lý do: __{reason}__.**""",
+            text=lydo_text,
             disable_web_page_preview=True,
         )
     except Exception:
