@@ -713,8 +713,8 @@ __**Người dùng bị fmute toàn hệ thống **__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"""**Người dùng** {user.mention} **bị cấm chat toàn hệ thống.** 
-            **Bởi:** {from_user.mention}**. Lý do: __{reason}__ . **""",
+            f"""**Người dùng {user.mention} đã bị đeo rọ mõm bỡi {from_user.mention}**
+            **Lý do: __{reason}__.**""",
             disable_web_page_preview=True,
         )
     except Exception:
