@@ -713,7 +713,8 @@ __**Người dùng bị fmute toàn hệ thống **__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"""**Người dùng {user.mention} đã bị đeo rọ mõm bỡi {from_user.mention}**
+            f"""**🔥Người dùng {user.mention} đã bị đeo rọ mõm 👙.**
+            **Bởi: {from_user.mention}.**
             **Lý do: __{reason}__.**""",
             disable_web_page_preview=True,
         )
