@@ -70,7 +70,7 @@ __HELP__ = """/ban - cấm người dùng
 /unb - Bỏ cấm người dùng
 /listban - Cấm người dùng khỏi các nhóm được liệt kê trong một tin nhắn
 /listunban - Bỏ cấm người dùng khỏi các nhóm được liệt kê trong thông báo
-/w - Cảnh báo người dùng
+/wa - Cảnh báo người dùng
 /dw - Xóa tin nhắn đã trả lời cảnh báo người gửi
 /uw - Xóa tất cả cảnh báo của người dùng
 /ws - Hiển thị cảnh báo của người dùng
