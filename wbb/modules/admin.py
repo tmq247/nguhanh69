@@ -1024,10 +1024,10 @@ async def check(_, message: Message):
 
     is_actived = await is_actived_user(user.id)
     if is_actived:
-        return await message.reply_text("**{user.mention} UY TÍN đã được admin check.**")
+        return await message.reply_text(f"**{user.mention} UY TÍN đã được admin check.**")
 
     else:
-        await message.reply_text("{user.mention} chưa được admin check.")
+        await message.reply_text(f"{user.mention} chưa được admin check.")
 
 
 #xacnhan
