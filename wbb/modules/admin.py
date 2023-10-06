@@ -1005,7 +1005,7 @@ async def check(_, message: Message):
 
 
 #checkidol
-@app.on_message(filters.command("checkidol") & ~filters.private)
+@app.on_message(filters.command("idol") & ~filters.private)
 #@adminsOnly("can_restrict_members")
 #@capture_err
 async def check(_, message: Message):
@@ -1020,7 +1020,7 @@ async def check(_, message: Message):
     #   await message.reply_text("Người này chưa được xác nhận.")
 
     if is_fmuted:
-        return await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
+        return await message.reply_text("Người này đã bị cấm chat và đang đợi admin check .")
 
     is_actived = await is_actived_user(user.id)
     if is_actived:
