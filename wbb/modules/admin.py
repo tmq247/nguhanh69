@@ -1004,6 +1004,32 @@ async def check(_, message: Message):
         await message.reply_text("Người này chưa được xác nhận.")
 
 
+#checkidol
+@app.on_message(filters.command("checkidol") & ~filters.private)
+#@adminsOnly("can_restrict_members")
+#@capture_err
+async def check(_, message: Message):
+    user_id = await extract_user(message)
+    from_user = message.from_user
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
+    user = await app.get_users(user_id)
+
+    is_fmuted = await is_fmuted_user(user.id)
+    #if not is_fmuted:
+    #   await message.reply_text("Người này chưa được xác nhận.")
+
+    if is_fmuted:
+        return await message.reply_text("Người này đã bị cấm chat và đang đợi admin xác nhận .")
+
+    is_actived = await is_actived_user(user.id)
+    if is_actived:
+        return await message.reply_text("**{user.mention} đã được admin check UY TÍN.**")
+
+    else:
+        await message.reply_text("{user.mention} chưa được admin check.")
+
+
 #xacnhan
 @app.on_message(filters.command("xacnhan") & SUDOERS)
 @adminsOnly("can_restrict_members")
