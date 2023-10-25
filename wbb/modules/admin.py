@@ -505,7 +505,7 @@ async def promoteFunc(_, message: Message):
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã thăng cấp full quyền cho {umention}")
+        return await message.reply_text(f"Đã cấp mod full quyền cho {umention}")
 
     if message.command[0] == "mod0":
         await message.chat.promote_member(
@@ -521,7 +521,7 @@ async def promoteFunc(_, message: Message):
                 can_manage_video_chats=False,
             ),
         )
-        return await message.reply_text(f"Đã thăng cấp mod cấp 0 cho {umention}")
+        return await message.reply_text(f"Đã cấp mod cấp 0 cho {umention}")
 
     if message.command[0] == "mod1":
         await message.chat.promote_member(
@@ -529,7 +529,7 @@ async def promoteFunc(_, message: Message):
             privileges=ChatPrivileges(
                 can_change_info=False,
                 can_invite_users=bot.can_invite_users,
-                can_delete_messages=False,
+                can_delete_messages=bot.can_delete_messages,
                 can_restrict_members=False,
                 can_pin_messages=False,
                 can_promote_members=False,
@@ -537,7 +537,7 @@ async def promoteFunc(_, message: Message):
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã thăng cấp mod cấp 1 cho {umention}")
+        return await message.reply_text(f"Đã cấp mod cấp 1 cho {umention}")
 
     if message.command[0] == "mod2":
         await message.chat.promote_member(
@@ -546,14 +546,14 @@ async def promoteFunc(_, message: Message):
                 can_change_info=False,
                 can_invite_users=bot.can_invite_users,
                 can_delete_messages=bot.can_delete_messages,
-                can_restrict_members=bot.can_restrict_members,
+                can_restrict_members=False,
                 can_pin_messages=False,
                 can_promote_members=False,
                 can_manage_chat=bot.can_manage_chat,
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã thăng cấp mod cấp 2 cho {umention}")
+        return await message.reply_text(f"Đã cấp mod cấp 2 cho {umention}")
 
     if message.command[0] == "mod3":
         await message.chat.promote_member(
@@ -564,12 +564,12 @@ async def promoteFunc(_, message: Message):
                 can_delete_messages=bot.can_delete_messages,
                 can_restrict_members=bot.can_restrict_members,
                 can_pin_messages=bot.can_pin_messages,
-                can_promote_members=bot.can_promote_members,
+                can_promote_members=False,
                 can_manage_chat=bot.can_manage_chat,
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã thăng cấp mod cấp 3 cho {umention}")
+        return await message.reply_text(f"Đã cấp mod cấp 3 cho {umention}")
 
 
         
