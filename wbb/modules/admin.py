@@ -512,7 +512,7 @@ async def promoteFunc(_, message: Message):
             user_id=user_id,
             privileges=ChatPrivileges(
                 can_change_info=False,
-                can_invite_users=False,
+                can_invite_users=bot.can_invite_users,
                 can_delete_messages=False,
                 can_restrict_members=False,
                 can_pin_messages=False,
