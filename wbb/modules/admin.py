@@ -474,7 +474,7 @@ async def deleteFunc(_, message: Message):
 # Promote Members
 
 
-@app.on_message(filters.command(["pm", "fullpromote"]) & ~filters.private)
+@app.on_message(filters.command(["promote", "fullmod", "mod0", "mod1", "mod2", "mod3"]) & ~filters.private)
 @adminsOnly("can_promote_members")
 async def promoteFunc(_, message: Message):
     user_id = await extract_user(message)
@@ -505,8 +505,75 @@ async def promoteFunc(_, message: Message):
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã thăng cấp full quyền! {umention}")
+        return await message.reply_text(f"Đã thăng cấp full quyền cho {umention}")
 
+    if message.command[0] == "mod0":
+        await message.chat.promote_member(
+            user_id=user_id,
+            privileges=ChatPrivileges(
+                can_change_info=False,
+                can_invite_users=False,
+                can_delete_messages=False,
+                can_restrict_members=False,
+                can_pin_messages=False,
+                can_promote_members=False,
+                can_manage_chat=False,
+                can_manage_video_chats=False,
+            ),
+        )
+        return await message.reply_text(f"Đã thăng cấp mod cấp 0 cho {umention}")
+
+    if message.command[0] == "mod1":
+        await message.chat.promote_member(
+            user_id=user_id,
+            privileges=ChatPrivileges(
+                can_change_info=False,
+                can_invite_users=bot.can_invite_users,
+                can_delete_messages=False,
+                can_restrict_members=False,
+                can_pin_messages=False,
+                can_promote_members=False,
+                can_manage_chat=False,
+                can_manage_video_chats=bot.can_manage_video_chats,
+            ),
+        )
+        return await message.reply_text(f"Đã thăng cấp mod cấp 1 cho {umention}")
+
+    if message.command[0] == "mod2":
+        await message.chat.promote_member(
+            user_id=user_id,
+            privileges=ChatPrivileges(
+                can_change_info=False,
+                can_invite_users=bot.can_invite_users,
+                can_delete_messages=bot.can_delete_messages,
+                can_restrict_members=bot.can_restrict_members,
+                can_pin_messages=False,
+                can_promote_members=False,
+                can_manage_chat=bot.can_manage_chat,
+                can_manage_video_chats=bot.can_manage_video_chats,
+            ),
+        )
+        return await message.reply_text(f"Đã thăng cấp mod cấp 2 cho {umention}")
+
+    if message.command[0] == "mod3":
+        await message.chat.promote_member(
+            user_id=user_id,
+            privileges=ChatPrivileges(
+                can_change_info=False,
+                can_invite_users=bot.can_invite_users,
+                can_delete_messages=bot.can_delete_messages,
+                can_restrict_members=bot.can_restrict_members,
+                can_pin_messages=bot.can_pin_messages,
+                can_promote_members=bot.can_promote_members,
+                can_manage_chat=bot.can_manage_chat,
+                can_manage_video_chats=bot.can_manage_video_chats,
+            ),
+        )
+        return await message.reply_text(f"Đã thăng cấp mod cấp 3 cho {umention}")
+
+
+        
+        
     await message.chat.promote_member(
         user_id=user_id,
         privileges=ChatPrivileges(
@@ -526,7 +593,7 @@ async def promoteFunc(_, message: Message):
 # Demote Member
 
 
-@app.on_message(filters.command("demote") & ~filters.private)
+@app.on_message(filters.command("hamod") & ~filters.private)
 @adminsOnly("can_promote_members")
 async def demote(_, message: Message):
     user_id = await extract_user(message)
@@ -552,7 +619,7 @@ async def demote(_, message: Message):
         ),
     )
     umention = (await app.get_users(user_id)).mention
-    await message.reply_text(f"Đã giáng cấp! {umention}")
+    await message.reply_text(f"Đã hạ mod {umention}")
 
 
 # Pin Messages
