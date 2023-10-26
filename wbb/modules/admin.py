@@ -546,7 +546,7 @@ async def promoteFunc(_, message: Message):
                 can_change_info=False,
                 can_invite_users=bot.can_invite_users,
                 can_delete_messages=bot.can_delete_messages,
-                can_restrict_members=False,
+                can_restrict_members=bot.can_restrict_members,
                 can_pin_messages=False,
                 can_promote_members=False,
                 can_manage_chat=bot.can_manage_chat,
