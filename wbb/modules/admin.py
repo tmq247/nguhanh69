@@ -474,7 +474,7 @@ async def deleteFunc(_, message: Message):
 # Promote Members
 
 
-@app.on_message(filters.command(["promote", "fullmod", "mod0", "mod1", "mod2", "mod3"]) & ~filters.private)
+@app.on_message(filters.command(["modfull", "modvip", "mod0", "mod1", "mod2", "mod3"]) & ~filters.private)
 @adminsOnly("can_promote_members")
 async def promoteFunc(_, message: Message):
     user_id = await extract_user(message)
@@ -491,7 +491,7 @@ async def promoteFunc(_, message: Message):
 
     umention = (await app.get_users(user_id)).mention
     
-    if message.command[0][0] == "f":
+    if message.command[0] == "modvip":
         await message.chat.promote_member(
             user_id=user_id,
             privileges=ChatPrivileges(
@@ -505,7 +505,7 @@ async def promoteFunc(_, message: Message):
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã cấp mod full quyền cho {umention}")
+        return await message.reply_text(f"Đã cấp mod vip cho {umention}")
 
     if message.command[0] == "mod0":
         await message.chat.promote_member(
@@ -577,17 +577,17 @@ async def promoteFunc(_, message: Message):
     await message.chat.promote_member(
         user_id=user_id,
         privileges=ChatPrivileges(
-            can_change_info=False,
+            can_change_info=bot.can_change_info,
             can_invite_users=bot.can_invite_users,
             can_delete_messages=bot.can_delete_messages,
-            can_restrict_members=False,
-            can_pin_messages=False,
-            can_promote_members=False,
+            can_restrict_members=bot.can_restrict_members,
+            can_pin_messages=bot.can_pin_messages,
+            can_promote_members=bot.can_promote_members,
             can_manage_chat=bot.can_manage_chat,
             can_manage_video_chats=bot.can_manage_video_chats,
         ),
     )
-    await message.reply_text(f"Đã thăng cấp! {umention}")
+    await message.reply_text(f"Đã cấp mod full quyền cho {umention}")
 
 
 # Demote Member
