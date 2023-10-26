@@ -605,7 +605,8 @@ async def demote(_, message: Message):
         return await message.reply_text(
             "Bạn muốn giáng cấp Một ĐẤNG? Không được đâu!"
         )
-    await message.chat.promote_member(
+    #await message.chat.promote_member(
+    await app.promote_chat_memberr(
         user_id=user_id,
         privileges=ChatPrivileges(
             can_change_info=False,
