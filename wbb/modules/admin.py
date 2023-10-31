@@ -64,7 +64,7 @@ from wbb.utils.dbfunctions import (
 )
 
 __MODULE__ = "Admin"
-__HELP__ = """/ban - cấm người dùng
+__HELP__ = """/ba - cấm người dùng
 /db - Xóa tin nhắn đã trả lời cấm người gửi
 /tb - Cấm người dùng trong thời gian cụ thể
 /unb - Bỏ cấm người dùng
@@ -74,7 +74,7 @@ __HELP__ = """/ban - cấm người dùng
 /dw - Xóa tin nhắn đã trả lời cảnh báo người gửi
 /uw - Xóa tất cả cảnh báo của người dùng
 /ws - Hiển thị cảnh báo của người dùng
-/k - Kick A User
+/ki - Kick A User
 /dk - Xóa tin nhắn đã trả lời đá người gửi của nó
 /purge - Xóa tin nhắn
 /purge [n] - Xóa số lượng tin nhắn "n" khỏi tin nhắn đã trả lời
@@ -212,7 +212,7 @@ async def purgeFunc(_, message: Message):
 # Kick members
 
 
-@app.on_message(filters.command(["k", "dk"]) & ~filters.private)
+@app.on_message(filters.command(["ki", "dk"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def kickFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
@@ -244,7 +244,7 @@ async def kickFunc(_, message: Message):
 # Ban members
 
 
-@app.on_message(filters.command(["ban", "db", "tb"]) & ~filters.private)
+@app.on_message(filters.command(["ba", "db", "tb"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def banFunc(_, message: Message):
     user_id, reason = await extract_user_and_reason(message, sender_chat=True)
