@@ -456,8 +456,8 @@ async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
     user = await app.get_users(user_id)#
     from_user = message.from_user#
-    if not message.reply_to_message:
-        return await message.reply_text("Trả lời một tin nhắn để xóa nó")
+    #if not message.reply_to_message:
+        #return await message.reply_text("Trả lời một tin nhắn để xóa nó")
     served_chats = await get_served_chats()
     number_of_chats = 0
     for served_chat in served_chats:
