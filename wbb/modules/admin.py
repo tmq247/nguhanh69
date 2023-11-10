@@ -78,7 +78,7 @@ __HELP__ = """/ba - cấm người dùng
 /dk - Xóa tin nhắn đã trả lời đá người gửi của nó
 /purge - Xóa tin nhắn
 /purge [n] - Xóa số lượng tin nhắn "n" khỏi tin nhắn đã trả lời
-/del - Xóa tin nhắn đã trả lời
+/d - Xóa tin nhắn đã trả lời
 /promote - Thăng cấp thành viên
 /fullpromote - Thăng cấp thành viên có mọi quyền
 /demote - giáng cấp một thành viên
