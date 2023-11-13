@@ -450,14 +450,14 @@ async def list_unban_(c, message: Message):
 #    await message.reply_to_message.delete()
 #    await message.delete()
 
-@app.on_message(filters.command("d") & ~filters.private)
+@app.on_message(filters.command(["d", "del"]) & ~filters.private)
 @adminsOnly("can_delete_messages")
 async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
     user = await app.get_users(user_id)#
     from_user = message.from_user#
-    if not message.reply_to_message:
-        return await message.reply_text("Trả lời một tin nhắn để xóa nó")
+    if not user_id: #message.reply_to_message:
+        return await message.reply_text("không tìm thấy người này")
     served_chats = await get_served_chats()
     number_of_chats = 0
     for served_chat in served_chats:
