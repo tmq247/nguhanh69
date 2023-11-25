@@ -625,7 +625,7 @@ async def demote(_, message: Message):
 # Pin Messages
 
 
-@app.on_message(filters.command(["pin", "unpin"]) & ~filters.private)
+@app.on_message(filters.command(["pi", "upi"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def pin(_, message: Message):
     if not message.reply_to_message:
