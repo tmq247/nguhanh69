@@ -626,7 +626,7 @@ async def demote(_, message: Message):
 
 
 @app.on_message(filters.command(["pin", "unpin"]) & ~filters.private)
-@adminsOnly("can_pin_messages")
+@adminsOnly("can_restrict_members")
 async def pin(_, message: Message):
     if not message.reply_to_message:
         return await message.reply_text("Trả lời tin nhắn để ghim/bỏ ghim tin nhắn đó.")
