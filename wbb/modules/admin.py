@@ -633,18 +633,29 @@ async def pin(_, message: Message):
     r = message.reply_to_message
     if message.command[0][0] == "u":
         await r.unpin()
-        return await message.reply_text(
+        boghim = await message.reply_text(
             f"**Đã bỏ ghim tin nhắn [this]({r.link}).**",
             disable_web_page_preview=True,
         )
+        await asyncio.sleep(10)
+        await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=boghim.id,
+            revoke=True,)
+        return
     await r.pin(disable_notification=True)
-    await message.reply(
-        f"**Đã ghim tin nhắn [this]({r.link}).**",
+    ghim = await message.reply(
+        f"**Đã ghim tin nhắn [này]({r.link}).**",
         disable_web_page_preview=True,
     )
     msg = "Vui lòng kiểm tra tin nhắn đã ghim: ~ " + f"[Check, {r.link}]"
     filter_ = dict(type="text", data=msg)
     await save_filter(message.chat.id, "~pinned", filter_)
+    await asyncio.sleep(10)
+    await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=ghim.id,
+            revoke=True,)
 
 
 # Mute members
@@ -735,10 +746,22 @@ async def mute_globally(_, message: Message):
         return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
     
     if is_fmuted:
-        return await message.reply_text(f"**Người có id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
+        muted = await message.reply_text(f"**Người có id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
+        await asyncio.sleep(10)
+        await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=muted.id,
+            revoke=True,)
+        return
 
     if is_actived:
-        return await message.reply_text(f"**Người có id {user_id} đã được xác nhận.**")
+        actived = await message.reply_text(f"**Người có id {user_id} đã được xác nhận.**")
+        await asyncio.sleep(10)
+        await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=actived.id,
+            revoke=True,)
+        return 
         
     served_chats = await get_served_chats()
     m = await message.reply_text(
@@ -815,10 +838,22 @@ async def mute_globally(_, message: Message):
         return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
     
     if is_fmuted:
-        return await message.reply_text(f"**Người có id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
+        fmuted = await message.reply_text(f"**Người có id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
+        await asyncio.sleep(10)
+        await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=fmuted.id,
+            revoke=True,)
+        return 
 
     if is_actived:
-        return await message.reply_text(f"**Người có id {user_id} đã được xác nhận.**")
+        actived = await message.reply_text(f"**Người có id {user_id} đã được xác nhận.**")
+        await asyncio.sleep(10)
+        await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=actived.id,
+            revoke=True,)
+        return 
         
     served_chats = await get_served_chats()
     m = await message.reply_text(
@@ -896,10 +931,22 @@ async def mute_globally(_, message: Message):
         return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
     
     if is_fmuted:
-        return await message.reply_text(f"**Người này id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
+        fmuted = await message.reply_text(f"**Người này id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
+        await asyncio.sleep(10)
+        await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=fmuted.id,
+            revoke=True,)
+        return 
         
     if is_actived:
-        return await message.reply_text(f"**Người này id {user_id} đã được xác nhận.**")
+        actived = await message.reply_text(f"**Người này id {user_id} đã được xác nhận.**")
+        await asyncio.sleep(10)
+        await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=actived.id,
+            revoke=True,)
+        return 
         
     served_chats = await get_served_chats()
     await add_fmute_user(user_id)
