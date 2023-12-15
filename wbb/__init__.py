@@ -43,7 +43,6 @@ else:
 
 USERBOT_PREFIX = USERBOT_PREFIX
 GBAN_LOG_GROUP_ID = GBAN_LOG_GROUP_ID
-FMUTE_LOG_GROUP_ID = FMUTE_LOG_GROUP_ID
 WELCOME_DELAY_KICK_SEC = WELCOME_DELAY_KICK_SEC
 LOG_GROUP_ID = LOG_GROUP_ID
 MESSAGE_DUMP_CHAT = MESSAGE_DUMP_CHAT
@@ -62,26 +61,26 @@ class Log:
         print(f"[+]: {msg}")
         if self.save_to_file:
             with open(self.file_name, "a") as f:
-                f.write(f"[THÔNG TIN]({time.ctime(time.time())}): {msg}\n")
+                f.write(f"[INFO]({time.ctime(time.time())}): {msg}\n")
 
     def error(self, msg):
         print(f"[-]: {msg}")
         if self.save_to_file:
             with open(self.file_name, "a") as f:
-                f.write(f"[LỖI]({time.ctime(time.time())}): {msg}\n")
+                f.write(f"[ERROR]({time.ctime(time.time())}): {msg}\n")
 
 
 log = Log(True, "bot.log")
 
 # MongoDB client
-log.info("Đang khởi tạo ứng dụng khách MongoDB")
+log.info("Initializing MongoDB client")
 mongo_client = MongoClient(MONGO_URL)
 db = mongo_client.wbb
 
 
 async def load_sudoers():
     global SUDOERS
-    log.info("Đang tải sudoers")
+    log.info("Loading sudoers")
     sudoersdb = db.sudoers
     sudoers = await sudoersdb.find_one({"sudo": "sudo"})
     sudoers = [] if not sudoers else sudoers["sudoers"]
@@ -111,7 +110,10 @@ if not SESSION_STRING:
     )
 else:
     app2 = Client(
-        name="userbot", api_id=API_ID, api_hash=API_HASH, session_string=SESSION_STRING
+        name="userbot",
+        api_id=API_ID,
+        api_hash=API_HASH,
+        session_string=SESSION_STRING,
     )
 
 aiohttpsession = ClientSession()
@@ -120,12 +122,12 @@ arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 
 app = Client("wbb", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
-log.info("Bắt đầu máy khách bot")
+log.info("Starting bot client")
 app.start()
-log.info("Bắt đầu ứng dụng khách userbot")
+log.info("Starting userbot client")
 app2.start()
 
-log.info("Thu thập thông tin hồ sơ")
+log.info("Gathering profile info")
 x = app.get_me()
 y = app2.get_me()
 
@@ -144,7 +146,7 @@ USERBOT_DC_ID = y.dc_id
 if USERBOT_ID not in SUDOERS:
     SUDOERS.add(USERBOT_ID)
 
-log.info("Đang khởi tạo máy khách Telegraph")
+log.info("Initializing Telegraph client")
 telegraph = Telegraph(domain="graph.org")
 telegraph.create_account(short_name=BOT_USERNAME)
 
