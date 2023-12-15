@@ -67,13 +67,13 @@ class Log:
         print(f"[-]: {msg}")
         if self.save_to_file:
             with open(self.file_name, "a") as f:
-                f.write(f"[ERROR]({time.ctime(time.time())}): {msg}\n")
+                f.write(f"[LỖI]({time.ctime(time.time())}): {msg}\n")
 
 
 log = Log(True, "bot.log")
 
 # MongoDB client
-log.info("Initializing MongoDB client")
+log.info("Đang khởi tạo ứng dụng khách MongoDB")
 mongo_client = MongoClient(MONGO_URL)
 db = mongo_client.wbb
 
