@@ -21,13 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
 from asyncio import gather
 from datetime import datetime, timedelta
 from io import BytesIO
 from math import atan2, cos, radians, sin, sqrt
 from os import execvp
 from random import randint
-from re import findall
+from re import findall, search
 from re import sub as re_sub
 from sys import executable
 
@@ -36,6 +37,7 @@ import speedtest
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
+from pyrogram import errors
 
 from wbb import aiohttpsession as aiosession
 from wbb.utils.dbfunctions import start_restart_stage
@@ -166,7 +168,7 @@ async def time_converter(message: Message, time_value: str) -> datetime:
     currunt_time = datetime.now()
     time_digit = time_value[:-1]
     if not time_digit.isdigit():
-        return await message.reply_text("Thời gian không chính xác được chỉ định")
+        return await message.reply_text("Incorrect time specified")
     if check_unit == "m":
         temp_time = currunt_time + timedelta(minutes=int(time_digit))
     elif check_unit == "h":
@@ -180,7 +182,7 @@ async def time_converter(message: Message, time_value: str) -> datetime:
 
 async def extract_userid(message, text: str):
     """
-    KHÔNG ĐƯỢC SỬ DỤNG BÊN NGOÀI TẬP TIN NÀY
+    NOT TO BE USED OUTSIDE THIS FILE
     """
 
     def is_int(text: str):
@@ -212,38 +214,43 @@ async def extract_user_and_reason(message, sender_chat=False):
     text = message.text
     user = None
     reason = None
-    if message.reply_to_message:
-        reply = message.reply_to_message
-        # if reply to a message and no reason is given
-        if not reply.from_user:
-            if (
-                reply.sender_chat
-                and reply.sender_chat != message.chat.id
-                and sender_chat
-            ):
-                id_ = reply.sender_chat.id
+
+    try:
+        if message.reply_to_message:
+            reply = message.reply_to_message
+            # if reply to a message and no reason is given
+            if not reply.from_user:
+                if (
+                    reply.sender_chat
+                    and reply.sender_chat != message.chat.id
+                    and sender_chat
+                ):
+                    id_ = reply.sender_chat.id
+                else:
+                    return None, None
             else:
-                return None, None
-        else:
-            id_ = reply.from_user.id
+                id_ = reply.from_user.id
 
-        if len(args) < 2:
-            reason = None
-        else:
-            reason = text.split(None, 1)[1]
-        return id_, reason
+            if len(args) < 2:
+                reason = None
+            else:
+                reason = text.split(None, 1)[1]
+            return id_, reason
 
-    # if not reply to a message and no reason is given
-    if len(args) == 2:
-        user = text.split(None, 1)[1]
-        return await extract_userid(message, user), None
+        # if not reply to a message and no reason is given
+        if len(args) == 2:
+            user = text.split(None, 1)[1]
+            return await extract_userid(message, user), None
 
-    # if reason is given
-    if len(args) > 2:
-        user, reason = text.split(None, 2)[1:]
-        return await extract_userid(message, user), reason
+        # if reason is given
+        if len(args) > 2:
+            user, reason = text.split(None, 2)[1:]
+            return await extract_userid(message, user), reason
 
-    return user, reason
+        return user, reason
+
+    except errors.UsernameInvalid:
+        return "", ""
 
 
 async def extract_user(message):
@@ -313,6 +320,64 @@ def extract_text_and_keyb(ikb, text: str, row_width: int = 2):
     except Exception:
         return
     return text, keyboard
+
+
+async def check_format(ikb, raw_text: str):
+    keyb = findall(r"\[.+\,.+\]", raw_text)
+    if keyb and not "~" in raw_text:
+        raw_text = raw_text.replace("button=", "\n~\nbutton=")
+        return raw_text
+    if "~" in raw_text and not keyb:
+        raw_text = raw_text.replace("~", "")
+        return raw_text
+    if "~" in raw_text and keyb:
+        if not extract_text_and_keyb(ikb, raw_text):
+            return ""
+        else:
+            return raw_text
+    else:
+        return raw_text
+
+
+async def get_data_and_name(replied_message, message):
+    text = (
+        message.text.markdown if message.text else message.caption.markdown
+    )
+    name = text.split(None, 1)[1].strip()
+    text = name.split(" ", 1)
+    if len(text) > 1:
+        name = text[0]
+        data = text[1].strip()
+        if replied_message and (
+            replied_message.sticker or replied_message.video_note
+        ):
+            data = None
+    else:
+        if replied_message and (
+            replied_message.sticker or replied_message.video_note
+        ):
+            data = None
+        elif (
+            replied_message
+            and not replied_message.text
+            and not replied_message.caption
+        ):
+            data = None
+        else:
+            data = (
+                replied_message.text.markdown
+                if replied_message.text
+                else replied_message.caption.markdown
+            )
+            command = search(r'\[\'(.*?)\'(?:, \'(.*?)\')*\]', str(message.command)).group(1)
+            match = f"/{command} " + name
+            if not message.reply_to_message and message.text:
+                if match == data:
+                    data ="error"
+            elif not message.reply_to_message and not message.text:
+                if match == data:
+                    data = None
+    return data, name
 
 
 async def get_user_id_and_usernames(client) -> dict:
