@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 import re
-from time import time
+from datetime import datetime, timedelta
 
 from pyrogram import filters
 from pyrogram.types import ChatPermissions
@@ -53,7 +53,9 @@ async def save_filters(_, message):
         return await message.reply_text("Usage:\n/blacklist [WORD|SENTENCE]")
     word = message.text.split(None, 1)[1].strip()
     if not word:
-        return await message.reply_text("**Usage**\n__/blacklist [WORD|SENTENCE]__")
+        return await message.reply_text(
+            "**Usage**\n__/blacklist [WORD|SENTENCE]__"
+        )
     chat_id = message.chat.id
     await save_blacklist_filter(chat_id, word)
     await message.reply_text(f"__**Blacklisted {word}.**__")
@@ -106,10 +108,11 @@ async def blacklist_filters_re(_, message):
             if user.id in await list_admins(chat_id):
                 return
             try:
+                await message.delete()
                 await message.chat.restrict_member(
                     user.id,
                     ChatPermissions(),
-                    until_date=int(time() + 3600),
+                    until_date=datetime.now() + timedelta(minutes=60),
                 )
             except Exception:
                 return
