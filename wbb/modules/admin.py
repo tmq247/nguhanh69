@@ -454,7 +454,7 @@ async def list_unban_(c, message: Message):
 @adminsOnly("can_delete_messages")
 async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
-    user = await app.get_users(user_id)#
+    #user = await app.get_users(user_id)#
     from_user = message.from_user#
     if not user_id: #message.reply_to_message:
         return await message.reply_text("không tìm thấy người này")
