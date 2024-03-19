@@ -978,8 +978,8 @@ __**Người dùng bị cấm chat toàn hệ thống bằng chế độ im lặ
     except Exception:
             pass
 
-    if message.reply_to_message:
-        await message.reply_to_message.delete()
+    #if message.reply_to_message:
+        #await message.reply_to_message.delete()
 
 
 #out
