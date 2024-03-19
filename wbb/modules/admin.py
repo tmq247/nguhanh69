@@ -463,7 +463,7 @@ async def deleteFunc(_, message: Message):
     actived = await message.reply_text(
         f"**Đang xóa trong khoảng {len(served_chats)} giây.**"
     )
-    await asyncio.sleep(10)
+    await asyncio.sleep(len(served_chats))
     await app.delete_messages(
         chat_id=message.chat.id,
         message_ids=actived.id,
