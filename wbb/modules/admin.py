@@ -875,7 +875,7 @@ async def mute_globally(_, message: Message):
         except Exception:
             pass
         try:
-            await app2.delete_user_history(served_chat["chat_id"], user.id)
+            await app2.delete_user_history(served_chat["chat_id"], user_id)
             #number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
@@ -972,7 +972,7 @@ async def mute_globally(_, message: Message):
         except Exception:
             pass
         try:
-            await app2.delete_user_history(served_chat["chat_id"], user.id)
+            await app2.delete_user_history(served_chat["chat_id"], user_id)
             #number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
