@@ -450,7 +450,7 @@ async def list_unban_(c, message: Message):
 #    await message.reply_to_message.delete()
 #    await message.delete()
 
-@app.on_message(filters.command(["d", "del"]) & ~filters.private)
+@app2.on_message(filters.command(["d", "del"]) & ~filters.private)
 @adminsOnly("can_delete_messages")
 async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
