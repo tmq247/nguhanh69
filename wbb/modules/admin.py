@@ -470,6 +470,8 @@ async def deleteFunc(_, message: Message):
             await asyncio.sleep(int(e.value))
         except Exception:
             pass
+    print("delete xong")
+    print(served_chat["chat_id"])
             
 
 # Promote Members
