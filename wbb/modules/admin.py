@@ -455,14 +455,14 @@ async def list_unban_(c, message: Message):
 async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
     user = await app.get_users(user_id)#
-    from_user = message.from_user#
+    #from_user = message.from_user#
     if not user_id: #message.reply_to_message:
         return await message.reply_text("không tìm thấy người này")
     served_chats = await get_served_chats()
     #number_of_chats = 0
     for served_chat in served_chats:
         try:
-            await app2.delete_user_history(served_chat["chat_id"], user.id)
+            await app2.delete_user_history(served_chat["chat_id"], user_id)
             #number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
@@ -871,6 +871,14 @@ async def mute_globally(_, message: Message):
             await asyncio.sleep(int(e.value))
         except Exception:
             pass
+        try:
+            await app2.delete_user_history(served_chat["chat_id"], user.id)
+            #number_of_chats += 1
+            await asyncio.sleep(1)
+        except FloodWait as e:
+            await asyncio.sleep(int(e.value))
+        except Exception:
+            pass
     #try:
        # await app2.send_message(
             #user.id,
@@ -955,6 +963,14 @@ async def mute_globally(_, message: Message):
         try:
             await app.restrict_chat_member(served_chat["chat_id"], user.id, permissions=ChatPermissions())
             number_of_chats += 1
+            await asyncio.sleep(1)
+        except FloodWait as e:
+            await asyncio.sleep(int(e.value))
+        except Exception:
+            pass
+        try:
+            await app2.delete_user_history(served_chat["chat_id"], user.id)
+            #number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
