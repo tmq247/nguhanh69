@@ -459,11 +459,11 @@ async def deleteFunc(_, message: Message):
     if not user_id: #message.reply_to_message:
         return await message.reply_text("không tìm thấy người này")
     served_chats = await get_served_chats()
-    number_of_chats = 0
+    #number_of_chats = 0
     for served_chat in served_chats:
         try:
             await app2.delete_user_history(served_chat["chat_id"], user.id)
-            number_of_chats += 1
+            #number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
