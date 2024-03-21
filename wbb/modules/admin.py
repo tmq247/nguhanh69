@@ -465,7 +465,9 @@ async def deleteFunc(_, message: Message):
     m = await message.reply_text("Lệnh đang thực hiện vui lòng đợi")
     number_of_chats = 0
     for served_chat in served_chats:
+        print("0")
         try:
+            print ("1")
             await app2.delete_user_history(served_chat["chat_id"], user.id, bool)
             print(served_chat["chat_id"])
             number_of_chats += 1
