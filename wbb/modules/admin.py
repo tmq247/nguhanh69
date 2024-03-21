@@ -466,10 +466,10 @@ async def deleteFunc(_, message: Message):
             await app2.delete_user_history(served_chat["chat_id"], user_id)
             #number_of_chats += 1
             #await asyncio.sleep(1)
-        except FloodWait as e:
-            await asyncio.sleep(int(e.value))
+        #except FloodWait as e:
+            #await asyncio.sleep(int(e.value))
         except Exception:
-            pass
+            print("lỗi") #pass
     print("delete xong")
     print(served_chat["chat_id"])
             
