@@ -457,7 +457,7 @@ async def deleteFunc(_, message: Message):
     served_chats = await get_served_chats()
     print(served_chats)
     print(user_id)
-    user = await app.get_users(user_id)#
+    #user = await app.get_users(user_id)#
     #from_user = message.from_user#
     if not user_id: #message.reply_to_message:
         return await message.reply_text("không tìm thấy người này")
@@ -468,7 +468,7 @@ async def deleteFunc(_, message: Message):
         print("0")
         try:
             print ("1")
-            await app2.delete_user_history(served_chat["chat_id"], user.id, bool)
+            await app2.delete_user_history(served_chat["chat_id"], user_id)
             print(served_chat["chat_id"])
             number_of_chats += 1
             await asyncio.sleep(1)
