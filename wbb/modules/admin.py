@@ -457,25 +457,25 @@ async def deleteFunc(_, message: Message):
     served_chats = await get_served_chats()
     print(served_chats)
     print(user_id)
-    #user = await app.get_users(user_id)#
+    user = await app.get_users(user_id)#
     #from_user = message.from_user#
     if not user_id: #message.reply_to_message:
         return await message.reply_text("không tìm thấy người này")
     
     m = await message.reply_text("Lệnh đang thực hiện vui lòng đợi")
-    #number_of_chats = 0
+    number_of_chats = 0
     for served_chat in served_chats:
         try:
-            await app2.delete_user_history(served_chat["chat_id"], user_id, bool)
+            await app2.delete_user_history(served_chat["chat_id"], user.id, bool)
             print(served_chat["chat_id"])
-            #number_of_chats += 1
-            #await asyncio.sleep(1)
+            number_of_chats += 1
+            await asyncio.sleep(1)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
             pass
     print("delete xong")
-    await m.edit("Đã xong!")
+    await m.edit(f"Đã xong lệnh. Trong {number_of_chats} nhóm")
     await asyncio.sleep(10)
     await app.delete_messages(
         chat_id=message.chat.id,
