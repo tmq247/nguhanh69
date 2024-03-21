@@ -26,6 +26,7 @@ import re
 from contextlib import suppress
 from time import time
 
+from pyrogram.raw.functions.messages.DeleteMessages
 from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter, ChatType
 from pyrogram.errors import FloodWait
@@ -454,9 +455,8 @@ async def list_unban_(c, message: Message):
 @adminsOnly("can_delete_messages")
 async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
+    await message.reply_to_message.delete()
     served_chats = await get_served_chats()
-    print(served_chats)
-    print(user_id)
     #user = await app.get_users(user_id)#
     #from_user = message.from_user#
     if not user_id: #message.reply_to_message:
@@ -469,7 +469,6 @@ async def deleteFunc(_, message: Message):
         try:
             print ("1")
             print(served_chat["chat_id"])
-            await app2.read_chat_history(served_chat["chat_id"])
             await app2.delete_user_history(served_chat["chat_id"], user_id)
             print("2")
             number_of_chats += 1
