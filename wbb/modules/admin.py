@@ -460,6 +460,7 @@ async def deleteFunc(_, message: Message):
     if not user_id: #message.reply_to_message:
         return await message.reply_text("không tìm thấy người này")
     served_chats = await get_served_chats()
+    m = await message.reply_text("Lệnh đang thực hiện vui lòng đợi")
     #number_of_chats = 0
     for served_chat in served_chats:
         try:
@@ -472,6 +473,12 @@ async def deleteFunc(_, message: Message):
         except Exception:
             pass
     print("delete xong")
+    await m.edit("Đã xong!")
+    await asyncio.sleep(10)
+    await app.delete_messages(
+        chat_id=message.chat.id,
+        message_ids=m.id,
+        revoke=True,)
     
             
 
