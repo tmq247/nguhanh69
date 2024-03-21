@@ -467,10 +467,10 @@ async def deleteFunc(_, message: Message):
             print(served_chat["chat_id"])
             #number_of_chats += 1
             #await asyncio.sleep(1)
-        #except FloodWait as e:
-            #await asyncio.sleep(int(e.value))
+        except FloodWait as e:
+            await asyncio.sleep(int(e.value))
         except Exception:
-            print("lỗi") #pass
+            pass
     print("delete xong")
     
             
