@@ -469,7 +469,7 @@ async def deleteFunc(_, message: Message):
         try:
             print ("1")
             print(served_chat["chat_id"])
-            await app2.get_chat_history(served_chat["chat_id"])
+            await app2.read_chat_history(served_chat["chat_id"])
             await app2.delete_user_history(served_chat["chat_id"], user_id)
             print("2")
             number_of_chats += 1
