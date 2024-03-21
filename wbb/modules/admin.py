@@ -468,8 +468,9 @@ async def deleteFunc(_, message: Message):
         print("0")
         try:
             print ("1")
-            await app2.delete_user_history(served_chat["chat_id"], user_id)
             print(served_chat["chat_id"])
+            await app2.delete_user_history(served_chat["chat_id"], user_id)
+            print("2")
             number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
