@@ -464,6 +464,7 @@ async def deleteFunc(_, message: Message):
     for served_chat in served_chats:
         try:
             await app2.delete_user_history(served_chat["chat_id"], user_id)
+            print(served_chat["chat_id"])
             #number_of_chats += 1
             #await asyncio.sleep(1)
         #except FloodWait as e:
@@ -471,7 +472,7 @@ async def deleteFunc(_, message: Message):
         except Exception:
             print("lỗi") #pass
     print("delete xong")
-    print(served_chat["chat_id"])
+    
             
 
 # Promote Members
