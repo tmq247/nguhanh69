@@ -69,7 +69,7 @@ vietnam_timezone = pytz.timezone(
     'Asia/Ho_Chi_Minh')  # Define the Vietnam timezone
 # Get the current time in Vietnam timezone
 current_time_vietnam = datetime.now(
-    tz=vietnam_timezone).strftime("%H:%M:%S %d-%m-%Y")
+    tz=vietnam_timezone).strftime("%Y-%m-%d %H:%M:%S")
 
 __MODULE__ = "Admin"
 __HELP__ = """/ba - cấm người dùng
