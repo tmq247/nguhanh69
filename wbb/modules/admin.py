@@ -757,6 +757,8 @@ async def mute_globally(_, message: Message):
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
     is_actived = await is_actived_user(user.id)
+    vietnam_time = datetime.utcnow() + timedelta(hours=7)
+    timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
 
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
@@ -814,7 +816,7 @@ __**Người dùng bị fmute toàn hệ thống **__
 **Người dùng bị cấm chat:** {user.mention}
 **ID người dùng bị cấm chat:** `{user_id}`
 **Lý do:** __{reason}__
-**Lúc:** __{current_time_vietnam}__
+**Lúc:** __{timestamp_vietnam}__
 **Số nhóm:** `{number_of_chats}`"""
     try:
         m2 = await app.send_message(
@@ -850,6 +852,8 @@ async def mute_globally(_, message: Message):
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
     is_actived = await is_actived_user(user.id)
+    vietnam_time = datetime.utcnow() + timedelta(hours=7)
+    timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
 
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
@@ -921,7 +925,7 @@ __**Người dùng bị cấm chat toàn hệ thống**__
 **Người dùng bị cấm chat:** {user.mention}
 **ID người dùng bị cấm chat:** `{user_id}`
 **Lý do (admin check):** __{reason}__
-**Lúc:** __{current_time_vietnam}__
+**Lúc:** __{timestamp_vietnam}__
 **Số nhóm:** `{number_of_chats}`"""
     try:
         m2 = await app.send_message(
@@ -952,6 +956,8 @@ async def mute_globally(_, message: Message):
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
     is_actived = await is_actived_user(user.id)
+    vietnam_time = datetime.utcnow() + timedelta(hours=7)
+    timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
 
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
@@ -1005,7 +1011,7 @@ __**Người dùng bị cấm chat toàn hệ thống bằng chế độ im lặ
 **Người dùng bị cấm chat:** {user.mention}
 **ID người dùng bị cấm chat:** `{user_id}`
 **Lý do:** __{reason}__
-**Lúc:** __{current_time_vietnam}__
+**Lúc:** __{timestamp_vietnam}__
 **Số nhóm:** `{number_of_chats}`"""
     try:
         m2 = await app.send_message(
@@ -1040,6 +1046,8 @@ async def out(_, message: Message):
 async def unmute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     from_user = message.from_user
+    vietnam_time = datetime.utcnow() + timedelta(hours=7)
+    timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     user = await app.get_users(user_id)
@@ -1084,7 +1092,7 @@ __**Người dùng được xác nhận**__
 **Mở chat người dùng:** {user.mention}
 **ID người dùng đã mở chat:** `{user_id}`
 **Note:** __{reason or 'None.'}__
-**Lúc:** __{current_time_vietnam}__
+**Lúc:** __{timestamp_vietnam}__
 **Số nhóm:** `{number_of_chats}`"""
         try:
             m2 = await app.send_message(
@@ -1109,6 +1117,8 @@ __**Người dùng được xác nhận**__
 async def huyxacnhan(_, message):
     user_id, reason = await extract_user_and_reason(message)
     from_user = message.from_user
+    vietnam_time = datetime.utcnow() + timedelta(hours=7)
+    timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng này.")
     user = await app.get_users(user_id)
@@ -1128,7 +1138,7 @@ __**Người dùng đã bị hủy xác nhận**__
 **Hủy xác nhận người dùng:** {user.mention}
 **ID người dùng bị hủy xác nhận:** `{user_id}`
 **Note:** __{reason or 'None.'}__
-**Lúc:** __{current_time_vietnam}__""",
+**Lúc:** __{timestamp_vietnam}__""",
                 disable_web_page_preview=True,
             )
 
