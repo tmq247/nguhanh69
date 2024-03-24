@@ -63,6 +63,12 @@ from wbb.utils.dbfunctions import (
     remove_active_user,
 )
 
+vietnam_timezone = pytz.timezone(
+    'Asia/Ho_Chi_Minh')  # Define the Vietnam timezone
+# Get the current time in Vietnam timezone
+current_time_vietnam = datetime.now(
+    tz=vietnam_timezone).strftime("%Y-%m-%d %H:%M:%S")
+
 __MODULE__ = "Admin"
 __HELP__ = """/ba - cấm người dùng
 /db - Xóa tin nhắn đã trả lời cấm người gửi
@@ -1072,7 +1078,8 @@ __**Người dùng được xác nhận**__
 **Quản trị viên:** {from_user.mention}
 **Mở chat người dùng:** {user.mention}
 **ID người dùng đã mở chat:** `{user_id}`
-**Lúc:** __{reason or 'None.'}__
+**Note:** __{reason or 'None.'}__
+**Lúc:** __{current_time_vietnam}__
 **Số nhóm:** `{number_of_chats}`"""
         try:
             m2 = await app.send_message(
