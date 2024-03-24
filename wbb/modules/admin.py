@@ -809,11 +809,12 @@ async def mute_globally(_, message: Message):
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị fmute toàn hệ thống **__
-**Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
+**Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention}
 **Người dùng bị cấm chat:** {user.mention}
 **ID người dùng bị cấm chat:** `{user_id}`
-**Lý do :** __{reason}__
+**Lý do:** __{reason}__
+**Lúc:** __{current_time_vietnam}__
 **Số nhóm:** `{number_of_chats}`"""
     try:
         m2 = await app.send_message(
@@ -915,11 +916,12 @@ async def mute_globally(_, message: Message):
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị cấm chat toàn hệ thống**__
-**Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
+**Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention}
 **Người dùng bị cấm chat:** {user.mention}
 **ID người dùng bị cấm chat:** `{user_id}`
-**Lý do (admin) :** __{reason}__
+**Lý do (admin check):** __{reason}__
+**Lúc:** __{current_time_vietnam}__
 **Số nhóm:** `{number_of_chats}`"""
     try:
         m2 = await app.send_message(
@@ -1002,7 +1004,8 @@ __**Người dùng bị cấm chat toàn hệ thống bằng chế độ im lặ
 **Quản trị viên:** {from_user.mention}
 **Người dùng bị cấm chat:** {user.mention}
 **ID người dùng bị cấm chat:** `{user_id}`
-**Lý do (admin) :** __{reason}__
+**Lý do:** __{reason}__
+**Lúc:** __{current_time_vietnam}__
 **Số nhóm:** `{number_of_chats}`"""
     try:
         m2 = await app.send_message(
@@ -1124,7 +1127,8 @@ __**Người dùng đã bị hủy xác nhận**__
 **Quản trị viên:** {from_user.mention}
 **Hủy xác nhận người dùng:** {user.mention}
 **ID người dùng bị hủy xác nhận:** `{user_id}`
-**Note:** __{reason or 'None.'}__""",
+**Note:** __{reason or 'None.'}__
+**Lúc:** __{current_time_vietnam}__""",
                 disable_web_page_preview=True,
             )
 
