@@ -62,13 +62,13 @@ from wbb.utils.dbfunctions import (
     is_actived_user,
     remove_active_user,
 )
-#from datetime import datetime, timedelta
+from datetime import datetime, timedelta
 import pytz
 
 vietnam_timezone = pytz.timezone(
     'Asia/Ho_Chi_Minh')  # Define the Vietnam timezone
 # Get the current time in Vietnam timezone
-current_time_vietnam = time.now(
+current_time_vietnam = datetime.now(
     tz=vietnam_timezone).strftime("%H:%M:%S %d-%m-%Y")
 
 __MODULE__ = "Admin"
