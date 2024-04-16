@@ -1085,6 +1085,11 @@ __**Người dùng được xác nhận**__
                 text=mute_text,
                 disable_web_page_preview=True,
             )
+            m3 = await app.send_message(
+                XAC_NHAN,
+                text=mute_text,
+                disable_web_page_preview=True,
+            )
             await m.edit(
                 f"Đã xác nhận {user.mention} trên toàn hệ thống!\n Bởi: {from_user.mention}",
                 disable_web_page_preview=True,
@@ -1126,6 +1131,17 @@ __**Người dùng đã bị hủy xác nhận**__
 **Lúc:** __{timestamp_vietnam}__""",
                 disable_web_page_preview=True,
             )
+    await app.send_message(
+                XAC_NHAN,
+                f"""
+__**Người dùng đã bị hủy xác nhận**__
+**Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention}
+**Hủy xác nhận người dùng:** {user.mention}
+**ID người dùng bị hủy xác nhận:** `{user_id}`
+**Note:** __{reason or 'None.'}__
+**Lúc:** __{timestamp_vietnam}__""",
+                disable_web_page_preview=True,
 
 #check
 @app.on_message(filters.command("check") & ~filters.private)
