@@ -1142,6 +1142,7 @@ __**Người dùng đã bị hủy xác nhận**__
 **Note:** __{reason or 'None.'}__
 **Lúc:** __{timestamp_vietnam}__""",
                 disable_web_page_preview=True,
+    )
 
 #check
 @app.on_message(filters.command("check") & ~filters.private)
