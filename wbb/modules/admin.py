@@ -1230,6 +1230,17 @@ __**Người dùng được xác nhận bằng lệnh**__
 **Note:** __{reason or 'None.'}__""",
                 disable_web_page_preview=True,
             )
+    await app.send_message(
+                XAC_NHAN,
+                f"""
+__**Người dùng được xác nhận bằng lệnh**__
+**Tại nhóm :** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention}
+**Xác nhận người dùng:** {user.mention}
+**ID người dùng được xác nhận:** `{user_id}`
+**Note:** __{reason or 'None.'}__""",
+                disable_web_page_preview=True,
+    )
 
 
 # Ban deleted accounts
