@@ -53,7 +53,7 @@ from wbb.utils.functions import (
     time_converter,
 )
 from wbb import FMUTE_LOG_GROUP_ID
-from wbb import XAC_NHAN
+#from wbb import XAC_NHAN
 from wbb.utils.dbfunctions import (
     get_served_chats,
     add_fmute_user,
