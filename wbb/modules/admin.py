@@ -463,7 +463,7 @@ async def list_unban_(c, message: Message):
 @adminsOnly("can_delete_messages")
 async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
-    #await message.reply_to_message.delete()
+    await message.delete()
     served_chats = await get_served_chats()
     #user = await app.get_users(user_id)#
     #from_user = message.from_user#
