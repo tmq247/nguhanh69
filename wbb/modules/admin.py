@@ -153,7 +153,6 @@ async def list_admins(chat_id: int):
 
 # Admin cache reload
 
-@app.on_message(filters.command("reload"))
 @app.on_chat_member_updated()
 async def admin_cache_func(_, cmu: ChatMemberUpdated):
     if cmu.old_chat_member and cmu.old_chat_member.promoted_by:
