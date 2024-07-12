@@ -101,8 +101,25 @@ __HELP__ = """/ba - cấm người dùng
 /report | @admins | @admin - Báo cáo tin nhắn cho quản trị viên.
 /invite - Gửi liên kết mời nhóm/siêu nhóm."""
 
-def get_peer_type_new(peer_id: int) -> str:
-    peer_id_str = str(peer_id)
+MIN_CHANNEL_ID = -1002147483647
+MAX_CHANNEL_ID = -1000000000000
+MIN_CHAT_ID = -2147483647
+MAX_USER_ID_OLD = 2147483647
+MAX_USER_ID = 999999999999
+# some other code
+def get_peer_type(user_id: int) -> str:
+    if peer_id < 0:
+        if MIN_CHAT_ID <= user_id:
+            return "chat"
+
+        if MIN_CHANNEL_ID <= user_id < MAX_CHANNEL_ID:
+            return "channel"
+    elif 0 < user_id <= MAX_USER_ID:
+        return "user"
+
+    raise ValueError(f"Peer id invalid: {user_id}")
+def get_peer_type_new(user_id: int) -> str:
+    peer_id_str = str(user_id)
     if not peer_id_str.startswith("-"):
         return "user"
     elif peer_id_str.startswith("-100"):
