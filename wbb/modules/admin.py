@@ -101,33 +101,7 @@ __HELP__ = """/ba - cấm người dùng
 /report | @admins | @admin - Báo cáo tin nhắn cho quản trị viên.
 /invite - Gửi liên kết mời nhóm/siêu nhóm."""
 
-MIN_CHANNEL_ID = -1002147483647
-MAX_CHANNEL_ID = -1000000000000
-MIN_CHAT_ID = -2147483647
-MAX_USER_ID_OLD = 2147483647
-MAX_USER_ID = 999999999999
-# some other code
-def get_peer_type(peer_id: int) -> str:
-    if peer_id < 0:
-        if MIN_CHAT_ID <= peer_id:
-            return "chat"
 
-        if MIN_CHANNEL_ID <= peer_id < MAX_CHANNEL_ID:
-            return "channel"
-    elif 0 < user_id <= MAX_USER_ID:
-        return "user"
-
-    raise ValueError(f"Peer id invalid: {peer_id}")
-def get_peer_type_new(peer_id: int) -> str:
-    peer_id_str = str(peer_id)
-    if not peer_id_str.startswith("-"):
-        return "user"
-    elif peer_id_str.startswith("-100"):
-        return "channel"
-    else:
-        return "chat"
-
-utils.get_peer_type = get_peer_type_new
 
 async def member_permissions(chat_id: int, user_id: int):
     perms = []
@@ -836,6 +810,7 @@ async def mute_globally(_, message: Message):
         #)
     #except Exception:
         #pass
+    print({user.id})
     await app.send_message(user.id, f"Xin chào, bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.")
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
