@@ -151,6 +151,22 @@ async def list_admins(chat_id: int):
     }
     return admins_in_chat[chat_id]["data"]
 
+@app.on_message(filters.command("reload"))
+@app.on_chat_member_updated()
+async def admin_cache_func(_, cmu: ChatMemberUpdated):
+    if cmu.old_chat_member and cmu.old_chat_member.promoted_by:
+        admins_in_chat[cmu.chat.id] = {
+            "last_updated_at": time(),
+            "data": [
+                member.user.id
+                async for member in app.get_chat_members(
+                    cmu.chat.id, filter=ChatMembersFilter.ADMINISTRATORS
+                )
+            ],
+        }
+        log.info(f"Đã cập nhật bộ đệm quản trị cho {cmu.chat.id} [{cmu.chat.title}]")
+
+
 async def list_admins(chat_id: int):
     global admins_in_chat
     if chat_id in admins_in_chat:
