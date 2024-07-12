@@ -800,14 +800,19 @@ async def mute_globally(_, message: Message):
             await asyncio.sleep(int(e.value))
         except Exception:
             pass
-    try:
-        await app.send_message(
+    #try:
+        #await app.send_message(
+            #user_id,
+            #f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason},"
+            #f" Bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.",
+        #)
+    #except Exception:
+        #pass
+    await app.send_message(
             user_id,
             f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason},"
             f" Bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.",
-        )
-    except Exception:
-        pass
+    )
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị fmute toàn hệ thống **__
@@ -901,14 +906,11 @@ async def mute_globally(_, message: Message):
             #f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
             #f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
         #)
-    try:
-        await app.send_message(
-            user.id,
-            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
-            f" Bạn hãy gửi ib cho admin {reason or from_user.mention} để mở chat.",
-        )
-    except Exception:
-        pass
+    await app.send_message(
+            user_id,
+            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason},"
+            f" Bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.",
+    )
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị cấm chat toàn hệ thống**__
