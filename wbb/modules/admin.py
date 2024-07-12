@@ -812,7 +812,7 @@ async def mute_globally(_, message: Message):
         #)
     #except Exception:
         #pass
-    await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat bởi {from_user.mention} @{username1} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.")
+    await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.")
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị fmute toàn hệ thống **__
@@ -912,7 +912,7 @@ async def mute_globally(_, message: Message):
     await app2.send_message(
             user.id,
             f"Xin chào, Bạn đã bị cấm chat tại nhóm {message.chat.title}."
-            f" Bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.",
+            f" Bạn hãy nhắn tin cho admin @{username1} hoặc {reason} để mở chat.",
     )
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
@@ -931,7 +931,7 @@ __**Người dùng bị cấm chat toàn hệ thống**__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention} @{username1} để được mỡ chat  💬💬💬**""",
+            f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention} để được mỡ chat  💬💬💬**""",
             disable_web_page_preview=True,
         )
     except Exception:
