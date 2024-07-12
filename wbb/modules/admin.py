@@ -810,8 +810,7 @@ async def mute_globally(_, message: Message):
         #)
     #except Exception:
         #pass
-    print({user.id})
-    await app.send_message(user.id, f"Xin chào, bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.")
+    await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.")
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị fmute toàn hệ thống **__
@@ -905,7 +904,11 @@ async def mute_globally(_, message: Message):
             #f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention},"
             #f" Bạn hãy nhắn tin cho admin {reason or from_user.mention} để mở chat.",
         #)
-    
+    await app2.send_message(
+            user.id,
+            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason},"
+            f" Bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.",
+    )
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị cấm chat toàn hệ thống**__
