@@ -911,7 +911,7 @@ async def mute_globally(_, message: Message):
     username2 = user.username
     await app2.send_message(
             user.id,
-            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} @{username1} với lý do: {reason},"
+            f"Xin chào, Bạn đã bị cấm chat tại nhóm {message.chat.title}."
             f" Bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.",
     )
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
