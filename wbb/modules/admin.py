@@ -107,19 +107,19 @@ MIN_CHAT_ID = -2147483647
 MAX_USER_ID_OLD = 2147483647
 MAX_USER_ID = 999999999999
 # some other code
-def get_peer_type(user_id: int) -> str:
+def get_peer_type(peer_id: int) -> str:
     if peer_id < 0:
-        if MIN_CHAT_ID <= user_id:
+        if MIN_CHAT_ID <= peer_id:
             return "chat"
 
-        if MIN_CHANNEL_ID <= user_id < MAX_CHANNEL_ID:
+        if MIN_CHANNEL_ID <= peer_id < MAX_CHANNEL_ID:
             return "channel"
     elif 0 < user_id <= MAX_USER_ID:
         return "user"
 
-    raise ValueError(f"Peer id invalid: {user_id}")
-def get_peer_type_new(user_id: int) -> str:
-    peer_id_str = str(user_id)
+    raise ValueError(f"Peer id invalid: {peer_id}")
+def get_peer_type_new(peer_id: int) -> str:
+    peer_id_str = str(peer_id)
     if not peer_id_str.startswith("-"):
         return "user"
     elif peer_id_str.startswith("-100"):
