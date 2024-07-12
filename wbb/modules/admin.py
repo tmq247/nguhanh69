@@ -132,7 +132,7 @@ from wbb.core.decorators.permissions import adminsOnly
 
 admins_in_chat = {}
 
-@app.on_message(filters.command("reload")
+@app.on_message(filters.command("reload"))
 async def list_admins(chat_id: int):
     global admins_in_chat
     if chat_id in admins_in_chat:
