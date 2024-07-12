@@ -1,7 +1,7 @@
 """
 MIT License
 
-Copyright (c) 2023 TheHamkerCat
+Copyright (c) 2024 TheHamkerCat
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,9 +35,9 @@ from sys import executable
 import aiofiles
 import speedtest
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from pyrogram import errors
 from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
-from pyrogram import errors
 
 from wbb import aiohttpsession as aiosession
 from wbb.utils.dbfunctions import start_restart_stage
@@ -305,7 +305,11 @@ def extract_text_and_keyb(ikb, text: str, row_width: int = 2):
         if text.endswith("`"):
             text = text[:-1]
 
+        if "~~" in text:
+            text = text.replace("~~", "¤¤")
         text, keyb = text.split("~")
+        if "¤¤" in text:
+            text = text.replace("¤¤", "~~")
 
         keyb = findall(r"\[.+\,.+\]", keyb)
         for btn_str in keyb:
@@ -327,9 +331,6 @@ async def check_format(ikb, raw_text: str):
     if keyb and not "~" in raw_text:
         raw_text = raw_text.replace("button=", "\n~\nbutton=")
         return raw_text
-    if "~" in raw_text and not keyb:
-        raw_text = raw_text.replace("~", "")
-        return raw_text
     if "~" in raw_text and keyb:
         if not extract_text_and_keyb(ikb, raw_text):
             return ""
@@ -340,9 +341,7 @@ async def check_format(ikb, raw_text: str):
 
 
 async def get_data_and_name(replied_message, message):
-    text = (
-        message.text.markdown if message.text else message.caption.markdown
-    )
+    text = message.text.markdown if message.text else message.caption.markdown
     name = text.split(None, 1)[1].strip()
     text = name.split(" ", 1)
     if len(text) > 1:
@@ -369,11 +368,11 @@ async def get_data_and_name(replied_message, message):
                 if replied_message.text
                 else replied_message.caption.markdown
             )
-            command = search(r'\[\'(.*?)\'(?:, \'(.*?)\')*\]', str(message.command)).group(1)
+            command = message.command[0]
             match = f"/{command} " + name
             if not message.reply_to_message and message.text:
                 if match == data:
-                    data ="error"
+                    data = "error"
             elif not message.reply_to_message and not message.text:
                 if match == data:
                     data = None
@@ -382,10 +381,21 @@ async def get_data_and_name(replied_message, message):
 
 async def get_user_id_and_usernames(client) -> dict:
     with client.storage.conn:
-        users = client.storage.conn.execute(
-            'SELECT * FROM peers WHERE type in ("user", "bot") AND username NOT null'
-        ).fetchall()
+        query = """
+        SELECT usernames.id, usernames.username
+        FROM usernames
+        WHERE usernames.id IN (
+            SELECT peers.id
+            FROM peers
+            WHERE peers.type IN ("user", "bot") AND username IS NOT NULL
+        )
+        """
+        result = client.storage.conn.execute(query).fetchall()
+
     users_ = {}
-    for user in users:
-        users_[user[0]] = user[3]
+    for row in result:
+        user_id = row[0]
+        username = row[1]
+        users_[user_id] = username
+
     return users_
