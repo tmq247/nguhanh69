@@ -802,7 +802,7 @@ async def mute_globally(_, message: Message):
             pass
     try:
         await app.send_message(
-            user.id,
+            user_id,
             f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} với lý do: {reason},"
             f" Bạn hãy nhắn tin cho admin {from_user.mention} để mở chat.",
         )
