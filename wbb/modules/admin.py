@@ -786,8 +786,8 @@ async def mute_globally(_, message: Message):
             revoke=True,)
         return 
 
-    username1 = "@" + {from_user.username}
-    username2 = "@" + {user.username}
+    username1 = @{from_user.username}
+    username2 = @{user.username}
         
     served_chats = await get_served_chats()
     m = await message.reply_text(
