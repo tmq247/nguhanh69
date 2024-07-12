@@ -812,13 +812,13 @@ async def mute_globally(_, message: Message):
         #)
     #except Exception:
         #pass
-    await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat bởi {from_user.mention} @{username1 or none} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1 or none} để mở chat.")
+    await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat bởi {from_user.mention} @{username1} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.")
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị fmute toàn hệ thống **__
 **Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
-**Quản trị viên:** {from_user.mention} @{username1 or none}
-**Người dùng bị cấm chat:** {user.mention} @{username2 or none}
+**Quản trị viên:** {from_user.mention} @{username1}
+**Người dùng bị cấm chat:** {user.mention} @{username2}
 **ID người dùng bị cấm chat:** `{user_id}`
 **Lý do:** __{reason}__
 **Lúc:** __{timestamp_vietnam}__
@@ -830,8 +830,8 @@ __**Người dùng bị fmute toàn hệ thống **__
             disable_web_page_preview=True,
         )
         lydo_text = f"""
-**🔥Người dùng {user.mention} @{username2 or none} đã bị đeo rọ mõm 👙.**
-**Bởi: {from_user.mention} @{username1 or none}.**
+**🔥Người dùng {user.mention} @{username2} đã bị đeo rọ mõm 👙.**
+**Bởi: {from_user.mention} @{username1}.**
 **Lý do: __{reason}__.**"""
         await m.edit(
             text=lydo_text,
@@ -911,8 +911,8 @@ async def mute_globally(_, message: Message):
     username2 = user.username
     await app2.send_message(
             user.id,
-            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} @{username1 or none} với lý do: {reason},"
-            f" Bạn hãy nhắn tin cho admin {from_user.mention} @{username1 or none} để mở chat.",
+            f"Xin chào, Bạn đã bị cấm chat bởi {from_user.mention} @{username1} với lý do: {reason},"
+            f" Bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.",
     )
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
@@ -931,7 +931,7 @@ __**Người dùng bị cấm chat toàn hệ thống**__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"""**Đã cấm chat {user.mention} @{username2 or none} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention} @{username1 or none} để được mỡ chat  💬💬💬**""",
+            f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention} @{username1} để được mỡ chat  💬💬💬**""",
             disable_web_page_preview=True,
         )
     except Exception:
