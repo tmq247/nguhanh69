@@ -26,6 +26,7 @@ import re
 from contextlib import suppress
 from time import time
 
+from pyrogram import utils
 from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter, ChatType, MessageEntityType
 from pyrogram.errors import FloodWait
@@ -100,6 +101,16 @@ __HELP__ = """/ba - cấm người dùng
 /report | @admins | @admin - Báo cáo tin nhắn cho quản trị viên.
 /invite - Gửi liên kết mời nhóm/siêu nhóm."""
 
+async def get_peer_type_new(peer_id: int) -> str:
+    peer_id_str = str(peer_id)
+    if not peer_id_str.startswith("-"):
+        return "user"
+    elif peer_id_str.startswith("-100"):
+        return "channel"
+    else:
+        return "chat"
+
+utils.get_peer_type = get_peer_type_new
 
 async def member_permissions(chat_id: int, user_id: int):
     perms = []
