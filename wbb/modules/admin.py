@@ -860,8 +860,8 @@ async def mute_globally(_, message: Message):
     is_actived = await is_actived_user(user.id)
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
-    username1 = @{from_user.username}
-    username2 = @{user.username}
+    username1 = "@" + {from_user.username}
+    username2 = "@" + {user.username}
 
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
