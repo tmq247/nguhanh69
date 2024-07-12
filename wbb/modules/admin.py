@@ -26,7 +26,6 @@ import re
 from contextlib import suppress
 from time import time
 
-from pyrogram import utils
 from pyrogram import filters
 from pyrogram.enums import ChatMembersFilter, ChatType, MessageEntityType
 from pyrogram.errors import FloodWait
