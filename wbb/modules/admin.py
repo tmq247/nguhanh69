@@ -919,8 +919,8 @@ async def mute_globally(_, message: Message):
     mute_text = f"""
 __**Người dùng bị cấm chat toàn hệ thống**__
 **Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
-**Quản trị viên:** {from_user.mention} @{username1 or none}
-**Người dùng bị cấm chat:** {user.mention} @{username2 or none}
+**Quản trị viên:** {from_user.mention} @{username1}
+**Người dùng bị cấm chat:** {user.mention} @{username2}
 **ID người dùng bị cấm chat:** `{user_id}`
 **Lý do (admin check):** __{reason}__
 **Lúc:** __{timestamp_vietnam}__
