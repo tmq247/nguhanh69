@@ -101,7 +101,7 @@ __HELP__ = """/ba - cấm người dùng
 /report | @admins | @admin - Báo cáo tin nhắn cho quản trị viên.
 /invite - Gửi liên kết mời nhóm/siêu nhóm."""
 
-async def get_peer_type_new(peer_id: int) -> str:
+def get_peer_type_new(peer_id: int) -> str:
     peer_id_str = str(peer_id)
     if not peer_id_str.startswith("-"):
         return "user"
