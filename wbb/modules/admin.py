@@ -783,7 +783,7 @@ async def unmute(_, message: Message):
 # Fmute
 
 
-@app.on_message(filters.command("fmute") & ~filters.private)
+@app.on_message(filters.command("fm") & ~filters.private)
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def mute_globally(_, message: Message):
@@ -962,8 +962,8 @@ __**Người dùng bị cấm chat toàn hệ thống**__
         )
         await m.edit(
             f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**"""
-            f"""**Bởi: {user.mention} @{username2}.**"""
-            f"""**Lý do: Gửi voice cho {user.mention} @{username2} để được mở chat  💬💬💬.**""")
+            f"""**Bởi: {from_user.mention} @{username1}.**"""
+            f"""**Lý do: Gửi voice cho {from_user.mention} @{username1} để được mở chat  💬💬💬.**""")
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
