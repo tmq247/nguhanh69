@@ -961,9 +961,10 @@ __**Người dùng bị cấm chat toàn hệ thống**__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
-            disable_web_page_preview=True,
-        )
+            f"""**(🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**""")
+            f"""**(Bởi: {user.mention} @{username2}.**""")
+            f"""**(Lý do: Gửi voice cho {user.mention} @{username2} để được mở chat  💬💬💬.**"""))
+            #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
             "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
