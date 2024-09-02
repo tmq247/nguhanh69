@@ -882,7 +882,8 @@ __**Người dùng bị fmute toàn hệ thống **__
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def mute_globally(_, message: Message):
-    tag = "@"
+    tag = f"@"
+    link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
     from_user = message.from_user
@@ -965,7 +966,7 @@ __**Người dùng bị cấm chat toàn hệ thống**__
         await m.edit(
 f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
 **Bởi: {from_user.mention} @{username1}.**
-**Lý do: Gửi voice cho {reason or from_user.mention} {t.me/ + reason.strip("@") or tag + username1} để được mở chat  💬💬💬.**""")
+**Lý do: Gửi voice cho {reason or from_user.mention} {link + reason.strip("@") or tag + username1} để được mở chat  💬💬💬.**""")
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
