@@ -882,6 +882,8 @@ __**Người dùng bị fmute toàn hệ thống **__
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def mute_globally(_, message: Message):
+    username1 = from_user.username
+    username2 = user.username
     link2 = f"web.telegram.org/k/#"
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
@@ -916,6 +918,9 @@ async def mute_globally(_, message: Message):
             message_ids=actived.id,
             revoke=True,)
         return 
+
+    if not reason and username1 == None:
+        await message.reply_text("Vì bạn không có user vui lòng tag admin khác để check voice người này.")
         
     served_chats = await get_served_chats()
     m = await message.reply_text(
@@ -934,8 +939,7 @@ async def mute_globally(_, message: Message):
         except Exception:
             pass
 
-    username1 = from_user.username
-    username2 = user.username
+    
     try:
         await app2.send_message(
             user.id,
