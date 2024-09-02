@@ -917,7 +917,9 @@ async def mute_globally(_, message: Message):
             revoke=True,)
         return 
 
-        
+    username1 = from_user.username
+    username2 = user.username   
+    
     served_chats = await get_served_chats()
     m = await message.reply_text(
         f"**Đang cấm chat {user.mention} trên toàn hệ thống!**"
@@ -935,8 +937,6 @@ async def mute_globally(_, message: Message):
         except Exception:
             pass
 
-    username1 = from_user.username
-    username2 = user.username
     try:
         await app2.send_message(
             user.id,
