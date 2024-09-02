@@ -882,7 +882,7 @@ __**Người dùng bị fmute toàn hệ thống **__
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def mute_globally(_, message: Message):
-    link2 = f"web.telegram.org/a/#"
+    link2 = f"web.telegram.org/#"
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
