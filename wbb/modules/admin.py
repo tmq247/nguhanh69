@@ -882,7 +882,7 @@ __**Người dùng bị fmute toàn hệ thống **__
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def mute_globally(_, message: Message):
-    
+    link2 = f"web.telegram.org/k/#"
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
@@ -962,11 +962,11 @@ __**Người dùng bị cấm chat toàn hệ thống**__
             text=mute_text,
             disable_web_page_preview=True,
         )
-        #await app.send_message(FMUTE_LOG_GROUP_ID, f"<a href='tg://user?id={msg.from_user.id}'>{msg.from_user.full_name}</a>", "HTML")
+        await app.send_message(FMUTE_LOG_GROUP_ID, f"<a href='tg://user?id={message.from_user.id}'>{message.from_user.full_name}</a>", "HTML")
         await m.edit(
 f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
 **Bởi: {from_user.mention} @{username1}.**
-**Lý do: Gửi voice cho {reason or from_user.mention} @{reason.strip("@") or username1} để được mở chat  💬💬💬.**""")
+**Lý do: Gửi voice cho {reason or from_user.mention} {link + reason.strip("@") or link + username1} để được mở chat  💬💬💬.**""")
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
