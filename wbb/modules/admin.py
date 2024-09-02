@@ -919,8 +919,8 @@ async def mute_globally(_, message: Message):
 
     username1 = from_user.username
     username2 = user.username   
-    if username1 == None:
-        return await message.reply_text("Vui lòng đặt username hoặc tag admin khác để check voice người này.")
+    #if username1 == None:
+        #return await message.reply_text("Vui lòng đặt username hoặc tag admin khác để check voice người này.")
         
     served_chats = await get_served_chats()
     m = await message.reply_text(
@@ -965,10 +965,21 @@ __**Người dùng bị cấm chat toàn hệ thống**__
             text=mute_text,
             disable_web_page_preview=True,
         )
-        await m.edit(
+        if not reason and username1 == None:
+            await m.edit(
 f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
 **Bởi: {from_user.mention} @{username1}.**
-**Lý do: Gửi voice cho {reason or from_user.mention} {link + reason.strip("@") or link + username1} để được mở chat  💬💬💬.**""")
+**Lý do: Gửi voice cho {from_user.mention} {link2 + from_user.id} để được mở chat  💬💬💬.**""")
+        elif reason == None:
+            await m.edit(
+f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
+**Bởi: {from_user.mention} @{username1}.**
+**Lý do: Gửi voice cho {reason} {link + reason.strip("@")} để được mở chat  💬💬💬.**""")
+        else:
+            await m.edit(
+f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
+**Bởi: {from_user.mention} @{username1}.**
+**Lý do: Gửi voice cho {from_user.mention} {link + username1} để được mở chat  💬💬💬.**""")
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
