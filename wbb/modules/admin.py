@@ -962,7 +962,6 @@ __**Người dùng bị cấm chat toàn hệ thống**__
             text=mute_text,
             disable_web_page_preview=True,
         )
-        await app.send_message(FMUTE_LOG_GROUP_ID, f"<a href='tg://user?id={message.from_user.id}'>{message.from_user.full_name}</a>", "HTML")
         await m.edit(
 f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
 **Bởi: {from_user.mention} @{username1}.**
