@@ -968,7 +968,7 @@ __**Người dùng bị cấm chat toàn hệ thống**__
         await m.edit(
 f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
 **Bởi: {from_user.mention} @{username1}.**
-**Lý do: Gửi voice cho {from_user.mention or reason} {link + username1 or link + reason.strip("@")} để được mở chat  💬💬💬.**""")
+**Lý do: Gửi voice cho {from_user.mention or reason} t.me/{username1 or reason.strip("@")} để được mở chat  💬💬💬.**""")
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
