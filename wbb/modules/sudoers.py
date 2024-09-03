@@ -140,8 +140,8 @@ async def ban_globally(_, message):
     try:
         await app.send_message(
             user.id,
-            f"Xin chào, Bạn đã bị cấm ở {message.chat.title} bởi {from_user.mention} với lý do: {reason},"
-            f" Bạn có thể khiếu nại lệnh cấm này bằng cách ib cho {from_user.mention}.",
+            f"Xin chào {user.mention}, Bạn đã bị cấm ở hệ thống nhóm {message.chat.title} bởi {from_user.mention} với lý do: {reason},"
+            f" Bạn có thể khiếu nại lệnh cấm này bằng cách ib cho {from_user.mention} t.me/{from_user.username}.",
         )
     except Exception:
         pass
@@ -161,7 +161,7 @@ __**Người dùng bị cấm trên toàn hệ thống**__
             disable_web_page_preview=True,
         )
         await m.edit(
-            f"""Đã cấm {user.mention} trên toàn hệ thống bởi {from_user.mention}!!! Lý do: {reason}""",
+            f"""Đã cấm {user.mention} @{user.username} trên toàn hệ thống bởi {from_user.mention} t.me/{from_user.username}!!! Lý do: {reason}""",
             disable_web_page_preview=True,
         )
     except Exception:
@@ -213,6 +213,7 @@ __**Người dùng được bỏ chặn**__
 **Mở chặn người dùng:** {user.mention}
 **ID người dùng đã mở chặn:** `{user_id}`
 **Số nhóm:** `{number_of_chats}`"""
+
         try:
             m2 = await app.send_message(
                 FMUTE_LOG_GROUP_ID,
@@ -220,12 +221,12 @@ __**Người dùng được bỏ chặn**__
                 disable_web_page_preview=True,
             )
             await m.edit(
-                f"Đã bỏ chặn {user.mention} trên toàn hệ thống!\n Bởi: {from_user.mention}",
+                f"Đã bỏ chặn {user.mention} @{user.username} trên toàn hệ thống!\n\n Bởi: {from_user.mention} t.me/{from_user.username}",
                 disable_web_page_preview=True,
             )
         except Exception:
             await message.reply_text(
-                "Người dùng đã được bỏ chặn, nhưng hành động này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
+                f"Người dùng {user.mention} @{user.username} đã được bỏ chặn, nhưng hành động này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
             )
 
 
