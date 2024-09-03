@@ -943,7 +943,7 @@ async def mute_globally(_, message: Message):
         await app.send_message(
             user.id,
             f"Xin chào {user.mention}, Bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title}."
-            f" Bạn hãy nhắn tin cho admin t.me/{reason.strip('@') or username1} để mở chat."
+            f" Bạn hãy nhắn tin cho admin {reason or link + username1} để mở chat."
         )
     except Exception:
         pass
@@ -968,7 +968,7 @@ __**Người dùng bị cấm chat toàn hệ thống**__
         await m.edit(
 f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
 **Bởi: {from_user.mention} @{username1}.**
-**Lý do: Gửi voice cho t.me/{username1 or reason.strip("@")} để được mở chat  💬💬💬.**""")
+**Lý do: Gửi voice cho {link + username1 or reason} để được mở chat  💬💬💬.**""")
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
