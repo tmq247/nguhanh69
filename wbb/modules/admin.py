@@ -919,8 +919,8 @@ async def mute_globally(_, message: Message):
 
     username1 = from_user.username
     username2 = user.username   
-    #if username1 == None:
-        #return await message.reply_text("Vui lòng đặt username hoặc tag admin khác để check voice người này.")
+    if username1 == None:
+        return await message.reply_text("Vui lòng đặt username hoặc tag admin khác để check voice người này.")
         
     served_chats = await get_served_chats()
     m = await message.reply_text(
