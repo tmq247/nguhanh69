@@ -798,7 +798,7 @@ async def mute_globally(_, message: Message):
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
 
-    if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS:
+    if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS or user_id in admins_in_chat:
         return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
     
     if is_fmuted:
@@ -839,7 +839,7 @@ async def mute_globally(_, message: Message):
         except Exception:
             pass
     try:
-        await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.")
+        await app.send_message(user.id, f"Xin chào {user.mention}, bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} t.me/{username1} để mở chat.")
     except Exception:
         pass
     #await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.")
@@ -896,7 +896,7 @@ async def mute_globally(_, message: Message):
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
 
-    if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS:
+    if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS or user_id in admins_in_chat:
         return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
     
     if is_fmuted:
@@ -940,10 +940,10 @@ async def mute_globally(_, message: Message):
             pass
 
     try:
-        await app2.send_message(
+        await app.send_message(
             user.id,
-            f"Xin chào, Bạn đã bị cấm chat tại nhóm {message.chat.title}."
-            f" Bạn hãy nhắn tin cho admin @{reason or username1} để mở chat.",
+            f"Xin chào {user.mention}, Bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title}."
+            f" Bạn hãy nhắn tin cho admin t.me/{username1 or reason.strip("@")} để mở chat.",
         )
     except Exception:
         pass
@@ -968,7 +968,7 @@ __**Người dùng bị cấm chat toàn hệ thống**__
         await m.edit(
 f"""**🔥Người dùng {user.mention} @{username2} đã bị 🚫cấm chat tất cả nhóm trong hệ thống.**
 **Bởi: {from_user.mention} @{username1}.**
-**Lý do: Gửi voice cho {from_user.mention} t.me/{username1} để được mở chat  💬💬💬.**""")
+**Lý do: Gửi voice cho t.me/{username1 or reason.strip("@")} để được mở chat  💬💬💬.**""")
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
@@ -1105,8 +1105,8 @@ async def unmute_globally(_, message: Message):
         try:
             await app.send_message(
                 user.id,
-                f"Xin chào, Bạn đã được {from_user.mention} bỏ cấm chat trên toàn hệ thống,"
-                + " Hãy tham gia trò chuyện cùng chúng tôi tại https://t.me/addlist/7WPWA3xQCGQ3NTlh .",
+                f"Xin chào {user.mention}, Bạn đã được {from_user.mention} t.me/{from_user.username}bỏ cấm chat trên toàn hệ thống,"
+                + " Hãy tham gia trò chuyện tại https://t.me/addlist/8LaQNjuIknljYmNh .",
             )
         except Exception:
             pass
