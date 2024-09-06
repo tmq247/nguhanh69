@@ -260,7 +260,7 @@ async def broadcast_message(_, message):
                 #text=text,
                 #reply_markup=reply_markup,
             #)
-            await app.forward_messages(i, from_chat_id=message.chat.id, message_ids=message.reply_to_message.id)
+            await app.forward_message(i, from_chat_id=message.chat.id, message_ids=message.reply_to_message.id)
             await asyncio.sleep(sleep_time)
             sent += 1
         except FloodWait as e:
