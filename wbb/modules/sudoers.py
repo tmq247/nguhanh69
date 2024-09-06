@@ -240,29 +240,25 @@ __**Người dùng được bỏ chặn**__
 @capture_err
 async def broadcast_message(_, message):
     sleep_time = 0.1
-    #text = message.reply_to_message.text.markdown
-    #text = await message.forward(message.reply_to_message.text)
     reply_message = message.reply_to_message
-
-    reply_markup = None
-    if reply_message.reply_markup:
-        reply_markup = InlineKeyboardMarkup(reply_message.reply_markup.inline_keyboard)
+    if not reply_message:
+        return await message.reply_text("Reply to a message to broadcast it")
+        
     sent = 0
     schats = await get_served_chats()
     chats = [int(chat["chat_id"]) for chat in schats]
     m = await message.reply_text(
         f"Broadcast in progress, will take {len(chats) * sleep_time} seconds."
     )
+    to_copy = not reply_message.poll
     for i in chats:
         try:
-            #await app.send_message(
-                #i,
-                #text=text,
-                #reply_markup=reply_markup,
-            #)
-            await app.forward_messages(i, message.chat.id, reply_message.id, reply_markup=reply_markup)
-            await asyncio.sleep(sleep_time)
+            if to_copy:
+                await reply_message.copy(i)
+            else:
+                await reply_message.forward(i)
             sent += 1
+            await asyncio.sleep(sleep_time)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
@@ -285,6 +281,13 @@ async def update_restart(_, message):
     m = await message.reply_text("**Đã cập nhật với nhánh mặc định, đang khởi động lại.**")
     await restart(m)
 
+@app.on_message(filters.command("restart") & SUDOERS)
+async def update_restart(_, message):
+    m = await message.reply_text(
+        "**Bot is restarting now.**"
+    )
+    await restart(m)
+
 
 @app.on_message(filters.command("uup") & SUDOERS)
 @capture_err
@@ -293,26 +296,23 @@ async def broadcast_message(_, message):
     sent = 0
     schats = await get_served_users()
     chats = [int(chat["user_id"]) for chat in schats]
-    text = message.reply_to_message.text.markdown
     reply_message = message.reply_to_message
-
-    reply_markup = None
-    if reply_message.reply_markup:
-        reply_markup = InlineKeyboardMarkup(reply_message.reply_markup.inline_keyboard)
+    if not reply_message:
+        return await message.reply_text("Reply to a message to broadcast it")
 
     m = await message.reply_text(
         f"Broadcast in progress, will take {len(chats) * sleep_time} seconds."
     )
 
+    to_copy = not reply_message.poll
     for i in chats:
         try:
-            await app.send_message(
-                i,
-                text=text,
-                reply_markup=reply_markup,
-            )
-            await asyncio.sleep(sleep_time)
+            if to_copy:
+                await reply_message.copy(i)
+            else:
+                await reply_message.forward(i)
             sent += 1
+            await asyncio.sleep(sleep_time)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
