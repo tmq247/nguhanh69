@@ -241,7 +241,7 @@ __**Người dùng được bỏ chặn**__
 async def broadcast_message(_, message):
     sleep_time = 0.1
     #text = message.reply_to_message.text.markdown
-    text = await message.forward(message.reply_to_message)
+    #text = await message.forward(message.reply_to_message.text)
     reply_message = message.reply_to_message
 
     reply_markup = None
@@ -255,11 +255,12 @@ async def broadcast_message(_, message):
     )
     for i in chats:
         try:
-            await app.send_message(
-                i,
-                text=text,
-                reply_markup=reply_markup,
-            )
+            #await app.send_message(
+                #i,
+                #text=text,
+                #reply_markup=reply_markup,
+            #)
+            await app.forward_messages(i, from_chat_id=message.chat.id, message_ids=message.id)
             await asyncio.sleep(sleep_time)
             sent += 1
         except FloodWait as e:
