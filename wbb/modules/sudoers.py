@@ -240,7 +240,7 @@ __**Người dùng được bỏ chặn**__
 @capture_err
 async def broadcast_message(_, message):
     sleep_time = 0.1
-    text = message.reply_to_message.text.markdown
+    text = message.reply_to_message.text
     reply_message = message.reply_to_message
 
     reply_markup = None
