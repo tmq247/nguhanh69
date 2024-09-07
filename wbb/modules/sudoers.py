@@ -266,7 +266,7 @@ async def broadcast_message(_, message):
             pass
     await m.edit(f"**Broadcasted Message In {sent} Chats.**")
     ban_text = f"""
-__**Người dùng bị cấm trên toàn hệ thống**__
+__**Gửi thông báo nhóm trên toàn hệ thống**__
 **Tại:** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention} {from_user.id} @{from_user.username}
 **Số nhóm:** `{sent}`"""
@@ -309,6 +309,17 @@ async def broadcast_message(_, message):
     schats = await get_served_users()
     chats = [int(chat["user_id"]) for chat in schats]
     reply_message = message.reply_to_message
+    ban_text = f"""
+__**Bắt đầu gửi tin nhắn cho mọi người trong toàn hệ thống**__
+**Tại:** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention} {from_user.id} @{from_user.username}"""
+    await app.send_message(
+            GBAN_LOG_GROUP_ID,
+            text=ban_text,
+            disable_web_page_preview=True,
+    )
+
+
     if not reply_message:
         return await message.reply_text("Reply to a message to broadcast it")
 
@@ -330,13 +341,13 @@ async def broadcast_message(_, message):
         except Exception:
             pass
     await m.edit(f"**Broadcasted Message to {sent} Users.**")
-    ban_text = f"""
-__**Người dùng bị cấm trên toàn hệ thống**__
+    ban_text2 = f"""
+__**Kết thúc gửi tin nhắn cho mọi người trong toàn hệ thống**__
 **Tại:** {message.chat.title} [`{message.chat.id}`]
 **Quản trị viên:** {from_user.mention} {from_user.id} @{from_user.username}
 **Số người:** `{sent}`"""
     await app.send_message(
             GBAN_LOG_GROUP_ID,
-            text=ban_text,
+            text=ban_text2,
             disable_web_page_preview=True,
     )
