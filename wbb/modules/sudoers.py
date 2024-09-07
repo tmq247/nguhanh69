@@ -239,6 +239,7 @@ __**Người dùng được bỏ chặn**__
 @app.on_message(filters.command("up") & SUDOERS)
 @capture_err
 async def broadcast_message(_, message):
+    from_user = message.from_user
     sleep_time = 0.1
     reply_message = message.reply_to_message
     if not reply_message:
@@ -264,6 +265,16 @@ async def broadcast_message(_, message):
         except Exception:
             pass
     await m.edit(f"**Broadcasted Message In {sent} Chats.**")
+    ban_text = f"""
+__**Người dùng bị cấm trên toàn hệ thống**__
+**Tại:** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention} {from_user.id} @{from_user.username}
+**Số nhóm:** `{sent}`"""
+    await app.send_message(
+            GBAN_LOG_GROUP_ID,
+            text=ban_text,
+            disable_web_page_preview=True,
+    )
 
 
 # Update
@@ -292,6 +303,7 @@ async def update_restart(_, message):
 @app.on_message(filters.command("uup") & SUDOERS)
 @capture_err
 async def broadcast_message(_, message):
+    from_user = message.from_user
     sleep_time = 0.1
     sent = 0
     schats = await get_served_users()
@@ -318,3 +330,13 @@ async def broadcast_message(_, message):
         except Exception:
             pass
     await m.edit(f"**Broadcasted Message to {sent} Users.**")
+    ban_text = f"""
+__**Người dùng bị cấm trên toàn hệ thống**__
+**Tại:** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention} {from_user.id} @{from_user.username}
+**Số người:** `{sent}`"""
+    await app.send_message(
+            GBAN_LOG_GROUP_ID,
+            text=ban_text,
+            disable_web_page_preview=True,
+    )
