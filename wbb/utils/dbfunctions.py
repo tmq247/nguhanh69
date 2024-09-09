@@ -41,6 +41,8 @@ karmadb = db.karma
 chatsdb = db.chats
 usersdb = db.users
 gbansdb = db.gban
+fmutesdb = db.fmute
+activesdb = db.active
 coupledb = db.couple
 captchadb = db.captcha
 solved_captcha_db = db.solved_captcha
@@ -142,6 +144,55 @@ async def get_filters_count() -> dict:
         "chats_count": chats_count,
         "filters_count": filters_count,
     }
+
+async def get_fmutes_count() -> int:
+    return len([i async for i in fmutesdb.find({"user_id": {"$gt": 0}})])
+
+
+async def is_fmuted_user(user_id: int) -> bool:
+    user = await fmutesdb.find_one({"user_id": user_id})
+    if not user:
+        return False
+    return True
+
+
+async def add_fmute_user(user_id: int):
+    is_fmuted = await is_fmuted_user(user_id)
+    if is_fmuted:
+        return
+    return await fmutesdb.insert_one({"user_id": user_id})
+
+
+async def remove_fmute_user(user_id: int):
+    is_fmuted = await is_fmuted_user(user_id)
+    if not is_fmuted:
+        return
+    return await fmutesdb.delete_one({"user_id": user_id})
+
+
+async def get_actives_count() -> int:
+    return len([i async for i in activesdb.find({"user_id": {"$gt": 0}})])
+
+
+async def is_actived_user(user_id: int) -> bool:
+    user = await activesdb.find_one({"user_id": user_id})
+    if not user:
+        return False
+    return True
+
+
+async def add_active_user(user_id: int):
+    is_actived = await is_actived_user(user_id)
+    if is_actived:
+        return
+    return await activesdb.insert_one({"user_id": user_id})
+
+
+async def remove_active_user(user_id: int):
+    is_actived = await is_actived_user(user_id)
+    if not is_actived:
+        return
+    return await activesdb.delete_one({"user_id": user_id})
 
 
 async def _get_filters(chat_id: int) -> Dict[str, int]:
