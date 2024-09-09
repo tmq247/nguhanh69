@@ -885,7 +885,6 @@ __**Người dùng bị fmute toàn hệ thống **__
 #@capture_err
 async def mute_globally(_, message: Message):
     link2 = f"tg://openmessage?user_id="
-    link3 = f"<a href="tg://user?id={A.user_id}">A</a>
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
