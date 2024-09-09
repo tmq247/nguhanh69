@@ -1486,14 +1486,14 @@ async def report_user(_, message):
     await reply.reply_text(text)
 
 
-@app.on_message(filters.command("invite"))
+@app.on_message(filters.command("link"))
 @adminsOnly("can_invite_users")
 async def invite(_, message):
     if message.chat.type in [ChatType.GROUP, ChatType.SUPERGROUP]:
         link = (await app.get_chat(message.chat.id)).invite_link
         if not link:
             link = await app.export_chat_invite_link(message.chat.id)
-        text = f"Đây là liên kết mời nhóm này.\n\n{link}"
+        text = f"Here's This Group Invite Link.\n\n{link}"
         if message.reply_to_message:
             await message.reply_to_message.reply_text(
                 text, disable_web_page_preview=True
