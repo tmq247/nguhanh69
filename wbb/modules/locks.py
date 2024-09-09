@@ -1,7 +1,7 @@
 """
 MIT License
 
-Copyright (c) 2023 TheHamkerCat
+Copyright (c) 2024 TheHamkerCat
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -101,7 +101,9 @@ async def tg_lock(message, permissions: list, perm: str, lock: bool):
     permissions = {perm: True for perm in list(set(permissions))}
 
     try:
-        await app.set_chat_permissions(message.chat.id, ChatPermissions(**permissions))
+        await app.set_chat_permissions(
+            message.chat.id, ChatPermissions(**permissions)
+        )
     except ChatNotModified:
         return await message.reply_text(
             "To unlock this, you have to unlock 'messages' first."
@@ -190,4 +192,4 @@ async def url_detector(_, message):
                 await message.reply_text(
                     "This message contains a URL, "
                     + "but i don't have enough permissions to delete it"
-                )
+        )
