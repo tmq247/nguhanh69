@@ -1,7 +1,7 @@
 """
 MIT License
 
-Copyright (c) 2023 TheHamkerCat
+Copyright (c) 2024 TheHamkerCat
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,8 +41,6 @@ karmadb = db.karma
 chatsdb = db.chats
 usersdb = db.users
 gbansdb = db.gban
-fmutesdb = db.fmute
-activesdb = db.active
 coupledb = db.couple
 captchadb = db.captcha
 solved_captcha_db = db.solved_captcha
@@ -57,6 +55,7 @@ blacklist_chatdb = db.blacklistChat
 restart_stagedb = db.restart_stage
 flood_toggle_db = db.flood_toggle
 rssdb = db.rss
+rulesdb = db.rules
 chatbotdb = db.chatbot
 
 
@@ -128,6 +127,10 @@ async def delete_note(chat_id: int, name: str) -> bool:
     return False
 
 
+async def deleteall_notes(chat_id: int):
+    return await notesdb.delete_one({"chat_id": chat_id})
+
+
 async def get_filters_count() -> dict:
     chats_count = 0
     filters_count = 0
@@ -186,6 +189,30 @@ async def delete_filter(chat_id: int, name: str) -> bool:
         )
         return True
     return False
+
+
+async def deleteall_filters(chat_id: int):
+    return await filtersdb.delete_one({"chat_id": chat_id})
+
+
+async def get_rules(chat_id: int):
+    chat = await rulesdb.find_one({"chat_id": chat_id})
+    if not chat:
+        return ""
+    rules = chat.get("rules", "")
+    return rules
+
+
+async def set_chat_rules(chat_id: int, rules: str):
+    await rulesdb.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"rules": rules}},
+        upsert=True,
+    )
+
+
+async def delete_rules(chat_id: int):
+    return await rulesdb.delete_one({"chat_id": chat_id})
 
 
 async def int_to_alpha(user_id: int) -> str:
@@ -270,7 +297,7 @@ async def get_karmas_count() -> dict:
 async def user_global_karma(user_id) -> int:
     total_karma = 0
     async for chat in karmadb.find({"chat_id": {"$lt": 0}}):
-        karma = await get_karma(chat["chat_id"], await int_to_alpha(user_id))
+        karma = chat["karma"].get(await int_to_alpha(user_id))
         if karma and (int(karma["karma"]) > 0):
             total_karma += int(karma["karma"])
     return total_karma
@@ -394,56 +421,6 @@ async def remove_gban_user(user_id: int):
     return await gbansdb.delete_one({"user_id": user_id})
 
 
-async def get_fmutes_count() -> int:
-    return len([i async for i in fmutesdb.find({"user_id": {"$gt": 0}})])
-
-
-async def is_fmuted_user(user_id: int) -> bool:
-    user = await fmutesdb.find_one({"user_id": user_id})
-    if not user:
-        return False
-    return True
-
-
-async def add_fmute_user(user_id: int):
-    is_fmuted = await is_fmuted_user(user_id)
-    if is_fmuted:
-        return
-    return await fmutesdb.insert_one({"user_id": user_id})
-
-
-async def remove_fmute_user(user_id: int):
-    is_fmuted = await is_fmuted_user(user_id)
-    if not is_fmuted:
-        return
-    return await fmutesdb.delete_one({"user_id": user_id})
-
-
-async def get_actives_count() -> int:
-    return len([i async for i in activesdb.find({"user_id": {"$gt": 0}})])
-
-
-async def is_actived_user(user_id: int) -> bool:
-    user = await activesdb.find_one({"user_id": user_id})
-    if not user:
-        return False
-    return True
-
-
-async def add_active_user(user_id: int):
-    is_actived = await is_actived_user(user_id)
-    if is_actived:
-        return
-    return await activesdb.insert_one({"user_id": user_id})
-
-
-async def remove_active_user(user_id: int):
-    is_actived = await is_actived_user(user_id)
-    if not is_actived:
-        return
-    return await activesdb.delete_one({"user_id": user_id})
-
-
 async def _get_lovers(chat_id: int):
     lovers = await coupledb.find_one({"chat_id": chat_id})
     if not lovers:
@@ -546,16 +523,27 @@ async def disapprove_pmpermit(user_id: int):
     return await pmpermitdb.delete_one({"user_id": user_id})
 
 
-async def get_welcome(chat_id: int) -> str:
-    text = await welcomedb.find_one({"chat_id": chat_id})
-    if not text:
-        return ""
-    return text["text"]
+async def get_welcome(chat_id: int) -> (str, str, str):
+    data = await welcomedb.find_one({"chat_id": chat_id})
+    if not data:
+        return "", "", ""
+
+    welcome = data.get("welcome", "")
+    raw_text = data.get("raw_text", "")
+    file_id = data.get("file_id", "")
+
+    return welcome, raw_text, file_id
 
 
-async def set_welcome(chat_id: int, text: str):
+async def set_welcome(chat_id: int, welcome: str, raw_text: str, file_id: str):
+    update_data = {
+        "welcome": welcome,
+        "raw_text": raw_text,
+        "file_id": file_id,
+    }
+
     return await welcomedb.update_one(
-        {"chat_id": chat_id}, {"$set": {"text": text}}, upsert=True
+        {"chat_id": chat_id}, {"$set": update_data}, upsert=True
     )
 
 
@@ -645,7 +633,10 @@ async def deactivate_pipe(from_chat_id: int, to_chat_id: int):
     if not pipes:
         return
     for pipe in pipes:
-        if pipe["from_chat_id"] == from_chat_id and pipe["to_chat_id"] == to_chat_id:
+        if (
+            pipe["from_chat_id"] == from_chat_id
+            and pipe["to_chat_id"] == to_chat_id
+        ):
             pipes.remove(pipe)
     return await pipesdb.update_one(
         {"pipe": "pipe"}, {"$set": {"pipes": pipes}}, upsert=True
@@ -654,7 +645,10 @@ async def deactivate_pipe(from_chat_id: int, to_chat_id: int):
 
 async def is_pipe_active(from_chat_id: int, to_chat_id: int) -> bool:
     for pipe in await show_pipes():
-        if pipe["from_chat_id"] == from_chat_id and pipe["to_chat_id"] == to_chat_id:
+        if (
+            pipe["from_chat_id"] == from_chat_id
+            and pipe["to_chat_id"] == to_chat_id
+        ):
             return True
 
 
@@ -810,7 +804,9 @@ async def add_chatbot(chat_id: int, is_userbot: bool = False):
         list_id["userbot"].append(chat_id)
     else:
         list_id["bot"].append(chat_id)
-    await chatbotdb.update_one({"chatbot": "chatbot"}, {"$set": list_id}, upsert=True)
+    await chatbotdb.update_one(
+        {"chatbot": "chatbot"}, {"$set": list_id}, upsert=True
+    )
 
 
 async def rm_chatbot(chat_id: int, is_userbot: bool = False):
@@ -819,4 +815,6 @@ async def rm_chatbot(chat_id: int, is_userbot: bool = False):
         list_id["userbot"].remove(chat_id)
     else:
         list_id["bot"].remove(chat_id)
-    await chatbotdb.update_one({"chatbot": "chatbot"}, {"$set": list_id}, upsert=True)
+    await chatbotdb.update_one(
+        {"chatbot": "chatbot"}, {"$set": list_id}, upsert=True
+                         )
