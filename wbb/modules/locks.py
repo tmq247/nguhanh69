@@ -21,274 +21,175 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-import re
-import secrets
-import string
-import subprocess
-from asyncio import Lock
-from re import findall
+from pyrogram import filters
+from pyrogram.errors.exceptions.bad_request_400 import ChatNotModified
+from pyrogram.types import ChatPermissions
 
-from pyrogram import enums, filters
-
-from wbb import SUDOERS, USERBOT_PREFIX, app, app2, arq, eor
+from wbb import SUDOERS, app
 from wbb.core.decorators.errors import capture_err
-from wbb.utils import random_line
-from wbb.utils.http import get
-from wbb.utils.json_prettify import json_prettify
-from wbb.utils.pastebin import paste
+from wbb.core.decorators.permissions import adminsOnly
+from wbb.modules.admin import list_admins
+from wbb.utils.functions import get_urls_from_text
 
-__MODULE__ = "Misc"
+__MODULE__ = "Locks"
 __HELP__ = """
-/asq
-    Ask a question
+Commands: /lock | /unlock | /locks [No Parameters Required]
 
-/commit
-    Generate Funny Commit Messages
+Parameters:
+    messages | stickers | gifs | media | games | polls
 
-/runs
-    Idk Test Yourself
+    inline  | url | group_info | user_add | pin
 
-/id
-    Get Chat_ID or User_ID
+You can only pass the "all" parameter with /lock, not with /unlock
 
-/random [Length]
-    Generate Random Complex Passwords
-
-/cheat [Language] [Query]
-    Get Programming Related Help
-
-/tr [LANGUAGE_CODE]
-    Translate A Message
-    Ex: /tr en
-
-/json [URL]
-    Get parsed JSON response from a rest API.
-
-/arq
-    Statistics Of ARQ API.
-
-/webss | .webss [URL] [FULL_SIZE?, use (y|yes|true) to get full size image. (optional)]
-    Take A Screenshot Of A Webpage
-
-/reverse
-    Reverse search an image.
-
-/carbon
-    Make Carbon from code.
-
-/tts
-    Convert Text To Speech.
-
-/autocorrect [Reply to a message]
-    Autocorrects the text in replied message.
-
-/pdf [Reply to an image (as document) or a group of images.]
-    Convert images to PDF, helpful for online classes.
-
-/markdownhelp
-    Sends mark down and formatting help.
-
-/backup
-    Backup database
-
-/ping
-    Check ping of all 5 DCs.
-    
-#RTFM - Tell noobs to read the manual
+Example:
+    /lock all
 """
 
-ASQ_LOCK = Lock()
-PING_LOCK = Lock()
+incorrect_parameters = "Incorrect Parameters, Check Locks Section In Help."
+# Using disable_preview as a switch for url checker
+# That way we won't need an additional db to check
+# If url lock is enabled/disabled for a chat
+data = {
+    "messages": "can_send_messages",
+    "stickers": "can_send_other_messages",
+    "gifs": "can_send_other_messages",
+    "media": "can_send_media_messages",
+    "games": "can_send_other_messages",
+    "inline": "can_send_other_messages",
+    "url": "can_add_web_page_previews",
+    "polls": "can_send_polls",
+    "group_info": "can_change_info",
+    "useradd": "can_invite_users",
+    "pin": "can_pin_messages",
+}
 
 
-@app2.on_message(
-    SUDOERS
-    & filters.command("ping", prefixes=USERBOT_PREFIX)
-    & ~filters.forwarded
-    & ~filters.via_bot
-)
-@app.on_message(filters.command("ping"))
-async def ping_handler(_, message):
-    m = await eor(message, text="Pinging datacenters...")
-    async with PING_LOCK:
-        ips = {
-            "dc1": "149.154.175.53",
-            "dc2": "149.154.167.51",
-            "dc3": "149.154.175.100",
-            "dc4": "149.154.167.91",
-            "dc5": "91.108.56.130",
-        }
-        text = "**Pings:**\n"
+async def current_chat_permissions(chat_id):
+    perms = []
+    perm = (await app.get_chat(chat_id)).permissions
+    if perm.can_send_messages:
+        perms.append("can_send_messages")
+    if perm.can_send_media_messages:
+        perms.append("can_send_media_messages")
+    if perm.can_send_other_messages:
+        perms.append("can_send_other_messages")
+    if perm.can_add_web_page_previews:
+        perms.append("can_add_web_page_previews")
+    if perm.can_send_polls:
+        perms.append("can_send_polls")
+    if perm.can_change_info:
+        perms.append("can_change_info")
+    if perm.can_invite_users:
+        perms.append("can_invite_users")
+    if perm.can_pin_messages:
+        perms.append("can_pin_messages")
 
-        for dc, ip in ips.items():
-            try:
-                shell = subprocess.run(
-                    ["ping", "-c", "1", "-W", "2", ip],
-                    text=True,
-                    check=True,
-                    capture_output=True,
-                )
-                resp_time = findall(r"time=.+m?s", shell.stdout, re.MULTILINE)[
-                    0
-                ].replace("time=", "")
-
-                text += f"    **{dc.upper()}:** {resp_time} ✅\n"
-            except Exception:
-                # There's a cross emoji here, but it's invisible.
-                text += f"    **{dc.upper}:** ❌\n"
-        await m.edit(text)
+    return perms
 
 
-@app.on_message(filters.command("asq"))
-async def asq(_, message):
-    err = "Reply to text message or pass the question as argument"
-    if message.reply_to_message:
-        if not message.reply_to_message.text:
-            return await message.reply(err)
-        question = message.reply_to_message.text
+async def tg_lock(message, permissions: list, perm: str, lock: bool):
+    if lock:
+        if perm not in permissions:
+            return await message.reply_text("Already locked.")
+        permissions.remove(perm)
     else:
-        if len(message.command) < 2:
-            return await message.reply(err)
-        question = message.text.split(None, 1)[1]
-    m = await message.reply("Thinking...")
-    async with ASQ_LOCK:
-        resp = await arq.asq(question)
-        await m.edit(resp.result)
+        if perm in permissions:
+            return await message.reply_text("Already Unlocked.")
+        permissions.append(perm)
 
+    permissions = {perm: True for perm in list(set(permissions))}
 
-@app.on_message(filters.command("commit"))
-async def commit(_, message):
-    await message.reply_text(await get("http://whatthecommit.com/index.txt"))
-
-
-@app.on_message(filters.command("RTFM", "#"))
-async def rtfm(_, message):
-    await message.delete()
-    if not message.reply_to_message:
-        return await message.reply_text("Reply To A Message lol")
-    await message.reply_to_message.reply_text(
-        "Are You Lost? READ THE FUCKING DOCS!"
-    )
-
-
-@app.on_message(filters.command("runs"))
-async def runs(_, message):
-    await message.reply_text((await random_line("wbb/utils/runs.txt")))
-
-
-@app2.on_message(
-    filters.command("id", prefixes=USERBOT_PREFIX)
-    & ~filters.forwarded
-    & ~filters.via_bot
-    & SUDOERS
-)
-@app.on_message(filters.command("id"))
-async def getid(client, message):
-    chat = message.chat
-    your_id = message.from_user.id
-    message_id = message.id
-    reply = message.reply_to_message
-
-    text = f"**[Message ID:]({message.link})** `{message_id}`\n"
-    text += f"**[Your ID:](tg://user?id={your_id})** `{your_id}`\n"
-
-    if not message.command:
-        message.command = message.text.split()
-
-    if len(message.command) == 2:
-        try:
-            split = message.text.split(None, 1)[1].strip()
-            user_id = (await client.get_users(split)).id
-            text += f"**[User ID:](tg://user?id={user_id})** `{user_id}`\n"
-        except Exception:
-            return await eor(message, text="This user doesn't exist.")
-
-    text += f"**[Chat ID:](https://t.me/{chat.username})** `{chat.id}`\n\n"
-    if not getattr(reply, "empty", True):
-        id_ = reply.from_user.id if reply.from_user else reply.sender_chat.id
-        text += f"**[Replied Message ID:]({reply.link})** `{reply.id}`\n"
-        text += f"**[Replied User ID:](tg://user?id={id_})** `{id_}`"
-
-    await eor(
-        message,
-        text=text,
-        disable_web_page_preview=True,
-        parse_mode=enums.ParseMode.MARKDOWN,
-    )
-
-
-# Random
-@app.on_message(filters.command("random"))
-@capture_err
-async def random(_, message):
-    if len(message.command) != 2:
-        return await message.reply_text(
-            '"/random" Needs An Argurment.' " Ex: `/random 5`"
-        )
-    length = message.text.split(None, 1)[1]
     try:
-        if 1 < int(length) < 1000:
-            alphabet = string.ascii_letters + string.digits
-            password = "".join(
-                secrets.choice(alphabet) for i in range(int(length))
-            )
-            await message.reply_text(f"`{password}`")
-        else:
-            await message.reply_text("Specify A Length Between 1-1000")
-    except ValueError:
-        await message.reply_text(
-            "Strings Won't Work!, Pass A Positive Integer Less Than 1000"
+        await app.set_chat_permissions(
+            message.chat.id, ChatPermissions(**permissions)
         )
-
-
-# Translate
-@app.on_message(filters.command("tr"))
-@capture_err
-async def tr(_, message):
-    if len(message.command) != 2:
-        return await message.reply_text("/tr [LANGUAGE_CODE]")
-    lang = message.text.split(None, 1)[1]
-    if not message.reply_to_message or not lang:
+    except ChatNotModified:
         return await message.reply_text(
-            "Reply to a message with /tr [language code]"
-            + "\nGet supported language list from here -"
-            + " https://py-googletrans.readthedocs.io/en"
-            + "/latest/#googletrans-languages"
+            "To unlock this, you have to unlock 'messages' first."
         )
-    reply = message.reply_to_message
-    text = reply.text or reply.caption
-    if not text:
-        return await message.reply_text("Reply to a text to translate it")
-    result = await arq.translate(text, lang)
-    if not result.ok:
-        return await message.reply_text(result.result)
-    await message.reply_text(result.result.translatedText)
+
+    await message.reply_text(("Locked." if lock else "Unlocked."))
 
 
-@app.on_message(filters.command("json"))
-@capture_err
-async def json_fetch(_, message):
+@app.on_message(filters.command(["lock", "unlock"]) & ~filters.private)
+@adminsOnly("can_restrict_members")
+async def locks_func(_, message):
     if len(message.command) != 2:
-        return await message.reply_text("/json [URL]")
-    url = message.text.split(None, 1)[1]
-    m = await message.reply_text("Fetching")
-    try:
-        data = await get(url)
-        data = await json_prettify(data)
-        if len(data) < 4090:
-            await m.edit(data)
-        else:
-            link = await paste(data)
-            await m.edit(
-                f"[OUTPUT_TOO_LONG]({link})",
-                disable_web_page_preview=True,
-            )
-    except Exception as e:
-        await m.edit(str(e))
+        return await message.reply_text(incorrect_parameters)
+
+    chat_id = message.chat.id
+    parameter = message.text.strip().split(None, 1)[1].lower()
+    state = message.command[0].lower()
+
+    if parameter not in data and parameter != "all":
+        return await message.reply_text(incorrect_parameters)
+
+    permissions = await current_chat_permissions(chat_id)
+
+    if parameter in data:
+        await tg_lock(
+            message,
+            permissions,
+            data[parameter],
+            bool(state == "lock"),
+        )
+    elif parameter == "all" and state == "lock":
+        await app.set_chat_permissions(chat_id, ChatPermissions())
+        await message.reply_text(f"Locked Everything in {message.chat.title}")
+
+    elif parameter == "all" and state == "unlock":
+        await app.set_chat_permissions(
+            chat_id,
+            ChatPermissions(
+                can_send_messages=True,
+                can_send_media_messages=True,
+                can_send_other_messages=True,
+                can_add_web_page_previews=True,
+                can_send_polls=True,
+                can_change_info=False,
+                can_invite_users=True,
+                can_pin_messages=False,
+            ),
+        )
+        await message.reply(f"Unlocked Everything in {message.chat.title}")
 
 
-@app.on_message(filters.command(["kickme", "banme"]))
-async def kickbanme(_, message):
-    await message.reply_text(
-        "Haha, it doesn't work that way, You're stuck with everyone here."
-    )
+@app.on_message(filters.command("locks") & ~filters.private)
+@capture_err
+async def locktypes(_, message):
+    permissions = await current_chat_permissions(message.chat.id)
+
+    if not permissions:
+        return await message.reply_text("No Permissions.")
+
+    perms = ""
+    for i in permissions:
+        perms += f"__**{i}**__\n"
+
+    await message.reply_text(perms)
+
+
+@app.on_message(filters.text & ~filters.private, group=69)
+async def url_detector(_, message):
+    user = message.from_user
+    chat_id = message.chat.id
+    text = message.text.lower().strip()
+
+    if not text or not user:
+        return
+    mods = await list_admins(chat_id)
+    if user.id in mods or user.id in SUDOERS:
+        return
+
+    check = get_urls_from_text(text)
+    if check:
+        permissions = await current_chat_permissions(chat_id)
+        if "can_add_web_page_previews" not in permissions:
+            try:
+                await message.delete()
+            except Exception:
+                await message.reply_text(
+                    "This message contains a URL, "
+                    + "but i don't have enough permissions to delete it"
+                )
