@@ -86,13 +86,13 @@ async def useradd(_, message: Message):
 )
 @capture_err
 async def userdel(_, message: Message):
-    if not message.reply_to_message:
-        return await eor(
-            message,
-            text="Trả lời tin nhắn của ai đó để xóa anh ta khỏi sudoers.",
-        )
-    user_id = message.reply_to_message.from_user.id
-    #user_id, reason = await extract_user_and_reason(message)
+    #if not message.reply_to_message:
+        #return await eor(
+            #message,
+            #text="Trả lời tin nhắn của ai đó để xóa anh ta khỏi sudoers.",
+        #)
+    #user_id = message.reply_to_message.from_user.id
+    user_id, reason = await extract_user_and_reason(message)
     umention = (await app2.get_users(user_id)).mention
 
     if user_id not in await get_sudoers():
