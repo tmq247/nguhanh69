@@ -58,7 +58,7 @@ async def useradd(_, message: Message):
             text="Trả lời tin nhắn của ai đó để thêm anh ta vào sudoers.",
         )
     #user_id = message.reply_to_message.from_user.id
-    user_id = await extract_user(message)
+    user_id, reason = await extract_user_and_reason(message)
     umention = (await app2.get_users(user_id)).mention
     sudoers = await get_sudoers()
 
@@ -92,7 +92,7 @@ async def userdel(_, message: Message):
             text="Trả lời tin nhắn của ai đó để xóa anh ta khỏi sudoers.",
         )
     #user_id = message.reply_to_message.from_user.id
-    user_id = await extract_user(message)
+    user_id, reason = await extract_user_and_reason(message)
     umention = (await app2.get_users(user_id)).mention
 
     if user_id not in await get_sudoers():
