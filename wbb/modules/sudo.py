@@ -27,6 +27,7 @@ from pyrogram.types import Message
 from wbb import BOT_ID, SUDOERS, USERBOT_PREFIX, app2, eor
 from wbb.core.decorators.errors import capture_err
 from wbb.utils.dbfunctions import add_sudo, get_sudoers, remove_sudo
+from wbb.utils.functions import extract_user
 
 __MODULE__ = "Sudo"
 __HELP__ = """
@@ -92,7 +93,7 @@ async def userdel(_, message: Message):
             #text="Trả lời tin nhắn của ai đó để xóa anh ta khỏi sudoers.",
         #)
     #user_id = message.reply_to_message.from_user.id
-    user_id, reason = await extract_user_and_reason(message)
+    user_id = await extract_user(message)
     umention = (await app2.get_users(user_id)).mention
 
     if user_id not in await get_sudoers():
