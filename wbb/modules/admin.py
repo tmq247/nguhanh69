@@ -788,7 +788,7 @@ async def unmute(_, message: Message):
 #@capture_err
 async def mute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
-    user = await app.get_users(user_id)
+    #user = await app.get_users(user_id)
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
     is_actived = await is_actived_user(user.id)
@@ -819,8 +819,10 @@ async def mute_globally(_, message: Message):
             revoke=True,)
         return 
 
+    user = await app.get_users(user_id)
     username1 = from_user.username
     username2 = user.username
+    
     if username1 == None:
         return await message.reply_text("Vui lòng đặt username hoặc tag admin khác để check voice người này.")
         
@@ -887,7 +889,7 @@ async def mute_globally(_, message: Message):
     link2 = f"tg://openmessage?user_id="
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
-    user = await app.get_users(user_id)
+    #user = await app.get_users(user_id)
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
     is_actived = await is_actived_user(user.id)
@@ -919,6 +921,7 @@ async def mute_globally(_, message: Message):
             revoke=True,)
         return 
 
+    user = await app.get_users(user_id)
     username1 = from_user.username
     username2 = user.username   
     if username1 == None:
@@ -987,7 +990,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user_id})  @
 #@capture_err
 async def mute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
-    user = await app.get_users(user_id)
+    #user = await app.get_users(user_id)
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
     is_actived = await is_actived_user(user.id)
@@ -1017,7 +1020,8 @@ async def mute_globally(_, message: Message):
             message_ids=actived.id,
             revoke=True,)
         return 
-        
+
+    user = await app.get_users(user_id)  
     served_chats = await get_served_chats()
     await add_fmute_user(user_id)
     number_of_chats = 0
