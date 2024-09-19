@@ -163,8 +163,8 @@ async def url_bio2(_, user: ChatMemberUpdated):
 
     check = get_urls_from_text(bio)
     if check:
-        await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
-        await message.chat.restrict_member(user.id, permissions=ChatPermissions())
+        await app.send_message(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
+        await app.restrict_chat_member(user.id, permissions=ChatPermissions())
         return 
 
 
