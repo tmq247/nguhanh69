@@ -155,16 +155,16 @@ async def url_bio(_, message):
 
 @app.on_chat_member_updated(filters.group , group=69)
 async def url_bio2(_, user: ChatMemberUpdated):
-    user.new_chat_member.user if user.new_chat_member else user.from_user
-    bio = (await app.get_chat(user.id)).bio
+    mem = user.new_chat_member.user if user.new_chat_member else user.from_user
+    bio = (await app.get_chat(mem.id)).bio
 
-    if not bio or not user:
+    if not bio or not mem:
         return
 
     check = get_urls_from_text(bio)
     if check:
-        await app.send_message(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
-        await app.restrict_chat_member(user.id, permissions=ChatPermissions())
+        await app.send_message(f"Ê !!! [{mem.mention}](tg://openmessage?user_id={mem.id})  @{mem.username} có link ở bio. Đã khóa mõm nó.")
+        await app.restrict_chat_member(mem.id, permissions=ChatPermissions())
         return 
 
 
