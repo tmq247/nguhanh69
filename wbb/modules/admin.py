@@ -132,7 +132,7 @@ from wbb.core.decorators.permissions import adminsOnly
 
 admins_in_chat = {}
 
-@app.on_message(filters.text & ~filters.private, group=69)
+@app.on_message(filters.all & ~filters.private, group=69)
 async def url_detector(_, message):
     user = message.from_user
     chat_id = message.chat.id
