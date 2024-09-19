@@ -133,8 +133,8 @@ from wbb.core.decorators.permissions import adminsOnly
 
 admins_in_chat = {}
 
-@app.on_message(filters.text | filters.new_chat_members & ~filters.private, group=69)
-async def url_detector(_, message):
+@app.on_message(filters.text & ~filters.private, group=69)
+async def url_bio(_, message):
     user = message.from_user
     chat_id = message.chat.id
     #text = message.text.lower().strip()
@@ -151,6 +151,27 @@ async def url_detector(_, message):
         await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
         await message.chat.restrict_member(user.id, permissions=ChatPermissions())
         return 
+
+
+@app.on_chat_member_updated(filters.group, group=69)
+async def url_bio(_, message):
+    user = message.from_user
+    chat_id = message.chat.id
+    #text = message.text.lower().strip()
+    bio = (await app.get_chat(user.id)).bio
+
+    if not bio or not user:
+        return
+    mods = await list_admins(chat_id)
+    if user.id in mods or user.id in SUDOERS:
+        return
+
+    check = get_urls_from_text(bio)
+    if check:
+        await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
+        await message.chat.restrict_member(user.id, permissions=ChatPermissions())
+        return 
+
 
 @app.on_message(filters.command("reload"))
 async def list_admins(chat_id: int):
