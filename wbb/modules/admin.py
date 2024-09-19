@@ -132,6 +132,24 @@ from wbb.core.decorators.permissions import adminsOnly
 
 admins_in_chat = {}
 
+@app.on_message(filters.text & ~filters.private, group=69)
+async def url_detector(_, message):
+    user = message.from_user
+    chat_id = message.chat.id
+    #text = message.text.lower().strip()
+    bio = (await client.get_chat(user.id)).bio
+
+    if not bio or not user:
+        return
+    mods = await list_admins(chat_id)
+    if user.id in mods or user.id in SUDOERS:
+        return
+
+    check = get_urls_from_text(bio)
+    if check:
+        return await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user_id})  @{user.username} có link ở bio kìa. /n/n Khóa mõm nó đi.")
+        
+
 @app.on_message(filters.command("reload"))
 async def list_admins(chat_id: int):
     global admins_in_chat
