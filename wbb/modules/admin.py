@@ -160,9 +160,6 @@ async def url_bio2(_, user: ChatMemberUpdated):
 
     if not bio or not user:
         return
-    mods = await list_admins(chat_id)
-    if user.id in mods or user.id in SUDOERS:
-        return
 
     check = get_urls_from_text(bio)
     if check:
