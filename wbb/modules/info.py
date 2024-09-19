@@ -46,6 +46,7 @@ async def get_user_info(user, already=False):
     username = user.username
     first_name = user.first_name
     mention = user.mention("Link")
+    bio = (await client.get_chat(from_user.id)).bio
     dc_id = user.dc_id
     photo_id = user.photo.big_file_id if user.photo else None
     is_gbanned = await is_gbanned_user(user_id)
@@ -58,6 +59,7 @@ async def get_user_info(user, already=False):
         "Name": [first_name],
         "Username": [("@" + username) if username else "Null"],
         "Mention": [mention],
+        "bio": bio,
         "Sudo": is_sudo,
         "Premium": is_premium,
         "Karma": karma,
