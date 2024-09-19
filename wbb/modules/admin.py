@@ -174,7 +174,7 @@ async def url_bio(_, message):
     try:
         await app.send_message(
             user.id,
-            f"Xin chào {user.mention}, Bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title}."
+            f"Xin chào {user.mention}, Bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title} do gắn link ở bio."
             f" Bạn hãy nhắn tin cho admin để mở chat."
         )
     except Exception:
@@ -183,7 +183,7 @@ async def url_bio(_, message):
     
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
     mute_text = f"""
-__**Người dùng bị cấm chat toàn hệ thống**__
+__**Người dùng bị cấm chat do link bio toàn hệ thống**__
 **Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
 **Người dùng bị cấm chat:** {user.mention} @{user.username}
 **ID người dùng bị cấm chat:** `{user.id}`
@@ -204,7 +204,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @
         await message.reply_text(
             "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
         )
-        return 
+        
 
 
 
