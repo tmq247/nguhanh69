@@ -148,8 +148,9 @@ async def url_detector(_, message):
 
     check = get_urls_from_text(bio)
     if check:
-        return await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio kìa. /n/n Khóa mõm nó đi.")
-        
+        await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
+        await message.chat.restrict_member(userid, permissions=ChatPermissions())
+        return 
 
 @app.on_message(filters.command("reload"))
 async def list_admins(chat_id: int):
