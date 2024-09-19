@@ -137,7 +137,7 @@ async def url_detector(_, message):
     user = message.from_user
     chat_id = message.chat.id
     #text = message.text.lower().strip()
-    bio = (await client.get_chat(user.id)).bio
+    bio = (await app.get_chat(user.id)).bio
 
     if not bio or not user:
         return
