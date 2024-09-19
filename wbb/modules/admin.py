@@ -148,7 +148,7 @@ async def url_detector(_, message):
 
     check = get_urls_from_text(bio)
     if check:
-        return await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user_id})  @{user.username} có link ở bio kìa. /n/n Khóa mõm nó đi.")
+        return await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio kìa. /n/n Khóa mõm nó đi.")
         
 
 @app.on_message(filters.command("reload"))
