@@ -51,6 +51,7 @@ from wbb.utils.functions import (
     extract_user,
     extract_user_and_reason,
     time_converter,
+    get_urls_from_text,
 )
 from wbb import FMUTE_LOG_GROUP_ID
 from wbb import XAC_NHAN
