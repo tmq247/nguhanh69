@@ -155,7 +155,7 @@ async def url_bio(_, message):
 
 @app.on_chat_member_updated(filters.group , group=69)
 async def url_bio2(_, user: ChatMemberUpdated):
-    user = user.new_chat_member.user if user.new_chat_member else user.from_user
+    user.new_chat_member.user if user.new_chat_member else user.from_user
     bio = (await app.get_chat(user.id)).bio
 
     if not bio or not user:
