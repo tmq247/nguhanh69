@@ -137,7 +137,7 @@ admins_in_chat = {}
 async def url_bio(_, message):
     user = message.from_user
     chat_id = message.chat.id
-    #text = message.text.lower().strip()
+    keyboard = ikb({"🚨  Mở chat  🚨": "https://t.me/boost?c=1707112470"})
     bio = (await app.get_chat(user.id)).bio
     link = f"t.me/"
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
@@ -198,7 +198,7 @@ __**Người dùng bị cấm chat do link bio toàn hệ thống**__
         )
         await m.edit(
 f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} đã bị 🚫khóa mõm tất cả nhóm trong hệ thống.**
-**Lý do: có link ở bio  💬💬💬.**""")
+**Lý do: có link ở bio  💬💬💬.**""", reply_markup=keyboard)
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await message.reply_text(
@@ -217,7 +217,7 @@ async def link_bio(_, user: ChatMemberUpdated):
 
     chat_id = user.chat.id
     user1 = user.new_chat_member.user if user.new_chat_member else user.from_user
-    
+    keyboard = ikb({"🚨  Mở chat  🚨": "https://t.me/boost?c=1707112470"})
     link = f"t.me/"
     is_fmuted = await is_fmuted_user(user1.id)
     is_actived = await is_actived_user(user1.id)
@@ -280,7 +280,7 @@ __**Người dùng bị cấm chat do link bio toàn hệ thống**__
         )
         await m.edit(
 f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id})  @{user1.username} đã bị 🚫khóa mõm tất cả nhóm trong hệ thống.**
-**Lý do: có link ở bio  💬💬💬.**""")
+**Lý do: có link ở bio  💬💬💬.**""", reply_markup=keyboard)
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
     except Exception:
         await app.send_message(
