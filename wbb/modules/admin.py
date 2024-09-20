@@ -205,7 +205,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @
             "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
         )
         
-@app.on_chat_member_updated(filters.group, group=69)
+@app.on_chat_member_updated(filters.group, group=1)
 @capture_err
 async def link_bio(_, user: ChatMemberUpdated):
     if not (
