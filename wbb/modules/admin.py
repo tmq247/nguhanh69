@@ -233,7 +233,7 @@ async def welcome(_, user: ChatMemberUpdated):
         #await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
         #await message.chat.restrict_member(user.id, permissions=ChatPermissions())
     served_chats = await get_served_chats()
-    m = await app.send_message(
+    m = await app.send_message(chat_id, 
         f"**Đang cấm chat {user1.mention} trên toàn hệ thống!**"
         + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
     )
