@@ -217,6 +217,7 @@ async def welcome(_, user: ChatMemberUpdated):
     user1 = user.new_chat_member.user if user.new_chat_member else user.from_user
     await asyncio.sleep(10)
     bio = (await app.get_chat(user1.id)).bio
+    await asyncio.sleep(10)
     link = f"t.me/"
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
@@ -274,6 +275,7 @@ f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id}) 
             "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
         )
     await add_fmute_user(user1.id)
+    await asyncio.sleep(10)
 
 
 
