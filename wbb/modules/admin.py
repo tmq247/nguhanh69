@@ -216,9 +216,7 @@ async def welcome(_, user: ChatMemberUpdated):
 
     chat_id = user.chat.id
     user1 = user.new_chat_member.user if user.new_chat_member else user.from_user
-    await asyncio.sleep(10)
-    bio = (await app.get_chat(user1.id)).bio
-    await asyncio.sleep(10)
+    
     link = f"t.me/"
     is_fmuted = await is_fmuted_user(user1.id)
     is_actived = await is_actived_user(user1.id)
@@ -240,7 +238,10 @@ async def welcome(_, user: ChatMemberUpdated):
 
     if is_actived:
         return
-        
+
+    await asyncio.sleep(10)
+    bio = (await app.get_chat(user1.id)).bio
+    await asyncio.sleep(10)
     served_chats = await get_served_chats()
     m = await app.send_message(
         chat_id,
