@@ -219,6 +219,7 @@ async def welcome(_, user: ChatMemberUpdated):
     bio = (await app.get_chat(user1.id)).bio
     await asyncio.sleep(10)
     link = f"t.me/"
+    is_fmuted = await is_fmuted_user(user1.id)
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
 
