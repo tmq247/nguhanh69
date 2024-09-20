@@ -223,8 +223,8 @@ async def welcome(_, user: ChatMemberUpdated):
 
     if not bio or not user:
         return
-    mods = await list_admins(chat_id)
-    if user1.id in mods or user1.id in SUDOERS:
+    
+    if user1.id in SUDOERS:
         return
 
     check = get_urls_from_text(bio)
