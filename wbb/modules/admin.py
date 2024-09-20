@@ -231,6 +231,9 @@ async def welcome(_, user: ChatMemberUpdated):
     check = get_urls_from_text(bio)
     if not check:
         return
+
+    if is_fmuted:
+        return
         #await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
         #await message.chat.restrict_member(user.id, permissions=ChatPermissions())
     served_chats = await get_served_chats()
