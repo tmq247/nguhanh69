@@ -57,7 +57,8 @@ blacklist_chatdb = db.blacklistChat
 restart_stagedb = db.restart_stage
 flood_toggle_db = db.flood_toggle
 rulesdb = db.rules
-
+rssdb = db.rss
+chatbotdb = db.chatbot
 
 def obj_to_str(obj):
     if not obj:
@@ -798,3 +799,72 @@ async def flood_off(chat_id: int):
         return
     return await flood_toggle_db.insert_one({"chat_id": chat_id})
 
+
+async def add_rss_feed(chat_id: int, url: str, last_title: str):
+    return await rssdb.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"url": url, "last_title": last_title}},
+        upsert=True,
+    )
+
+
+async def remove_rss_feed(chat_id: int):
+    return await rssdb.delete_one({"chat_id": chat_id})
+
+
+async def update_rss_feed(chat_id: int, last_title: str):
+    return await rssdb.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"last_title": last_title}},
+        upsert=True,
+    )
+
+
+async def is_rss_active(chat_id: int) -> bool:
+    return await rssdb.find_one({"chat_id": chat_id})
+
+
+async def get_rss_feeds() -> list:
+    data = []
+    async for feed in rssdb.find({"chat_id": {"$exists": 1}}):
+        data.append(
+            dict(
+                chat_id=feed["chat_id"],
+                url=feed["url"],
+                last_title=feed["last_title"],
+            )
+        )
+    return data
+
+
+async def get_rss_feeds_count() -> int:
+    return len([i async for i in rssdb.find({"chat_id": {"$exists": 1}})])
+
+
+async def check_chatbot():
+    return await chatbotdb.find_one({"chatbot": "chatbot"}) or {
+        "bot": [],
+        "userbot": [],
+    }
+
+
+async def add_chatbot(chat_id: int, is_userbot: bool = False):
+    list_id = await check_chatbot()
+    if is_userbot:
+        list_id["userbot"].append(chat_id)
+    else:
+        list_id["bot"].append(chat_id)
+    await chatbotdb.update_one(
+        {"chatbot": "chatbot"}, {"$set": list_id}, upsert=True
+    )
+
+
+async def rm_chatbot(chat_id: int, is_userbot: bool = False):
+    list_id = await check_chatbot()
+    if is_userbot:
+        list_id["userbot"].remove(chat_id)
+    else:
+        list_id["bot"].remove(chat_id)
+    await chatbotdb.update_one(
+        {"chatbot": "chatbot"}, {"$set": list_id}, upsert=True
+    )
