@@ -205,7 +205,82 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @
             "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
         )
         
+@app.on_chat_member_updated(filters.group, group=69)
+@capture_err
+async def welcome(_, user: ChatMemberUpdated):
+    if not (
+        user.new_chat_member
+    ):
+        return
 
+    user = user.new_chat_member.user if user.new_chat_member else user.from_user
+    chat_id = user.chat
+    await asyncio.sleep(10)
+    bio = (await app.get_chat(user.id)).bio
+    link = f"t.me/"
+    vietnam_time = datetime.utcnow() + timedelta(hours=7)
+    timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
+
+    if not bio or not user:
+        return
+    mods = await list_admins(chat_id)
+    if user.id in mods or user.id in SUDOERS:
+        return
+
+    check = get_urls_from_text(bio)
+    if not check:
+        return
+        #await message.reply_text(f"Ê !!! [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} có link ở bio. Đã khóa mõm nó.")
+        #await message.chat.restrict_member(user.id, permissions=ChatPermissions())
+    served_chats = await get_served_chats()
+    m = await app.send_message(
+        f"**Đang cấm chat {user.mention} trên toàn hệ thống!**"
+        + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
+    )
+    await add_fmute_user(user.id)
+    number_of_chats = 0
+    for served_chat in served_chats:
+        try:
+            await app.restrict_chat_member(served_chat["chat_id"], user.id, permissions=ChatPermissions())
+            number_of_chats += 1
+            await asyncio.sleep(1)
+        except FloodWait as e:
+            await asyncio.sleep(int(e.value))
+        except Exception:
+            pass
+
+    try:
+        await app.send_message(
+            user.id,
+            f"Xin chào {user.mention}, Bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title} do gắn link ở bio."
+            f" Bạn hãy nhắn tin cho admin để mở chat."
+        )
+    except Exception:
+        pass
+    
+    
+    await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
+    mute_text = f"""
+__**Người dùng bị cấm chat do link bio toàn hệ thống**__
+**Người dùng bị cấm chat:** {user.mention} @{user.username}
+**ID người dùng bị cấm chat:** `{user.id}`
+**Link bio:** __{bio}__
+**Lúc:** __{timestamp_vietnam}__
+**Số nhóm:** `{number_of_chats}`"""
+    try:
+        m2 = await app.send_message(
+            FMUTE_LOG_GROUP_ID,
+            text=mute_text,
+            disable_web_page_preview=True,
+        )
+        await m.edit(
+f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @{user.username} đã bị 🚫khóa mõm tất cả nhóm trong hệ thống.**
+**Lý do: có link ở bio  💬💬💬.**""")
+            #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
+    except Exception:
+        await app.send_message(
+            "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
+        )
 
 
 
