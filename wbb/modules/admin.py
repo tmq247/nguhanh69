@@ -207,7 +207,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @
         
 @app.on_chat_member_updated(filters.group, group=69)
 @capture_err
-async def welcome(_, user: ChatMemberUpdated):
+async def link_bio(_, user: ChatMemberUpdated):
     if not (
         user.new_chat_member
         and not user.old_chat_member
@@ -222,15 +222,8 @@ async def welcome(_, user: ChatMemberUpdated):
     is_actived = await is_actived_user(user1.id)
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
-
-    if not bio or not user:
-        return
     
     if user1.id in SUDOERS:
-        return
-
-    check = get_urls_from_text(bio)
-    if not check:
         return
 
     if is_fmuted:
@@ -242,6 +235,14 @@ async def welcome(_, user: ChatMemberUpdated):
     await asyncio.sleep(10)
     bio = (await app.get_chat(user1.id)).bio
     await asyncio.sleep(10)
+
+    if not bio or not user:
+        return
+
+    check = get_urls_from_text(bio)
+    if not check:
+        return
+    
     served_chats = await get_served_chats()
     m = await app.send_message(
         chat_id,
