@@ -212,6 +212,7 @@ async def welcome(_, user: ChatMemberUpdated):
         user.new_chat_member
         and not user.old_chat_member
     ):
+        return
 
     chat_id = user.chat.id
     user1 = user.new_chat_member.user if user.new_chat_member else user.from_user
