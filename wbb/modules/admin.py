@@ -210,8 +210,8 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @
 async def welcome(_, user: ChatMemberUpdated):
     if not (
         user.new_chat_member
+        and not user.old_chat_member
     ):
-        return
 
     chat_id = user.chat.id
     user1 = user.new_chat_member.user if user.new_chat_member else user.from_user
