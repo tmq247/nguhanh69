@@ -265,6 +265,7 @@ async def link_bio(_, user: ChatMemberUpdated):
     await m.edit(f"Đã cấm chat {user1.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị cấm chat do link bio toàn hệ thống**__
+**Tại nhóm:** {chat.title} [`{chat.id}`]
 **Người dùng bị cấm chat:** {user1.mention} @{user1.username}
 **ID người dùng bị cấm chat:** `{user1.id}`
 **Link bio:** __{bio}__
@@ -1268,7 +1269,7 @@ async def unmute_globally(_, message: Message):
         try:
             await app.send_message(
                 user.id,
-                f"Xin chào {user.mention}, Bạn đã được {from_user.mention} t.me/{from_user.username}bỏ cấm chat trên toàn hệ thống,"
+                f"Xin chào {user.mention}, Bạn đã được {from_user.mention} t.me/{from_user.username} bỏ cấm chat trên toàn hệ thống,"
                 + " Hãy tham gia trò chuyện tại https://t.me/addlist/8LaQNjuIknljYmNh .",
             )
         except Exception:
