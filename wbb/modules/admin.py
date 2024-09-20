@@ -953,6 +953,7 @@ async def mute_globally(_, message: Message):
     is_actived = await is_actived_user(user.id)
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
+    keyboard = ikb({"🚨  Mở chat  🚨": "https://t.me/boost?c=1707112470"})
 
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
@@ -1028,7 +1029,7 @@ __**Người dùng bị fmute toàn hệ thống **__
 **Lý do: __{reason}__.**"""
         await m.edit(
             text=lydo_text,
-            disable_web_page_preview=True,
+            reply_markup=keyboard,
         )
     except Exception:
         await message.reply_text(
