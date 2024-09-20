@@ -213,8 +213,8 @@ async def welcome(_, user: ChatMemberUpdated):
     ):
         return
 
+    chat_id = user.chat
     user = user.new_chat_member.user if user.new_chat_member else user.from_user
-    #chat_id = user.chat
     await asyncio.sleep(10)
     bio = (await app.get_chat(user.id)).bio
     link = f"t.me/"
@@ -223,7 +223,7 @@ async def welcome(_, user: ChatMemberUpdated):
 
     if not bio or not user:
         return
-    #mods = await list_admins(chat_id)
+    mods = await list_admins(chat_id)
     if user.id in SUDOERS:
         return
 
