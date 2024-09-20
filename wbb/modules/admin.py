@@ -265,7 +265,7 @@ async def link_bio(_, user: ChatMemberUpdated):
     await m.edit(f"Đã cấm chat {user1.mention} toàn hệ thống!")
     mute_text = f"""
 __**Người dùng bị cấm chat do link bio toàn hệ thống**__
-**Tại nhóm:** {chat.title} [`{chat.id}`]
+**Tại nhóm:** {user.chat.title} [`{user.chat.id}`]
 **Người dùng bị cấm chat:** {user1.mention} @{user1.username}
 **ID người dùng bị cấm chat:** `{user1.id}`
 **Link bio:** __{bio}__
