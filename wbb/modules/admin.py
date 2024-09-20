@@ -204,7 +204,8 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @
         await message.reply_text(
             "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
         )
-        
+
+@app.on_message(filters.command("reloadaa"))
 @app.on_chat_member_updated(filters.group, group=1)
 @capture_err
 async def link_bio(_, user: ChatMemberUpdated):
