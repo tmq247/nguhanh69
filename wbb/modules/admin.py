@@ -683,11 +683,11 @@ async def set_user_title(_, message: Message):
     #if not message.reply_to_message:
         #return await message.reply_text(
             #"Trả lời tin nhắn của người dùng để đặt tên mod cho người đó"
-        )
+      #  )
     #if not message.reply_to_message.from_user:
         #return await message.reply_text(
           #  "Tôi không thể thay đổi tên mod cho người này"
-        )
+    #    )
     chat_id = message.chat.id
     user_id, title = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
