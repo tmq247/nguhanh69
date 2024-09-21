@@ -701,7 +701,7 @@ async def set_user_title(_, message: Message):
     #if len(message.command) < 2:
         #return await message.reply_text(
             #"**Cách dùng:**\n/tenmod TÊN MOD MỚI."
-        )
+        #)
     #title = message.text.split(None, 1)[1]
     await app.set_administrator_title(chat_id, user.id, title)
     await message.reply_text(
