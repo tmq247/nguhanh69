@@ -680,20 +680,20 @@ async def deleteFunc(_, message: Message):
 @app.on_message(filters.command("tenmod") & ~filters.private)
 @adminsOnly("can_promote_members")
 async def set_user_title(_, message: Message):
-    if not message.reply_to_message:
-        return await message.reply_text(
-            "Trả lời tin nhắn của người dùng để đặt tên mod cho người đó"
+    #if not message.reply_to_message:
+        #return await message.reply_text(
+            #"Trả lời tin nhắn của người dùng để đặt tên mod cho người đó"
         )
-    if not message.reply_to_message.from_user:
-        return await message.reply_text(
-            "Tôi không thể thay đổi tên mod cho người này"
+    #if not message.reply_to_message.from_user:
+        #return await message.reply_text(
+          #  "Tôi không thể thay đổi tên mod cho người này"
         )
     chat_id = message.chat.id
     user_id, title = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
     bot = (await app.get_chat_member(chat_id, BOT_ID)).privileges
     if user_id == BOT_ID:
-        return await message.reply_text("Tôi không thể thăng cấp bản thân mình.")
+        return await message.reply_text("Tôi không thể đổi tên mod bản thân mình.")
     if not bot:
         return await message.reply_text("Tôi không phải là quản trị viên trong cuộc trò chuyện này.")
     if not bot.can_promote_members:
