@@ -682,7 +682,31 @@ async def deleteFunc(_, message: Message):
         message_ids=m.id,
         revoke=True,)
     
-            
+# tenmod
+
+@app.on_message(filters.command("tenmod") & ~filters.private)
+@adminsOnly("can_promote_members")
+async def set_user_title(_, message: Message):
+    if not message.reply_to_message:
+        return await message.reply_text(
+            "Trả lời tin nhắn của người dùng để đặt tên mod cho người đó"
+        )
+    if not message.reply_to_message.from_user:
+        return await message.reply_text(
+            "Tôi không thể thay đổi tên mod cho người này"
+        )
+    chat_id = message.chat.id
+    user_id, title = await extract_user_and_reason(message)
+    from_user = await app.get_users(user_id)
+    if len(message.command) < 2:
+        return await message.reply_text(
+            "**Cách dùng:**\n/tenmod TÊN MOD MỚI."
+        )
+    #title = message.text.split(None, 1)[1]
+    await app.set_administrator_title(chat_id, from_user.id, title)
+    await message.reply_text(
+        f"Đã thay đổi tên mod cho {from_user.mention} là {title}"
+    )
 
 # Promote Members
 
