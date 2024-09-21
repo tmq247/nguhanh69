@@ -644,13 +644,6 @@ async def list_unban_(c, message: Message):
 # Delete messages
 
 
-#@app.on_message(filters.command("del") & ~filters.private)
-#@adminsOnly("can_delete_messages")
-#async def deleteFunc(_, message: Message):
-#    if not message.reply_to_message:
-#        return await message.reply_text("Trả lời một tin nhắn để xóa nó")
-#    await message.reply_to_message.delete()
-#    await message.delete()
 
 @app.on_message(filters.command(["d", "del"]) & ~filters.private)
 @adminsOnly("can_delete_messages")
@@ -697,19 +690,22 @@ async def set_user_title(_, message: Message):
         )
     chat_id = message.chat.id
     user_id, title = await extract_user_and_reason(message)
-    bot = (await app.get_chat_member(message.chat.id, BOT_ID)).privileges
-    from_user = await app.get_users(user_id)
+    user = await app.get_users(user_id)
+    bot = (await app.get_chat_member(chat_id, BOT_ID)).privileges
+    if user_id == BOT_ID:
+        return await message.reply_text("Tôi không thể thăng cấp bản thân mình.")
+    if not bot:
+        return await message.reply_text("Tôi không phải là quản trị viên trong cuộc trò chuyện này.")
     if not bot.can_promote_members:
         return await message.reply_text("Tôi không có đủ quyền")
-
-    if len(message.command) < 2:
-        return await message.reply_text(
-            "**Cách dùng:**\n/tenmod TÊN MOD MỚI."
+    #if len(message.command) < 2:
+        #return await message.reply_text(
+            #"**Cách dùng:**\n/tenmod TÊN MOD MỚI."
         )
     #title = message.text.split(None, 1)[1]
-    await app.set_administrator_title(chat_id, from_user.id, title)
+    await app.set_administrator_title(chat_id, user.id, title)
     await message.reply_text(
-        f"Đã thay đổi tên mod cho {from_user.mention} là {title}"
+        f"Đã thay đổi tên mod cho {user.mention} là {title}"
     )
 
 # Promote Members
@@ -718,7 +714,7 @@ async def set_user_title(_, message: Message):
 @app.on_message(filters.command(["modfull", "modvip", "mod0", "mod1", "mod2", "mod3"]) & ~filters.private)
 @adminsOnly("can_promote_members")
 async def promoteFunc(_, message: Message):
-    user_id = await extract_user(message)
+    user_id, title = await extract_user_and_reason(message)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     
