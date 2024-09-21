@@ -697,7 +697,11 @@ async def set_user_title(_, message: Message):
         )
     chat_id = message.chat.id
     user_id, title = await extract_user_and_reason(message)
+    bot = (await app.get_chat_member(message.chat.id, BOT_ID)).privileges
     from_user = await app.get_users(user_id)
+    if not bot.can_promote_members:
+        return await message.reply_text("Tôi không có đủ quyền")
+
     if len(message.command) < 2:
         return await message.reply_text(
             "**Cách dùng:**\n/tenmod TÊN MOD MỚI."
