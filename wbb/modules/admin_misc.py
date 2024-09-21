@@ -25,6 +25,7 @@ import os
 
 from pyrogram import filters
 from pyrogram.types import Message
+from wbb.utils.functions import extract_user
 
 from wbb import app
 from wbb.core.decorators.permissions import adminsOnly
