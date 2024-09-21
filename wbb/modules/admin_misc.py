@@ -61,7 +61,7 @@ async def set_user_title(_, message):
             "Tôi không thể thay đổi tên mod cho người này"
         )
     chat_id = message.chat.id
-    from_user = message.reply_to_message.from_user
+    from_user = message.reply_to_message.user
     if len(message.command) < 2:
         return await message.reply_text(
             "**Cách dùng:**\n/tenmod TÊN MOD MỚI."
