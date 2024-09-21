@@ -714,7 +714,7 @@ async def set_user_title(_, message: Message):
 @app.on_message(filters.command(["modfull", "modvip", "mod0", "mod1", "mod2", "mod3"]) & ~filters.private)
 @adminsOnly("can_promote_members")
 async def promoteFunc(_, message: Message):
-    user_id, title = await extract_user_and_reason(message)
+    user_id = await extract_user(message)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     
