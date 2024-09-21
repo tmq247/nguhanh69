@@ -25,7 +25,7 @@ import os
 
 from pyrogram import filters
 from pyrogram.types import Message
-from wbb.utils.functions import extract_user
+from wbb.utils.functions import extract_user, extract_user_and_reason
 
 from wbb import app
 from wbb.core.decorators.permissions import adminsOnly
@@ -51,29 +51,7 @@ async def set_chat_title(_, message):
     )
 
 
-@app.on_message(filters.command("tenmod") & ~filters.private)
-@adminsOnly("can_promote_members")
-async def set_user_title(_, message: Message):
-    if not message.reply_to_message:
-        return await message.reply_text(
-            "Trả lời tin nhắn của người dùng để đặt tên mod cho người đó"
-        )
-    if not message.reply_to_message.from_user:
-        return await message.reply_text(
-            "Tôi không thể thay đổi tên mod cho người này"
-        )
-    chat_id = message.chat.id
-    user_id = await extract_user(message)
-    from_user = await app.get_users(user_id)
-    if len(message.command) < 2:
-        return await message.reply_text(
-            "**Cách dùng:**\n/tenmod TÊN MOD MỚI."
-        )
-    title = message.text.split(None, 1)[1]
-    await app.set_administrator_title(chat_id, from_user.id, title)
-    await message.reply_text(
-        f"Đã thay đổi tên mod cho {from_user.mention} là {title}"
-    )
+
 
 
 @app.on_message(filters.command("set_chat_photo") & ~filters.private)
