@@ -51,7 +51,7 @@ async def set_chat_title(_, message):
 
 @app.on_message(filters.command("tenmod") & ~filters.private)
 @adminsOnly("can_promote_members")
-async def set_user_title(_, message):
+async def set_user_title(_, message: Message):
     if not message.reply_to_message:
         return await message.reply_text(
             "Trả lời tin nhắn của người dùng để đặt tên mod cho người đó"
@@ -61,7 +61,7 @@ async def set_user_title(_, message):
             "Tôi không thể thay đổi tên mod cho người này"
         )
     chat_id = message.chat.id
-    from_user = message.reply_to_message.user
+    from_user = await extract_user(message)
     if len(message.command) < 2:
         return await message.reply_text(
             "**Cách dùng:**\n/tenmod TÊN MOD MỚI."
