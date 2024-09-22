@@ -1003,6 +1003,7 @@ async def mute_globally(_, message: Message):
             revoke=True,)
         return 
 
+    await app.get_chat_member(chat_id, user_id)
     user = await app.get_users(user_id)
     username1 = from_user.username
     username2 = user.username
@@ -1073,6 +1074,7 @@ async def mute_globally(_, message: Message):
     link2 = f"tg://openmessage?user_id="
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
+    await app.get_chat_member(chat_id, user_id)
     user = await app.get_users(user_id)
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
@@ -1174,6 +1176,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user_id})  @
 #@capture_err
 async def mute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
+    await app.get_chat_member(chat_id, user_id)
     #user = await app.get_users(user_id)
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
@@ -1264,6 +1267,7 @@ async def unmute_globally(_, message: Message):
     from_user = message.from_user
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
+    await app.get_chat_member(chat_id, user_id)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     user = await app.get_users(user_id)
