@@ -649,6 +649,7 @@ async def list_unban_(c, message: Message):
 @adminsOnly("can_delete_messages")
 async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
+    chat_id = message.chat.id
     await app.get_chat_member(chat_id, user_id)
     await message.reply_to_message.delete()
     served_chats = await get_served_chats()
@@ -972,6 +973,7 @@ async def unmute(_, message: Message):
 #@capture_err
 async def mute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
+    chat_id = message.chat.id
     user = await app.get_users(user_id)
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
@@ -1075,6 +1077,7 @@ async def mute_globally(_, message: Message):
     link2 = f"tg://openmessage?user_id="
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
+    chat_id = message.chat.id
     await app.get_chat_member(chat_id, user_id)
     user = await app.get_users(user_id)
     from_user = message.from_user
@@ -1177,6 +1180,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user_id})  @
 #@capture_err
 async def mute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
+    chat_id = message.chat.id
     await app.get_chat_member(chat_id, user_id)
     #user = await app.get_users(user_id)
     from_user = message.from_user
@@ -1265,6 +1269,7 @@ async def out(_, message: Message):
 #@capture_err
 async def unmute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
+    chat_id = message.chat.id
     from_user = message.from_user
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
