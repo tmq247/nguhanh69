@@ -206,7 +206,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @
         )
 
 @app.on_message(filters.command("reloadaa"))
-@app.on_chat_member_updated(filters.group, group=1)
+@app.on_chat_member_updated(filters.group, group=69)
 @capture_err
 async def link_bio(_, user: ChatMemberUpdated):
     if not (
@@ -219,19 +219,19 @@ async def link_bio(_, user: ChatMemberUpdated):
     user1 = user.new_chat_member.user if user.new_chat_member else user.from_user
     keyboard = ikb({"🚨  Mở chat  🚨": "https://t.me/boost?c=1707112470"})
     link = f"t.me/"
-    is_fmuted = await is_fmuted_user(user1.id)
-    is_actived = await is_actived_user(user1.id)
+    #is_fmuted = await is_fmuted_user(user1.id)
+    #is_actived = await is_actived_user(user1.id)
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
     
     if user1.id in SUDOERS:
         return
 
-    if is_fmuted:
-        return
+    #if is_fmuted:
+        #return
 
-    if is_actived:
-        return
+    #if is_actived:
+        #return
 
     await asyncio.sleep(10)
     bio = (await app.get_chat(user1.id)).bio
@@ -244,50 +244,51 @@ async def link_bio(_, user: ChatMemberUpdated):
     if not check:
         return
     
-    served_chats = await get_served_chats()
+    #served_chats = await get_served_chats()
     m = await app.send_message(
         chat_id,
-        f"**Đang cấm chat {user1.mention} trên toàn hệ thống!**"
-        + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
-    )
+        f"**Đang cấm chat {user1.mention} trên toàn hệ thống!**")
+        #+ f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
+  #  )
+    await app.restrict_chat_member(chat_id, user1.id, permissions=ChatPermissions())
     
-    number_of_chats = 0
-    for served_chat in served_chats:
-        try:
-            await app.restrict_chat_member(served_chat["chat_id"], user1.id, permissions=ChatPermissions())
-            number_of_chats += 1
-            await asyncio.sleep(1)
-        except FloodWait as e:
-            await asyncio.sleep(int(e.value))
-        except Exception:
-            pass
+    #number_of_chats = 0
+    #for served_chat in served_chats:
+        #try:
+            #await app.restrict_chat_member(served_chat["chat_id"], user1.id, permissions=ChatPermissions())
+            #number_of_chats += 1
+            #await asyncio.sleep(1)
+        #except FloodWait as e:
+            #await asyncio.sleep(int(e.value))
+        #except Exception:
+            #pass
     
     
-    await m.edit(f"Đã cấm chat {user1.mention} toàn hệ thống!")
-    mute_text = f"""
-__**Người dùng bị cấm chat do link bio toàn hệ thống**__
-**Tại nhóm:** {user.chat.title} [`{user.chat.id}`]
-**Người dùng bị cấm chat:** {user1.mention} @{user1.username}
-**ID người dùng bị cấm chat:** `{user1.id}`
-**Link bio:** __{bio}__
-**Lúc:** __{timestamp_vietnam}__
-**Số nhóm:** `{number_of_chats}`"""
-    try:
-        m2 = await app.send_message(
-            FMUTE_LOG_GROUP_ID,
-            text=mute_text,
-            disable_web_page_preview=True,
-        )
-        await m.edit(
+    #await m.edit(f"Đã cấm chat {user1.mention} toàn hệ thống!")
+    #mute_text = f"""
+#__**Người dùng bị cấm chat do link bio toàn hệ thống**__
+#**Tại nhóm:** {user.chat.title} [`{user.chat.id}`]
+#**Người dùng bị cấm chat:** {user1.mention} @{user1.username}
+#**ID người dùng bị cấm chat:** `{user1.id}`
+#**Link bio:** __{bio}__
+#**Lúc:** __{timestamp_vietnam}__
+#**Số nhóm:** `{number_of_chats}`"""
+   # try:
+  #      m2 = await app.send_message(
+ #           FMUTE_LOG_GROUP_ID,
+  #          text=mute_text,
+  #          disable_web_page_preview=True,
+   #     )
+    await m.edit(
 f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id})  @{user1.username} đã bị 🚫khóa mõm tất cả nhóm trong hệ thống.**
 **Lý do: có link ở bio  💬💬💬.**""", reply_markup=keyboard)
             #f"""**Đã cấm chat {user.mention} @{username2} trên toàn hệ thống!!!\n Gửi voice cho {reason or from_user.mention}  để được mỡ chat  💬💬💬**""",
-    except Exception:
-        await app.send_message(
-            "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
+    #except Exception:
+    #    await app.send_message(
+      #      "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
         )
-    await add_fmute_user(user1.id)
-    await asyncio.sleep(10)
+  #  await add_fmute_user(user1.id)
+ #   await asyncio.sleep(10)
 
 
 
