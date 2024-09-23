@@ -205,7 +205,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user.id})  @
             "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
         )
 
-@app.on_message(filters.command("reloadaa"))
+#@app.on_message(filters.command("reloadaa"))
 @app.on_chat_member_updated(filters.group, group=69)
 @capture_err
 async def link_bio(_, user: ChatMemberUpdated):
@@ -247,7 +247,7 @@ async def link_bio(_, user: ChatMemberUpdated):
     served_chats = await get_served_chats()
     m = await app.send_message(
         chat_id,
-        f"**Đang cấm chat {user1.mention} trên toàn hệ thống!**")
+        f"**Đang cấm chat {user1.mention} trên toàn hệ thống!**"
         + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
     )
     #await app.restrict_chat_member(chat_id, user1.id, permissions=ChatPermissions())
@@ -288,7 +288,7 @@ f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id}) 
             "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
         )
     await add_fmute_user(user1.id)
-    await asyncio.sleep(10) )
+    await asyncio.sleep(10) 
 
 
 
