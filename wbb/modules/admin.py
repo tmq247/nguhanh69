@@ -286,7 +286,7 @@ f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id}) 
     #except Exception:
     #    await app.send_message(
       #      "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
-        )
+       # )
   #  await add_fmute_user(user1.id)
  #   await asyncio.sleep(10)
 
