@@ -39,6 +39,7 @@ __HELP__ = """
 
 async def get_user_info(user, already=False):
     if not already:
+        await app.get_chat_member(user)
         user = await app2.get_users(user)
     if not user.first_name:
         return ["Deleted account", None]
