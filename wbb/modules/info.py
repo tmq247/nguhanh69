@@ -107,6 +107,7 @@ async def info_func(_, message: Message):
         user = message.from_user.id
     elif not message.reply_to_message and len(message.command) != 1:
         user = message.text.split(None, 1)[1]
+        print(user)
 
     m = await message.reply_text("Processing")
 
