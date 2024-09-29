@@ -37,9 +37,8 @@ __HELP__ = """
 """
 
 
-async def get_user_info(user, chat, already=False):
+async def get_user_info(user, already=False):
     if not already:
-        await app.get_chat_members(chat, user)
         user = await app2.get_users(user)
     if not user.first_name:
         return ["Deleted account", None]
@@ -102,7 +101,6 @@ async def get_chat_info(chat, already=False):
 
 @app.on_message(filters.command("info"))
 async def info_func(_, message: Message):
-    chat = message.chat.id
     if message.reply_to_message:
         user = message.reply_to_message.from_user.id
     elif not message.reply_to_message and len(message.command) == 1:
@@ -113,7 +111,7 @@ async def info_func(_, message: Message):
     m = await message.reply_text("Processing")
 
     try:
-        info_caption, photo_id = await get_user_info(user, chat)
+        info_caption, photo_id = await get_user_info(user)
     except Exception as e:
         return await m.edit(f"{str(e)}, Perhaps you meant to use /chat_info ?")
 
