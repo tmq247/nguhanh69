@@ -79,7 +79,7 @@ async def set_chat_photo(_, message):
 
 
 @app.on_message(filters.command("dem") & ~filters.private)
-async def dem(_, message, member: ChatMemberUpdated):
+async def dem(_, message):
     reply = message.reply_to_message
     chat_id = message.chat.id
     user = message.from_user
