@@ -113,7 +113,7 @@ async def info_func(_, message: Message):
     m = await message.reply_text("Processing")
 
     try:
-        info_caption, photo_id = await get_user_info(user)
+        info_caption, photo_id = await get_user_info(user, chat)
     except Exception as e:
         return await m.edit(f"{str(e)}, Perhaps you meant to use /chat_info ?")
 
