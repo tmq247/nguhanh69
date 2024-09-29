@@ -314,9 +314,7 @@ async def list_admins(chat_id: int):
 @app.on_message(filters.command("reload"))
 @app.on_chat_member_updated()
 async def admin_cache_func(_, cmu: ChatMemberUpdated):
-    chat_id = cmu.chat.id
-    async for member in app.get_chat_members(chat_id):
-       print("updated")
+    
     if cmu.old_chat_member and cmu.old_chat_member.promoted_by:
         admins_in_chat[cmu.chat.id] = {
             "last_updated_at": time(),
@@ -353,6 +351,8 @@ async def list_admins(chat_id: int):
 
 @app.on_chat_member_updated()
 async def admin_cache_func(_, cmu: ChatMemberUpdated):
+    chat_id = cmu.chat.id
+    async for member in app.get_chat_members(chat_id)
     if cmu.old_chat_member and cmu.old_chat_member.promoted_by:
         admins_in_chat[cmu.chat.id] = {
             "last_updated_at": time(),
