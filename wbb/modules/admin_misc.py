@@ -81,21 +81,7 @@ async def set_chat_photo(_, message):
 @app.on_message(filters.command("dem") & ~filters.private)
 async def set_chat_photo(_, message):
     reply = message.reply_to_message
-
-
-    if not reply:
-        return await message.reply_text("Reply to a photo to set it as chat_photo")
-
-    file = reply.document or reply.photo
-    if not file:
-        return await message.reply_text(
-            "Reply to a photo or document to set it as chat_photo"
-        )
-
-    if file.file_size > 5000000:
-        return await message.reply("File size too large.")
-
-    photo = await reply.download()
-    await message.chat.set_photo(photo)
-    await message.reply_text("Successfully Changed Group Photo")
-    os.remove(photo)
+    chat_id = message.chat.id
+    dem = await app.get_history_count(chat_id)
+    await message.reply_text(f"{dem}")
+ 
