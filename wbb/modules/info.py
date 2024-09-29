@@ -39,7 +39,7 @@ __HELP__ = """
 
 async def get_user_info(user, already=False):
     if not already:
-        user = await app2.get_users(user)
+        user = await app.get_users(user)
     if not user.first_name:
         return ["Deleted account", None]
     user_id = user.id
