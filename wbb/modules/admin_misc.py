@@ -27,7 +27,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 from wbb.utils.functions import extract_user, extract_user_and_reason
 
-from wbb import app
+from wbb import app, app2
 from wbb.core.decorators.permissions import adminsOnly
 
 __MODULE__ = "Admin Miscs"
@@ -82,6 +82,6 @@ async def set_chat_photo(_, message):
 async def set_chat_photo(_, message):
     reply = message.reply_to_message
     chat_id = message.chat.id
-    dem = await app.get_history_count(chat_id)
+    dem = await app2.get_history_count(chat_id)
     await message.reply_text(f"{dem}")
  
