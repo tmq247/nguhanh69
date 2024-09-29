@@ -83,7 +83,7 @@ async def set_chat_photo(_, message):
     reply = message.reply_to_message
     chat_id = message.chat.id
     user = message.from_user
-    dem = await app2.get_chat_member(chat_id, user.id)
+    dem = await app2.get_chat_members(chat_id)
     #user = 
     await message.reply_text(f"{dem}")
  
