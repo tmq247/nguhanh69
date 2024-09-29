@@ -86,5 +86,5 @@ async def dem(_, message, member: ChatMemberUpdated):
     for member in app.get_chat_members(chat_id):
     #dem = app2.get_chat_members(chat_id)
     #user = 
-    await message.reply_text(f"{member}")
+       await message.reply_text(f"{member}")
  
