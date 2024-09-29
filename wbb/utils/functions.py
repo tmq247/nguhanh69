@@ -39,6 +39,7 @@ from pyrogram import errors
 from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
 from pyrogram import utils
+import pyrogram.utils as utils
 
 from wbb import aiohttpsession as aiosession
 from wbb.utils.dbfunctions import start_restart_stage
@@ -95,6 +96,18 @@ def generate_captcha():
     image.save(file, "jpeg")
     return [file, correct_answer, wrong_answers]
 
+def get_peer_type(peer_id: int) -> str:
+    print('get_peer_type call')
+    peer_id_str = str(peer_id)
+    if not peer_id_str.startswith("-"):
+        return "user"
+    elif peer_id_str.startswith("-100"):
+        return "channel"
+    else:
+        return "chat"
+
+
+utils.get_peer_type = get_peer_type
 
 def test_speedtest():
     def speed_convert(size):
