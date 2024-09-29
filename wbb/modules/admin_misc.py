@@ -23,7 +23,7 @@ SOFTWARE.
 """
 import os
 
-from pyrogram import filters
+from pyrogram import filters, get_chat_history_count
 from pyrogram.types import Message
 from wbb.utils.functions import extract_user, extract_user_and_reason
 
