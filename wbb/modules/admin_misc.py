@@ -23,7 +23,7 @@ SOFTWARE.
 """
 import os
 
-from pyrogram import filters
+from pyrogram import filters, enums
 from pyrogram.types import Message
 from wbb.utils.functions import extract_user, extract_user_and_reason
 
@@ -83,7 +83,8 @@ async def set_chat_photo(_, message):
     reply = message.reply_to_message
     chat_id = message.chat.id
     user = message.from_user
-    dem = app2.get_chat_members(chat_id)
+    async for member in app.get_chat_members(chat_id):
+    #dem = app2.get_chat_members(chat_id)
     #user = 
-    await message.reply_text(f"{dem}")
+    await message.reply_text(f"{member}")
  
