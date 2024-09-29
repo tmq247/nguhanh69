@@ -24,7 +24,7 @@ SOFTWARE.
 import os
 
 from pyrogram import filters, enums
-from pyrogram.types import Message
+from pyrogram.types import Message, ChatMemberUpdated
 from wbb.utils.functions import extract_user, extract_user_and_reason
 
 from wbb import app, app2
