@@ -82,6 +82,6 @@ async def set_chat_photo(_, message):
 async def set_chat_photo(_, message):
     reply = message.reply_to_message
     chat_id = message.chat.id
-    dem = await app2.get_history_count(chat_id)
+    dem = await app2.get_chat_history_count(chat_id)
     await message.reply_text(f"{dem}")
  
