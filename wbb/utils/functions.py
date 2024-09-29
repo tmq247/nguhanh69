@@ -41,6 +41,7 @@ from pyrogram.types import Message
 from pyrogram import utils
 import pyrogram.utils as utils
 
+from wbb import app2
 from wbb import aiohttpsession as aiosession
 from wbb.utils.dbfunctions import start_restart_stage
 from wbb.utils.http import get, post
@@ -214,10 +215,10 @@ async def extract_userid(message, text: str):
     entities = message.entities
     app = message._client
     if len(entities) < 2:
-        return (await app.get_users(text)).id
+        return (await app2.get_users(text)).id
     entity = entities[1]
     if entity.type == MessageEntityType.MENTION:
-        return (await app.get_users(text)).id
+        return (await app2.get_users(text)).id
     if entity.type == MessageEntityType.TEXT_MENTION:
         return entity.user.id
     return None
