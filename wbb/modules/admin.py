@@ -723,6 +723,7 @@ async def set_user_title(_, message: Message):
 async def promoteFunc(_, message: Message):
     user_id = await extract_user(message)
     user = await app.get_users(user_id)
+    chat_id = message.chat.id
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     
@@ -737,7 +738,7 @@ async def promoteFunc(_, message: Message):
     umention = (await app.get_users(user_id)).mention
     mute_text = f"""
 __**Người dùng đã được cấp mod **__
-**Tại nhóm:** {user.chat.title} [`{user.chat.id}`]
+**Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
 **Người được cấp mod:** {user.mention} @{user.username}
 **ID:** `{user.id}`
 **Người cấp:** {message.from_user.mention}
