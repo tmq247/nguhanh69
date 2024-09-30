@@ -990,8 +990,8 @@ async def mute_globally(_, message: Message):
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
 
-    if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS or user_id in admins_in_chat:
-        return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
+    if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS or user_id in (await list_admins(message.chat.id)):
+        return await message.reply_text(f"Mod mỏ hỗn {user.mention} đã bị khóa mõm.")
     
     if is_fmuted:
         muted = await message.reply_text(f"**Người có id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
@@ -1011,8 +1011,7 @@ async def mute_globally(_, message: Message):
             revoke=True,)
         return 
 
-    await app.get_chat_member(chat_id, user_id)
-    user = await app.get_users(user_id)
+    #await app.get_chat_member(chat_id, user_id)
     username1 = from_user.username
     username2 = user.username
     
@@ -1083,7 +1082,7 @@ async def mute_globally(_, message: Message):
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
-    await app.get_chat_member(chat_id, user_id)
+    #await app.get_chat_member(chat_id, user_id)
     user = await app.get_users(user_id)
     from_user = message.from_user
     is_fmuted = await is_fmuted_user(user.id)
@@ -1095,8 +1094,8 @@ async def mute_globally(_, message: Message):
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
 
-    if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS or user_id in admins_in_chat:
-        return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
+    if user_id in [from_user.id, BOT_ID] or user_id in SUDOERS or user_id in (await list_admins(message.chat.id)):
+        return await message.reply_text(f"Mod mỏ hỗn {user.mention} đã bị khóa mõm.")
     
     if is_fmuted:
         fmuted = await message.reply_text(f"**Người có id {user_id} đã bị cấm chat và đang đợi admin xác nhận .**")
@@ -1116,7 +1115,7 @@ async def mute_globally(_, message: Message):
             revoke=True,)
         return 
 
-    user = await app.get_users(user_id)
+    
     username1 = from_user.username
     username2 = user.username   
     if username1 == None:
