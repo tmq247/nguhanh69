@@ -722,6 +722,7 @@ async def set_user_title(_, message: Message):
 @adminsOnly("can_promote_members")
 async def promoteFunc(_, message: Message):
     user_id = await extract_user(message)
+    user = await app.get_users(user_id)
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     
@@ -734,6 +735,18 @@ async def promoteFunc(_, message: Message):
         return await message.reply_text("Tôi không có đủ quyền")
 
     umention = (await app.get_users(user_id)).mention
+    mute_text = f"""
+__**Người dùng đã được cấp mod **__
+**Tại nhóm:** {user.chat.title} [`{user.chat.id}`]
+**Người được cấp mod:** {user.mention} @{user.username}
+**ID:** `{user.id}`
+**Người cấp:** {message.from_user.mention}
+**Lúc:** __{timestamp_vietnam}__"""
+    await app.send_message(
+            FMUTE_LOG_GROUP_ID,
+            text=mute_text,
+            disable_web_page_preview=True,
+        )
     
     if message.command[0] == "modvip":
         await message.chat.promote_member(
