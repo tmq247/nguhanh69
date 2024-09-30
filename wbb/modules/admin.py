@@ -724,6 +724,8 @@ async def promoteFunc(_, message: Message):
     user_id = await extract_user(message)
     user = await app.get_users(user_id)
     chat_id = message.chat.id
+    vietnam_time = datetime.utcnow() + timedelta(hours=7)
+    timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     
