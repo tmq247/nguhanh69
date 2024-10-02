@@ -149,11 +149,11 @@ async def url_bio(_, message):
     if user.id in mods or user.id in SUDOERS:
         return
 
-    if is_fmuted:
-        return
+    #if is_fmuted:
+        #return
 
-    if is_actived:
-        return
+    #if is_actived:
+        #return
 
     check = get_urls_from_text(bio)
     if not check:
