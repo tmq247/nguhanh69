@@ -787,7 +787,7 @@ __**Người dùng đã được cấp mod **__
                 can_manage_video_chats=False,
             ),
         )
-        return await message.reply_text(f"Đã cấp mod cấp 0 cho {umention}")
+        return await message.reply_text(f"Đã cấp mod lỏ cho {umention} @{user.mention}")
 
     if message.command[0] == "mod1":
         await message.chat.promote_member(
