@@ -69,13 +69,13 @@ async def save_filters(_, message):
         _type = "video"
         _filter = {
         "type": _type,
-        "data": message.reply_to_message.text.markdowm(message.reply_to_message.video.file_id)
+        "data": message.reply_to_message.video.file_id.markdowm
         "caption": message.reply_to_message.caption, }
     else:
         _type = "text"
         _filter = {
         "type": _type,
-        "data": message.reply_to_message.text.markdowm(message.reply_to_message.text), }
+        "data": message.reply_to_message.text.markdowm, }
 
 
     await save_filter(chat_id, name, _filter)
