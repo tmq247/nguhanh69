@@ -149,7 +149,7 @@ async def filters_re(_, message):
                 )
             if message.reply_to_message:
                 await message.reply_to_message.reply_video(data)
-                await message.reply_to_message.text(text)
+                await message.reply_to_message.text
 
                 if text.startswith("~"):
                     await message.delete()
