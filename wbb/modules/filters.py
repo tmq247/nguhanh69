@@ -69,7 +69,7 @@ async def save_filters(_, message):
         _type = "video"
         _filter = {
         "type": _type,
-        "data": message.reply_to_message.video.file_id.markdowm
+        "data": message.reply_to_message.video.file_id
         "caption": message.reply_to_message.caption, }
     else:
         _type = "text"
