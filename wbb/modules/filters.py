@@ -71,9 +71,7 @@ async def save_filters(_, message):
         "data": message.reply_to_message.text.markdown
         if _type == "text"
         else message.reply_to_message.video.file_id ,
-        "caption": message.reply_to_message.text.markdown
-        if message.reply_to_message.caption
-        else None ,
+        "caption": message.reply_to_message.caption ,
     }
     await save_filter(chat_id, name, _filter)
     await message.reply_text(f"__**Saved filter {name}.**__")
