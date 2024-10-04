@@ -70,8 +70,12 @@ async def save_filters(_, message):
         _filter = {
         "type": _type,
         "data": message.reply_to_message.text.markdowm(message.reply_to_message.video.file_id)
-        "caption": message.reply_to_message.caption ,}
-
+        "caption": message.reply_to_message.caption, }
+    else:
+        _type = "text"
+        _filter = {
+        "type": _type,
+        "data": message.reply_to_message.text.markdowm(message.reply_to_message.text), }
 
 
     await save_filter(chat_id, name, _filter)
@@ -124,7 +128,8 @@ async def filters_re(_, message):
             _filter = await get_filter(chat_id, word)
             data_type = _filter["type"]
             data = _filter["data"]
-            caption = _filter["caption"]
+            if data_type == "video":
+                caption = _filter["caption"]
             if data_type == "text":
                 keyb = None
                 if re.findall(r"\[.+\,.+\]", data):
