@@ -718,7 +718,7 @@ async def set_user_title(_, message: Message):
     #title = message.text.split(None, 1)[1]
     await app.set_administrator_title(chat_id, user.id, title)
     await message.reply_text(
-        f"Đã thay đổi tên mod cho {user.mention} là {title}"
+        f"Đã thay đổi tên mod cho {user.mention} @{user.username} là {title}"
     )
 
 # Promote Members
@@ -771,7 +771,7 @@ __**Người dùng đã được cấp mod **__
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã cấp mod vip cho {umention}")
+        return await message.reply_text(f"Đã cấp mod vip cho {umention} @{user.username}")
 
     if message.command[0] == "mod0":
         await message.chat.promote_member(
@@ -787,7 +787,7 @@ __**Người dùng đã được cấp mod **__
                 can_manage_video_chats=False,
             ),
         )
-        return await message.reply_text(f"Đã cấp mod lỏ cho {umention} @{user.mention}")
+        return await message.reply_text(f"Đã cấp mod lỏ cho {umention} @{user.username}")
 
     if message.command[0] == "mod1":
         await message.chat.promote_member(
@@ -803,7 +803,7 @@ __**Người dùng đã được cấp mod **__
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã cấp mod cấp 1 cho {umention}")
+        return await message.reply_text(f"Đã cấp mod cấp 1 cho {umention} @{user.username}")
 
     if message.command[0] == "mod2":
         await message.chat.promote_member(
@@ -819,7 +819,7 @@ __**Người dùng đã được cấp mod **__
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã cấp mod cấp 2 cho {umention}")
+        return await message.reply_text(f"Đã cấp mod cấp 2 cho {umention} @{user.username}")
 
     if message.command[0] == "mod3":
         await message.chat.promote_member(
@@ -835,7 +835,7 @@ __**Người dùng đã được cấp mod **__
                 can_manage_video_chats=bot.can_manage_video_chats,
             ),
         )
-        return await message.reply_text(f"Đã cấp mod cấp 3 cho {umention}")
+        return await message.reply_text(f"Đã cấp mod cấp 3 cho {umention} @{user.username}")
 
 
         
@@ -853,7 +853,7 @@ __**Người dùng đã được cấp mod **__
             can_manage_video_chats=bot.can_manage_video_chats,
         ),
     )
-    await message.reply_text(f"Đã cấp mod full quyền cho {umention}")
+    await message.reply_text(f"Đã cấp mod full quyền cho {umention} @{user.username}")
 
 
 # Demote Member
