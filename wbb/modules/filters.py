@@ -72,7 +72,7 @@ async def save_filters(_, message):
         if _type == "text"
         else message.reply_to_message.video.file_id ,
         "caption": message.reply_to_message.text.markdown
-        if _type == "video": message.reply_to_message.caption
+        if message.reply_to_message.caption
         else None ,
     }
     await save_filter(chat_id, name, _filter)
