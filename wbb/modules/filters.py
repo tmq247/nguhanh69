@@ -68,6 +68,7 @@ async def save_filters(_, message):
     _type = "text" if message.reply_to_message.text else "video"
     _filter = {
         "type": _type,
+        "text": message.reply_to_message.text,
         "data": message.reply_to_message.text.markdown
         if _type == "text"
         else message.reply_to_message.video.file_id,
@@ -121,6 +122,7 @@ async def filters_re(_, message):
         if re.search(pattern, text, flags=re.IGNORECASE):
             _filter = await get_filter(chat_id, word)
             data_type = _filter["type"]
+            text = _filter["text"]
             data = _filter["data"]
             if data_type == "text":
                 keyb = None
@@ -147,6 +149,7 @@ async def filters_re(_, message):
                 )
             if message.reply_to_message:
                 await message.reply_to_message.reply_video(data)
+                await message.reply_to_message.text(text)
 
                 if text.startswith("~"):
                     await message.delete()
