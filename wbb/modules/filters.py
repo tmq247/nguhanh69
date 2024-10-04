@@ -65,7 +65,8 @@ async def save_filters(_, message):
     if not name:
         return await message.reply_text("**Usage:**\n__/filter [FILTER_NAME]__")
     chat_id = message.chat.id
-    _type = "text" if message.reply_to_message.text else "video"
+    if message.reply_to_message.video:
+_type= "text" if message.reply_to_message.text else "video"
     _filter = {
         "type": _type,
         "data": message.reply_to_message.text.markdown
