@@ -146,9 +146,9 @@ async def filters_re(_, message):
                     disable_web_page_preview=True,
                 )
             if message.reply_to_message:
-                await message.reply_to_message.reply_sticker(data)
+                await message.reply_to_message.reply_video(data)
 
                 if text.startswith("~"):
                     await message.delete()
                 return
-            return await message.reply_sticker(data)
+            return await message.reply_video(data)
