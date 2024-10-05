@@ -997,7 +997,7 @@ async def unmute(_, message: Message):
 
 @app.on_message(filters.command("fm") & ~filters.private)
 @adminsOnly("can_restrict_members")
-#@capture_err
+@capture_err
 async def mute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
@@ -1098,7 +1098,7 @@ __**Người dùng bị fmute toàn hệ thống **__
 
 @app.on_message(filters.command("m") & ~filters.private)
 @adminsOnly("can_restrict_members")
-#@capture_err
+@capture_err
 async def mute_globally(_, message: Message):
     link2 = f"tg://openmessage?user_id="
     link = f"t.me/"
@@ -1203,7 +1203,7 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user_id})  @
 
 @app.on_message(filters.command("sm") & ~filters.private)
 @adminsOnly("can_restrict_members")
-#@capture_err
+@capture_err
 async def mute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
@@ -1292,7 +1292,7 @@ async def out(_, message: Message):
 
 @app.on_message(filters.command("um") & ~filters.private)
 @adminsOnly("can_restrict_members")
-#@capture_err
+@capture_err
 async def unmute_globally(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
@@ -1370,7 +1370,7 @@ __**Người dùng được xác nhận**__
 #huyxacnhan
 @app.on_message(filters.command("huy") & SUDOERS)
 @adminsOnly("can_restrict_members")
-#@capture_err
+@capture_err
 async def huyxacnhan(_, message):
     user_id, reason = await extract_user_and_reason(message)
     from_user = message.from_user
