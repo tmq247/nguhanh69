@@ -342,7 +342,7 @@ async def check_format(ikb, raw_text: str):
 
 
 async def get_data_and_name(replied_message, message):
-    text = message.text.markdown if replied_message.text else message.caption.markdown
+    text = message.text.markdown if message.text else message.caption.markdown
     name = text.split(None, 1)[1].strip()
     text = name.split(" ", 1)
     if len(text) > 1:
