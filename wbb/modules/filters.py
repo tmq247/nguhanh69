@@ -125,7 +125,7 @@ async def save_filters(_, message):
                 return await message.reply_text(
                     "**Wrong formatting, check the help section.**"
                 )
-        #name = name.replace("_", " ")
+        name = name.replace("_", " ")
         _filter = {
             "type": _type,
             "data": data,
