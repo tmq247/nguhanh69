@@ -50,7 +50,7 @@ from wbb.core.decorators.errors import capture_err
 from wbb.core.decorators.permissions import adminsOnly
 from wbb.core.keyboard import ikb
 from wbb.modules.notes import extract_urls
-from wbb.utils.dbfeds import check_banned_user#, get_fed_id
+#from wbb.utils.dbfeds import check_banned_user, get_fed_id
 from wbb.utils.dbfunctions import (
     #captcha_off,
     #captcha_on,
