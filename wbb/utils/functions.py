@@ -346,8 +346,8 @@ async def get_data_and_name(replied_message, message):
     name = text.split(None, 1)[1].strip()
     text = name.split(" ", 1)
     if len(text) > 1:
-        name = text.split(None, 1)[1].strip()
-        data = text.split(None, 1)[1].strip()#text[1].strip()
+        name = text[0].strip()
+        data = text[1].strip()
         if replied_message and (
             replied_message.sticker or replied_message.video_note
         ):
