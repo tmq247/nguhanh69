@@ -10,7 +10,7 @@ __HELP__ = """
 """
 
 #filters.command("dice", prefixes=USERBOT_PREFIX)
-@app2.on_message(
+@app.on_message(
     filters.command("dice")
     & SUDOERS
     & ~filters.forwarded
