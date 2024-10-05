@@ -78,7 +78,7 @@ async def save_filters(_, message):
         _type = "text"
         _filter = {
         "type": _type,
-        "data": message.reply_to_message.text.markdowm, }
+        "data": message.reply_to_message.text, }
 
 
     await save_filter(chat_id, name, _filter)
