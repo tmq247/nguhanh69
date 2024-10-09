@@ -666,6 +666,10 @@ async def deleteFunc(_, message: Message):
     served_chats = await get_served_chats()
     #user = await app.get_users(user_id)#
     #from_user = message.from_user#
+    if not message.reply_to_message:
+        return await message.reply_text(
+            "Trả lời tin nhắn của người dùng để xóa tin nhắn của người đó"
+        )
     if not user_id: #message.reply_to_message:
         return await message.reply_text("không tìm thấy người này")
     
@@ -711,10 +715,10 @@ async def set_user_title(_, message: Message):
         return await message.reply_text("Tôi không phải là quản trị viên trong cuộc trò chuyện này.")
     if not bot.can_promote_members:
         return await message.reply_text("Tôi không có đủ quyền")
-    #if len(message.command) < 2:
-        #return await message.reply_text(
-            #"**Cách dùng:**\n/tenmod TÊN MOD MỚI."
-        #)
+    if len(message.command) < 2:
+        return await message.reply_text(
+            "**Cách dùng:**\n/tenmod TÊN MOD MỚI."
+        )
     #title = message.text.split(None, 1)[1]
     await app.set_administrator_title(chat_id, user.id, title)
     await message.reply_text(
