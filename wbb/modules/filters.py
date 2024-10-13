@@ -131,6 +131,7 @@ async def save_filters(_, message):
             "data": data,
             "file_id": file_id,
         }
+        print(file_id)
         chat_id = message.chat.id
         await save_filter(chat_id, name, _filter)
         return await message.reply_text(f"__**Saved filter {name}.**__")
