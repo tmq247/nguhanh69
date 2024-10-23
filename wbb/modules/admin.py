@@ -658,13 +658,14 @@ async def list_unban_(c, message: Message):
 
 @app.on_message(filters.command(["d", "del"]) & ~filters.private)
 @adminsOnly("can_delete_messages")
+@capture_err
 async def deleteFunc(_, message: Message):
     user_id = await extract_user(message)#
     chat_id = message.chat.id
     #await app.get_chat_member(chat_id, user_id)
     #await message.reply_to_message.delete()
     served_chats = await get_served_chats()
-    user = await app.get_users(user_id)#
+    #user = await app.get_users(user_id)#
     #from_user = message.from_user#
     if not message.reply_to_message:
         return await message.reply_text(
