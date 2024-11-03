@@ -76,24 +76,24 @@ __MODULE__ = "Greetings"
 __HELP__ = """
 /captcha [ENABLE|DISABLE] - Enable/Disable captcha.
 
-/set_welcome - Reply this to a message containing correct
-format for a welcome message, check end of this message.
+/set_welcome - Trả lời tin nhắn này có nội dung chính xác
+định dạng cho tin nhắn chào mừng, hãy kiểm tra phần cuối của tin nhắn này.
 
-/del_welcome - Delete the welcome message.
-/get_welcome - Get the welcome message.
+/del_welcome - Xóa tin nhắn chào mừng.
+/get_welcome - Xem tin nhắn chào mừng đã được đặt.
 
 **SET_WELCOME ->**
 
-**To set a photo or gif as welcome message. Add your welcome message as caption to the photo or gif. The caption muse be in the format given below.**
+**Để đặt ảnh hoặc gif làm tin nhắn chào mừng. Thêm thông điệp chào mừng của bạn dưới dạng chú thích cho ảnh hoặc gif. Chú thích có định dạng dưới đây.**
 
-For text welcome message just send the text. Then reply with the command 
+Đối với tin nhắn chào mừng bằng văn bản, chỉ cần gửi văn bản. Sau đó trả lời bằng lệnh 
 
-The format should be something like below.
+Định dạng phải giống như dưới đây.
 
 ```
 **Hi** {name} [{id}] Welcome to {chat}
 
-~ #This separater (~) should be there between text and buttons, remove this comment also
+~ #Dấu phân cách này (~) phải ở giữa văn bản và nút, cũng xóa nhận xét này
 
 button=[Duck, https://duckduckgo.com]
 button2=[Github, https://github.com]
@@ -101,7 +101,7 @@ button2=[Github, https://github.com]
 
 **NOTES ->**
 
-Checkout /markdownhelp to know more about formattings and other syntax.
+Kiểm tra /markdownhelp để biết thêm về định dạng và cú pháp khác.
 """
 
 answers_dicc = []
