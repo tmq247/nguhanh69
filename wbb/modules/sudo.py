@@ -24,7 +24,7 @@ SOFTWARE.
 from pyrogram import filters
 from pyrogram.types import Message
 
-from wbb import BOT_ID, SUDOERS, USERBOT_PREFIX, app2, eor
+from wbb import BOT_ID, SUDOERS, USERBOT_PREFIX, app, app2, eor
 from wbb.core.decorators.errors import capture_err
 from wbb.utils.dbfunctions import add_sudo, get_sudoers, remove_sudo
 from wbb.utils.functions import extract_user
@@ -45,7 +45,7 @@ thậm chí có thể xóa tài khoản của bạn.
 """
 
 #filters.command("useradd", prefixes=USERBOT_PREFIX)
-@app2.on_message(
+@app.on_message(
     filters.command("useradd")
     & ~filters.forwarded
     & ~filters.via_bot
@@ -60,7 +60,7 @@ async def useradd(_, message: Message):
         )
     user_id = message.reply_to_message.from_user.id
     #user_id, reason = await extract_user_and_reason(message)
-    umention = (await app2.get_users(user_id)).mention
+    umention = (await app.get_users(user_id)).mention
     sudoers = await get_sudoers()
 
     if user_id in sudoers:
@@ -79,7 +79,7 @@ async def useradd(_, message: Message):
     )
 
 #filters.command("userdel", prefixes=USERBOT_PREFIX)
-@app2.on_message(
+@app.on_message(
     filters.command("userdel")
     & ~filters.forwarded
     & ~filters.via_bot
@@ -94,7 +94,7 @@ async def userdel(_, message: Message):
         #)
     #user_id = message.reply_to_message.from_user.id
     user_id = await extract_user(message)
-    umention = (await app2.get_users(user_id)).mention
+    umention = (await app.get_users(user_id)).mention
 
     if user_id not in await get_sudoers():
         return await eor(message, text=f"{umention} không có trong sudoers.")
@@ -110,7 +110,7 @@ async def userdel(_, message: Message):
     )
 
 #filters.command("sudoers", prefixes=USERBOT_PREFIX)
-@app2.on_message(
+@app.on_message(
     filters.command("sudoers") 
     & ~filters.forwarded
     & ~filters.via_bot
@@ -123,7 +123,7 @@ async def sudoers_list(_, message: Message):
     j = 0
     for user_id in sudoers:
         try:
-            user = await app2.get_users(user_id)
+            user = await app.get_users(user_id)
             user = user.first_name if not user.mention else user.mention
             j += 1
         except Exception:
