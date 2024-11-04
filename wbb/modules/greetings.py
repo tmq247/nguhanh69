@@ -285,6 +285,54 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
     asyncio.create_task(_send_wait_delete())
 
 
+
+async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
+    welcome, raw_text, file_id = await get_welcome(chat.id)
+
+    if not raw_text:
+        return
+    text = raw_text
+    keyb = None
+    if findall(r"\[.+\,.+\]", raw_text):
+        text, keyb = extract_text_and_keyb(ikb, raw_text)
+
+    if "{chat}" in text:
+        text = text.replace("{chat}", chat.title)
+    if "{name}" in text:
+        text = text.replace("{name}", (await app.get_users(user_id)).mention)
+    if "{id}" in text:
+        text = text.replace("{id}", f"`{user_id}`")
+
+    async def _send_wait_delete():
+        if welcome == "Text":
+            m = await app.send_message(
+                user_id,
+                text=text,
+                reply_markup=keyb,
+                disable_web_page_preview=True,
+            )
+        elif welcome == "Photo":
+            m = await app.send_photo(
+                user_id,
+                photo=file_id,
+                caption=text,
+                reply_markup=keyb,
+            )
+        else:
+            m = await app.send_animation(
+                user_id,
+                animation=file_id,
+                caption=text,
+                reply_markup=keyb,
+            )
+        #await asyncio.sleep(300)
+        #await m.delete()
+
+    asyncio.create_task(_send_wait_delete())
+
+
+
+
 @app.on_callback_query(filters.regex("pressed_button"))
 async def callback_query_welcome_button(_, callback_query):
     """After the new member presses the correct button,
