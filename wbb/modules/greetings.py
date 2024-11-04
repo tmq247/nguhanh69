@@ -26,6 +26,7 @@ SOFTWARE.
 import asyncio
 import os
 import requests
+from sample_config import BOT_TOKEN
 from re import findall
 from datetime import datetime, timedelta
 from random import shuffle
