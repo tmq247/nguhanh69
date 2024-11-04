@@ -288,39 +288,7 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
 
 
 
-async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
-    welcome, raw_text, file_id = await get_welcome(chat.id)
-    user = await app.get_users(user_id)
-    if not raw_text:
-        return
-    text = raw_text
-    keyb = None
-    if findall(r"\[.+\,.+\]", raw_text):
-        text, keyb = extract_text_and_keyb(ikb, raw_text)
 
-    if "{chat}" in text:
-        text = text.replace("{chat}", chat.title)
-    if "{name}" in text:
-        text = text.replace("{name}", (await app.get_users(user_id)).mention)
-    if "{id}" in text:
-        text = text.replace("{id}", f"`{user_id}`")
-
-    async def _send_wait_delete():
-        if welcome == "Text":
-            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text}&KeyboardButton{keyb}")
-            
-            
-        elif welcome == "Photo":
-            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text}")
-            
-            
-        else:
-            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text}")
-            
-        await asyncio.sleep(300)
-        await m.delete()
-
-    asyncio.create_task(_send_wait_delete())
 
 
 
