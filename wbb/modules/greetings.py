@@ -286,9 +286,9 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
 
 
 
-async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
+async def send_welcome_message2(chat: Chat, user_id: int, delete: bool = False):
     welcome, raw_text, file_id = await get_welcome(chat.id)
-
+    user = await app.get_users(user_id)
     if not raw_text:
         return
     text = raw_text
@@ -306,21 +306,21 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
     async def _send_wait_delete():
         if welcome == "Text":
             m = await app.send_message(
-                user_id,
+                user.id,
                 text=text,
                 reply_markup=keyb,
                 disable_web_page_preview=True,
             )
         elif welcome == "Photo":
             m = await app.send_photo(
-                user_id,
+                user.id,
                 photo=file_id,
                 caption=text,
                 reply_markup=keyb,
             )
         else:
             m = await app.send_animation(
-                user_id,
+                user.id,
                 animation=file_id,
                 caption=text,
                 reply_markup=keyb,
