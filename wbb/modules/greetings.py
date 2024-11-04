@@ -310,11 +310,11 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
             
             
         elif welcome == "Photo":
-            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text=text, reply_markup=keyb}")
+            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text}")
             
             
         else:
-            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text=text, reply_markup=keyb}")
+            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text}")
             
         await asyncio.sleep(300)
         await m.delete()
