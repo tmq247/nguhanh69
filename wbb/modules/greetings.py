@@ -286,7 +286,7 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
 
 
 
-async def send_welcome_message2(chat: Chat, user_id: int, delete: bool = False):
+async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
     welcome, raw_text, file_id = await get_welcome(chat.id)
     user = await app.get_users(user_id)
     if not raw_text:
