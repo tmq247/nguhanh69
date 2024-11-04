@@ -25,6 +25,7 @@ SOFTWARE.
 
 import asyncio
 import os
+import requests
 from re import findall
 from datetime import datetime, timedelta
 from random import shuffle
@@ -305,28 +306,18 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
 
     async def _send_wait_delete():
         if welcome == "Text":
-            m = await app.send_message(
-                user.id,
-                text=text,
-                reply_markup=keyb,
-                disable_web_page_preview=True,
-            )
+            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text=text, reply_markup=keyb}")
+            
+            
         elif welcome == "Photo":
-            m = await app.send_photo(
-                user.id,
-                photo=file_id,
-                caption=text,
-                reply_markup=keyb,
-            )
+            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text=text, reply_markup=keyb}")
+            
+            
         else:
-            m = await app.send_animation(
-                user.id,
-                animation=file_id,
-                caption=text,
-                reply_markup=keyb,
-            )
-        #await asyncio.sleep(300)
-        #await m.delete()
+            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text=text, reply_markup=keyb}")
+            
+        await asyncio.sleep(300)
+        await m.delete()
 
     asyncio.create_task(_send_wait_delete())
 
