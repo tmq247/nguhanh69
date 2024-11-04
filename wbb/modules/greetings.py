@@ -306,7 +306,7 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
 
     async def _send_wait_delete():
         if welcome == "Text":
-            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text}&KeyboardButton{reply_markup=keyb}")
+            requests.get(f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage?chat_id={user_id}&text={text}&KeyboardButton{keyb}")
             
             
         elif welcome == "Photo":
