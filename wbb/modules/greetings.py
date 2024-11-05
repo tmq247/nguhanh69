@@ -256,6 +256,8 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
         text = text.replace("{chat}", chat.title)
     if "{name}" in text:
         text = text.replace("{name}", (await app.get_users(user_id)).mention)
+    if "{username}" in text:
+        text = text.replace("{name}", (await app.get_users(user_id)).username)
     if "{id}" in text:
         text = text.replace("{id}", f"`{user_id}`")
 
@@ -269,6 +271,13 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
             )
         elif welcome == "Photo":
             m = await app.send_photo(
+                chat.id,
+                photo=file_id,
+                caption=text,
+                reply_markup=keyb,
+            )
+        elif welcome == "Video":
+            m = await app.send_video(
                 chat.id,
                 photo=file_id,
                 caption=text,
@@ -465,6 +474,13 @@ async def set_welcome_func(_, message):
             if not text:
                 return await message.reply_text(usage, reply_markup=key)
             raw_text = text.markdown
+        if replied_message.video:
+            welcome = "Video"
+            file_id = replied_message.video.file_id
+            text = replied_message.caption
+            if not text:
+                return await message.reply_text(usage, reply_markup=key)
+            raw_text = text.markdown
         if replied_message.text:
             welcome = "Text"
             file_id = None
@@ -490,7 +506,7 @@ async def set_welcome_func(_, message):
             )
     except UnboundLocalError:
         return await message.reply_text(
-            "**Chỉ hỗ trợ tin nhắn chào mừng bằng Văn bản, Gif và Hình ảnh.**"
+            "**Chỉ hỗ trợ tin nhắn chào mừng bằng Văn bản, Video, Gif và Hình ảnh.**"
         )
 
 
