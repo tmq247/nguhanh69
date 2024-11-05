@@ -279,7 +279,7 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
         elif welcome == "Video":
             m = await app.send_video(
                 chat.id,
-                photo=file_id,
+                video=file_id,
                 caption=text,
                 reply_markup=keyb,
             )
