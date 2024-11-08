@@ -257,7 +257,7 @@ async def send_welcome_message(chat: Chat, user_id: int, delete: bool = False):
     if "{name}" in text:
         text = text.replace("{name}", (await app.get_users(user_id)).mention)
     if "{username}" in text:
-        text = text.replace("{name}", (await app.get_users(user_id)).username)
+        text = text.replace("{username}", (await app.get_users(user_id)).username)
     if "{id}" in text:
         text = text.replace("{id}", f"`{user_id}`")
 
