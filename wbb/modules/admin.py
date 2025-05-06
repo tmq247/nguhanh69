@@ -792,6 +792,7 @@ __**Người dùng đã được cấp mod **__
                 can_manage_video_chats=False,
             ),
         )
+        await app.set_administrator_title(chat_id, user.id, "mod lỏ")
         return await message.reply_text(f"Đã cấp mod lỏ cho {umention} @{user.username}")
 
     if message.command[0] == "mod1":
