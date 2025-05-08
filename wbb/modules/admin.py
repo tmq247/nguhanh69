@@ -933,7 +933,7 @@ async def pin(_, message: Message):
 # Mute members
 
 
-@app.on_message(filters.command(["mut", "tmut", "dmut"]) & ~filters.private)
+@app.on_message(filters.command(["mute", "tmute", "dmute"]) & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def mute(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
@@ -982,6 +982,14 @@ async def mute(_, message: Message):
         msg += f"**Lý do:** {reason}"
     await message.chat.restrict_member(user_id, permissions=ChatPermissions())
     await message.reply_text(msg, reply_markup=keyboard)
+    is_actived = await is_actived_user(user_id)
+    if is_actived:
+        actived = await message.reply_text(f"**{mention} đã được xác nhận trong hệ thống trước đó.**")
+        await asyncio.sleep(10)
+        await app.delete_messages(
+            chat_id=message.chat.id,
+            message_ids=actived.id,
+            revoke=True,)
 
 
 # Unmute members
