@@ -684,6 +684,12 @@ async def deleteFunc(_, message: Message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
+            await app.delete_messages(
+            chat_id=chat_id,
+            message_ids=message_ids,
+            revoke=True,
+            )
+            await app.send_message(FMUTE_LOG_GROUP_ID, f"Lỗi ở nhóm: {chat_id}")
             pass
     
     await m.edit(f"Đã xong lệnh. Trong {number_of_chats} nhóm")
