@@ -35,8 +35,8 @@ from wbb import app
 
 def convert(text):
     audio = BytesIO()
-    i = Translator().translate(text, dest="en")
-    lang = i.src
+    i = Translator().translate(text, dest="vn")
+    lang = i.vn
     tts = gTTS(text, lang=lang)
     audio.name = lang + ".mp3"
     tts.write_to_fp(audio)
