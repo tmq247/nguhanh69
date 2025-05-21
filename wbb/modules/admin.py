@@ -684,20 +684,20 @@ async def deleteFunc(_, message: Message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
-            await app.delete_messages(
+            """await app.delete_messages(
             chat_id=chat_id,
             message_ids=m.id,
             revoke=True,
-            )
+            )"""
             await app.send_message(FMUTE_LOG_GROUP_ID, f"Lỗi ở nhóm: {chat_id}")
             pass
     
     await m.edit(f"Đã xong lệnh. Trong {number_of_chats} nhóm")
-    """await asyncio.sleep(10)
+    await asyncio.sleep(10)
     await app.delete_messages(
         chat_id=message.chat.id,
         message_ids=m.id,
-        revoke=True,)"""
+        revoke=True,)
     
 # tenmod
 
