@@ -26,3 +26,4 @@ telegraph~=2.2.0
 pytube~=15.0.0
 pytz~=2024.1
 git+https://github.com/KurimuzonAkuma/pyrogram.git
+pyrotgfork
