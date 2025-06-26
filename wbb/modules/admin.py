@@ -239,9 +239,11 @@ async def link_bio(_, user: ChatMemberUpdated):
     if is_actived:
         return
 
-    await asyncio.sleep(10)
-    bio = (await app.get_chat(user1.id)).bio
-    await asyncio.sleep(10)
+    try:
+        bio = (await app.get_chat(user1.id)).bio
+    except FloodWait as e:
+        await asyncio.sleep(e.value)  # đợi đúng số giây Telegram yêu cầu
+        bio = (await app.get_chat(user1.id)).bio  # thử lại sau khi đã đợi
 
     if not bio or not user:
         return
