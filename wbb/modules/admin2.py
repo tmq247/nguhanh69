@@ -295,7 +295,7 @@ f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id}) 
     await asyncio.sleep(10) 
 
 # Fmute
-'''@app.on_message(filters.command("fm") & ~filters.private)
+@app.on_message(filters.command("fm") & ~filters.private)
 @adminsOnly("can_restrict_members")
 @capture_err
 async def mute_globally(_, message: Message):
