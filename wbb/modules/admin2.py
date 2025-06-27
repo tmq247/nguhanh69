@@ -76,28 +76,30 @@ current_time_vietnam = datetime.now(
 
 admins_in_chat = {}
 
-async def refresh_admin_cache(chat_id: int):
+async def list_admins(chat_id: int):
     global admins_in_chat
-    admins = [
-        member.user.id
-        async for member in app.get_chat_members(
-            chat_id, filter=ChatMembersFilter.ADMINISTRATORS
-        )
-    ]
+    if chat_id in admins_in_chat:
+        interval = time() - admins_in_chat[chat_id]["last_updated_at"]
+        if interval < 3600:
+            return admins_in_chat[chat_id]["data"]
+
     admins_in_chat[chat_id] = {
         "last_updated_at": time(),
-        "data": admins,
+        "data": [
+            member.user.id
+            async for member in app.get_chat_members(
+                chat_id, filter=ChatMembersFilter.ADMINISTRATORS
+            )
+        ],
     }
-    log.info(f"⚙️ Đã làm mới cache admin cho nhóm {chat_id}")
-    return admins
+    return admins_in_chat[chat_id]["data"]
 
 @app.on_message(filters.command("reload") & filters.group)
 @adminsOnly("can_manage_chat")
 async def force_refresh_admin_cache(_, message: Message):
     chat_id = message.chat.id
-    await refresh_admin_cache(chat_id)
+    await list_admins(chat_id)
     await message.reply_text("✅ Cache admin đã được làm mới.")
-
 
 # Admin cache reload
 
@@ -106,7 +108,17 @@ async def admin_cache_func(_, cmu: ChatMemberUpdated):
     chat_id = cmu.chat.id
     async for member in app.get_chat_members(chat_id):
         pass 
-    await refresh_admin_cache(cmu.chat.id)
+    if cmu.old_chat_member and cmu.old_chat_member.promoted_by:
+        admins_in_chat[cmu.chat.id] = {
+            "last_updated_at": time(),
+            "data": [
+                member.user.id
+                async for member in app.get_chat_members(
+                    cmu.chat.id, filter=ChatMembersFilter.ADMINISTRATORS
+                )
+            ],
+        }
+        log.info(f"Đã cập nhật bộ đệm quản trị cho {cmu.chat.id} [{cmu.chat.title}]")
 
 
 @app.on_message(filters.text & ~filters.private, group=69)
@@ -126,7 +138,7 @@ async def url_bio(_, message):
 
     if not bio or not user:
         return
-    mods = await admins_in_chat(chat_id)
+    mods = await list_admins(chat_id)
     if user.id in mods or user.id in SUDOERS:
         return
 
