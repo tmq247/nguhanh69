@@ -924,7 +924,7 @@ async def sm_command(_, message: Message):
 @adminsOnly("can_restrict_members")
 async def m_command(_, message: Message):
     user_id, reason = await extract_user_and_reason(message)
-    await mute_user_globally(message, user_id, reason, mode="check")
+    await mute_user_globally(message, user_id, reason, mode="check") '''
 
 
 
