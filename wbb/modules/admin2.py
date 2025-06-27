@@ -283,7 +283,7 @@ f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id}) 
     await asyncio.sleep(10) 
 
 # Fmute
-@app.on_message(filters.command("fm") & ~filters.private)
+'''@app.on_message(filters.command("fm") & ~filters.private)
 @adminsOnly("can_restrict_members")
 @capture_err
 async def mute_globally(_, message: Message):
@@ -815,14 +815,14 @@ __**Người dùng được xác nhận bằng lệnh**__
 **Note:** __{reason or 'None.'}__""",
                 disable_web_page_preview=True,
     )
-
+'''
 #########################################
 
 async def mute_user_globally(
     message: Message,
     user_id: int,
     reason: str,
-    mode: str = "default", "silent", "check"
+    mode: str = "default"#, "silent", "check"
 ):
     from_user = message.from_user
     chat_id = message.chat.id
