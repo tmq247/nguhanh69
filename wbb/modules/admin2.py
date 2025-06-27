@@ -838,7 +838,11 @@ async def mute_user_globally(
 ):
     from_user = message.from_user
     chat_id = message.chat.id
-    user = await app.get_users(user_id)
+    try:
+        user = await app.get_users(user_id)
+    except Exception as e:
+        return await message.reply_text(f"Không thể lấy thông tin người dùng: {e}")
+
     is_fmuted = await is_fmuted_user(user.id)
     is_actived = await is_actived_user(user.id)
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
