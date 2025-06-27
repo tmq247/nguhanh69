@@ -126,7 +126,7 @@ async def url_bio(_, message):
 
     if not bio or not user:
         return
-    mods = await admins(chat_id)
+    mods = await admins_in_chat(chat_id)
     if user.id in mods or user.id in SUDOERS:
         return
 
