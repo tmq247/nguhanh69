@@ -76,23 +76,27 @@ current_time_vietnam = datetime.now(
 
 admins_in_chat = {}
 
-async def list_admins(chat_id: int):
+async def refresh_admin_cache(chat_id: int):
     global admins_in_chat
-    if chat_id in admins_in_chat:
-        interval = time() - admins_in_chat[chat_id]["last_updated_at"]
-        if interval < 3600:
-            return admins_in_chat[chat_id]["data"]
-
+    admins = [
+        member.user.id
+        async for member in app.get_chat_members(
+            chat_id, filter=ChatMembersFilter.ADMINISTRATORS
+        )
+    ]
     admins_in_chat[chat_id] = {
         "last_updated_at": time(),
-        "data": [
-            member.user.id
-            async for member in app.get_chat_members(
-                chat_id, filter=ChatMembersFilter.ADMINISTRATORS
-            )
-        ],
+        "data": admins,
     }
-    return admins_in_chat[chat_id]["data"]
+    log.info(f"⚙️ Đã làm mới cache admin cho nhóm {chat_id}")
+    return admins
+
+@app.on_message(filters.command("reload") & filters.group)
+@adminsOnly("can_manage_chat")
+async def force_refresh_admin_cache(_, message: Message):
+    chat_id = message.chat.id
+    await refresh_admin_cache(chat_id)
+    await message.reply_text("✅ Cache admin đã được làm mới.")
 
 
 # Admin cache reload
@@ -102,24 +106,20 @@ async def admin_cache_func(_, cmu: ChatMemberUpdated):
     chat_id = cmu.chat.id
     async for member in app.get_chat_members(chat_id):
         pass 
-    if cmu.old_chat_member and cmu.old_chat_member.promoted_by:
-        admins_in_chat[cmu.chat.id] = {
-            "last_updated_at": time(),
-            "data": [
-                member.user.id
-                async for member in app.get_chat_members(
-                    cmu.chat.id, filter=ChatMembersFilter.ADMINISTRATORS
-                )
-            ],
-        }
-        log.info(f"Đã cập nhật bộ đệm quản trị cho {cmu.chat.id} [{cmu.chat.title}]")
+    await refresh_admin_cache(cmu.chat.id)
+
 
 @app.on_message(filters.text & ~filters.private, group=69)
 async def url_bio(_, message):
     user = message.from_user
     chat_id = message.chat.id
     keyboard = ikb({"🚨  Mở chat  🚨": "https://t.me/boost?c=1707112470"})
-    bio = (await app.get_chat(user.id)).bio
+    try:
+        bio = (await app.get_chat(user.id)).bio
+    except FloodWait as e:
+        await asyncio.sleep(e.value)
+        bio = (await app.get_chat(user.id)).bio
+
     link = f"t.me/"
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
     timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
@@ -156,6 +156,7 @@ async def url_bio(_, message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
+            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
 
     try:
@@ -165,6 +166,7 @@ async def url_bio(_, message):
             f" Bạn hãy nhắn tin cho admin để mở chat."
         )
     except Exception:
+        log.error(f"Lỗi khi nhắn tin đến {user.id}: {e}")
         pass
     
     
@@ -250,6 +252,7 @@ async def link_bio(_, user: ChatMemberUpdated):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
+            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
     
     
@@ -284,6 +287,7 @@ f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id}) 
 @adminsOnly("can_restrict_members")
 @capture_err
 async def mute_globally(_, message: Message):
+    await refresh_admin_cache(message.chat.id)
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
     user = await app.get_users(user_id)
@@ -322,7 +326,7 @@ async def mute_globally(_, message: Message):
     username1 = from_user.username
     username2 = user.username
     
-    if username1 == None:
+    if not username1:
         return await message.reply_text("Vui lòng đặt username hoặc tag admin khác để check voice người này.")
         
     served_chats = await get_served_chats()
@@ -340,10 +344,12 @@ async def mute_globally(_, message: Message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
+            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
     try:
         await app.send_message(user.id, f"Xin chào {user.mention}, bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} t.me/{username1} để mở chat.")
     except Exception:
+        log.error(f"Lỗi khi nhắn tin đến {user.id}: {e}")
         pass
     #await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.")
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
@@ -385,6 +391,8 @@ __**Người dùng bị fmute toàn hệ thống **__
 @adminsOnly("can_restrict_members")
 @capture_err
 async def mute_globally(_, message: Message):
+    await refresh_admin_cache(message.chat.id)
+
     link2 = f"tg://openmessage?user_id="
     link = f"t.me/"
     user_id, reason = await extract_user_and_reason(message)
@@ -425,7 +433,7 @@ async def mute_globally(_, message: Message):
     
     username1 = from_user.username
     username2 = user.username   
-    if username1 == None:
+    if not username1:
         return await message.reply_text("Vui lòng đặt username hoặc tag admin khác để check voice người này.")
         
     served_chats = await get_served_chats()
@@ -443,6 +451,7 @@ async def mute_globally(_, message: Message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
+            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
 
     try:
@@ -452,6 +461,7 @@ async def mute_globally(_, message: Message):
             f" Bạn hãy nhắn tin cho admin {reason or link + username1} để mở chat."
         )
     except Exception:
+        log.error(f"Lỗi khi nhắn tin đến {user.id}: {e}")
         pass
     
     
@@ -490,6 +500,8 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user_id})  @
 @adminsOnly("can_restrict_members")
 @capture_err
 async def mute_globally(_, message: Message):
+    await refresh_admin_cache(message.chat.id)
+
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
     await app.get_chat_member(chat_id, user_id)
@@ -536,6 +548,7 @@ async def mute_globally(_, message: Message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
+            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
         
     
@@ -555,7 +568,8 @@ __**Người dùng bị cấm chat toàn hệ thống bằng chế độ im lặ
             disable_web_page_preview=True,
         )
     except Exception:
-            pass
+        log.error(f"Lỗi khi gửi tin nhắn đến nhóm log {FMUTE_LOG_GROUP_ID}: {e}")
+        pass
 
     #if message.reply_to_message:
         #await message.reply_to_message.delete()
@@ -579,6 +593,8 @@ async def out(_, message: Message):
 @adminsOnly("can_restrict_members")
 @capture_err
 async def unmute_globally(_, message: Message):
+    await refresh_admin_cache(message.chat.id)
+
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
     from_user = message.from_user
@@ -612,6 +628,8 @@ async def unmute_globally(_, message: Message):
             except FloodWait as e:
                 await asyncio.sleep(int(e.value))
             except Exception:
+                FMUTE_LOG_GROUP_ID
+                log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
                 pass
         try:
             await app.send_message(
@@ -620,6 +638,7 @@ async def unmute_globally(_, message: Message):
                 + " Hãy tham gia trò chuyện tại https://t.me/addlist/8LaQNjuIknljYmNh .",
             )
         except Exception:
+            log.error(f"Lỗi khi nhắn tin đến {user.id}: {e}")
             pass
         await m.edit(f"Đã xác nhận {user.mention} trên toàn hệ thống!")
         mute_text = f"""
@@ -657,6 +676,8 @@ __**Người dùng được xác nhận**__
 @adminsOnly("can_restrict_members")
 @capture_err
 async def huyxacnhan(_, message):
+    await refresh_admin_cache(message.chat.id)
+
     user_id, reason = await extract_user_and_reason(message)
     from_user = message.from_user
     vietnam_time = datetime.utcnow() + timedelta(hours=7)
@@ -753,6 +774,8 @@ async def check(_, message: Message):
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def xacnhan(_, message):
+    await refresh_admin_cache(message.chat.id)
+
     user_id, reason = await extract_user_and_reason(message)
     from_user = message.from_user
     if not user_id:
@@ -792,3 +815,106 @@ __**Người dùng được xác nhận bằng lệnh**__
 **Note:** __{reason or 'None.'}__""",
                 disable_web_page_preview=True,
     )
+
+#########################################
+
+async def mute_user_globally(
+    message: Message,
+    user_id: int,
+    reason: str,
+    mode: str = "default", "silent", "check"
+):
+    from_user = message.from_user
+    chat_id = message.chat.id
+    user = await app.get_users(user_id)
+    is_fmuted = await is_fmuted_user(user.id)
+    is_actived = await is_actived_user(user.id)
+    vietnam_time = datetime.utcnow() + timedelta(hours=7)
+    timestamp_vietnam = vietnam_time.strftime('%H:%M:%S %d-%m-%Y')
+    keyboard = ikb({"🚨  Mở chat  🚨": "https://t.me/boost?c=1707112470"})
+
+    if user_id in [from_user.id, BOT_ID] or user.id in SUDOERS or user.id in (await list_admins(chat_id)):
+        return await message.reply_text("Không thể cấm chat người này.")
+
+    if is_fmuted:
+        return await message.reply_text("Người này đã bị cấm chat.")
+    
+    if is_actived:
+        return await message.reply_text("Người này đã được xác nhận.")
+
+    await add_fmute_user(user.id)
+
+    served_chats = await get_served_chats()
+    m = await message.reply_text(
+        f"**Đang cấm chat {user.mention} toàn hệ thống...**"
+        + f" **Tổng nhóm: {len(served_chats)}.**"
+    )
+
+    number_of_chats = 0
+    for sc in served_chats:
+        try:
+            await app.restrict_chat_member(sc["chat_id"], user.id, ChatPermissions())
+            number_of_chats += 1
+            await asyncio.sleep(1)
+        except FloodWait as e:
+            await asyncio.sleep(e.value)
+        except Exception:
+            pass
+
+    # Gửi tin nhắn cá nhân nếu mode phù hợp
+    if mode != "silent":
+        try:
+            await app.send_message(
+                user.id,
+                f"Bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title}."
+                + (f"\nLý do: {reason}" if reason else "")
+                + f"\nHãy liên hệ {from_user.mention} để được mở."
+            )
+        except Exception:
+            pass
+
+    mute_log = f"""
+__**Cấm chat toàn hệ thống**__
+**Nhóm:** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention}
+**Người dùng:** {user.mention} @{user.username}
+**ID:** `{user.id}`
+**Lý do:** {reason or "Không có"}
+**Lúc:** {timestamp_vietnam}
+**Số nhóm:** {number_of_chats}"""
+
+    await app.send_message(FMUTE_LOG_GROUP_ID, mute_log, disable_web_page_preview=True)
+    await m.edit(
+        f"🔥 {user.mention} đã bị cấm chat trên **{number_of_chats}** nhóm.",
+        reply_markup=keyboard,
+    )
+
+#fm
+@app.on_message(filters.command("fm") & ~filters.private)
+@adminsOnly("can_restrict_members")
+async def fm_command(_, message: Message):
+    await refresh_admin_cache(message.chat.id)
+
+    user_id, reason = await extract_user_and_reason(message)
+    await mute_user_globally(message, user_id, reason, mode="default")
+
+#sm
+@app.on_message(filters.command("sm") & ~filters.private)
+@adminsOnly("can_restrict_members")
+async def sm_command(_, message: Message):
+    await refresh_admin_cache(message.chat.id)
+
+    user_id, reason = await extract_user_and_reason(message)
+    await mute_user_globally(message, user_id, reason, mode="silent")
+
+#m
+@app.on_message(filters.command("m") & ~filters.private)
+@adminsOnly("can_restrict_members")
+async def m_command(_, message: Message):
+    await refresh_admin_cache(message.chat.id)
+
+    user_id, reason = await extract_user_and_reason(message)
+    await mute_user_globally(message, user_id, reason, mode="check")
+
+
+
