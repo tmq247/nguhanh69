@@ -905,8 +905,6 @@ __**Cấm chat toàn hệ thống**__
 @app.on_message(filters.command("fm") & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def fm_command(_, message: Message):
-    await refresh_admin_cache(message.chat.id)
-
     user_id, reason = await extract_user_and_reason(message)
     await mute_user_globally(message, user_id, reason, mode="default")
 
@@ -914,8 +912,6 @@ async def fm_command(_, message: Message):
 @app.on_message(filters.command("sm") & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def sm_command(_, message: Message):
-    await refresh_admin_cache(message.chat.id)
-
     user_id, reason = await extract_user_and_reason(message)
     await mute_user_globally(message, user_id, reason, mode="silent")
 
@@ -923,8 +919,6 @@ async def sm_command(_, message: Message):
 @app.on_message(filters.command("m") & ~filters.private)
 @adminsOnly("can_restrict_members")
 async def m_command(_, message: Message):
-    await refresh_admin_cache(message.chat.id)
-
     user_id, reason = await extract_user_and_reason(message)
     await mute_user_globally(message, user_id, reason, mode="check")
 
