@@ -1070,7 +1070,6 @@ async def url_bio(_, message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
-            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
 
     try:
@@ -1080,7 +1079,6 @@ async def url_bio(_, message):
             f" Bạn hãy nhắn tin cho admin để mở chat."
         )
     except Exception:
-        log.error(f"Lỗi khi nhắn tin đến {user.id}: {e}")
         pass
     
     
@@ -1258,12 +1256,10 @@ async def mute_globally(_, message: Message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
-            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
     try:
         await app.send_message(user.id, f"Xin chào {user.mention}, bạn đã bị cấm chat toàn hệ thống tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} t.me/{username1} để mở chat.")
     except Exception:
-        log.error(f"Lỗi khi nhắn tin đến {user.id}: {e}")
         pass
     #await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.")
     await m.edit(f"Đã cấm chat {user.mention} toàn hệ thống!")
@@ -1364,7 +1360,7 @@ async def mute_globally(_, message: Message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
-            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
+            
             pass
 
     try:
@@ -1374,7 +1370,6 @@ async def mute_globally(_, message: Message):
             f" Bạn hãy nhắn tin cho admin {reason or link + username1} để mở chat."
         )
     except Exception:
-        log.error(f"Lỗi khi nhắn tin đến {user.id}: {e}")
         pass
     
     
@@ -1460,7 +1455,6 @@ async def mute_globally(_, message: Message):
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
         except Exception:
-            log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
         
     
@@ -1480,7 +1474,6 @@ __**Người dùng bị cấm chat toàn hệ thống bằng chế độ im lặ
             disable_web_page_preview=True,
         )
     except Exception:
-        log.error(f"Lỗi khi gửi tin nhắn đến nhóm log {FMUTE_LOG_GROUP_ID}: {e}")
         pass
 
     #if message.reply_to_message:
@@ -1540,7 +1533,7 @@ async def unmute_globally(_, message: Message):
                 await asyncio.sleep(int(e.value))
             except Exception:
                 FMUTE_LOG_GROUP_ID
-                log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
+            
                 pass
         try:
             await app.send_message(
@@ -1549,7 +1542,6 @@ async def unmute_globally(_, message: Message):
                 + " Hãy tham gia trò chuyện tại https://t.me/addlist/8LaQNjuIknljYmNh .",
             )
         except Exception:
-            log.error(f"Lỗi khi nhắn tin đến {user.id}: {e}")
             pass
         await m.edit(f"Đã xác nhận {user.mention} trên toàn hệ thống!")
         mute_text = f"""
