@@ -1201,7 +1201,7 @@ f"""**🔥Người dùng [{user1.mention}](tg://openmessage?user_id={user1.id}) 
 @adminsOnly("can_restrict_members")
 @capture_err
 async def mute_globally(_, message: Message):
-    await refresh_admin_cache(message.chat.id)
+
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
     user = await app.get_users(user_id)
@@ -1305,7 +1305,6 @@ __**Người dùng bị fmute toàn hệ thống **__
 @adminsOnly("can_restrict_members")
 @capture_err
 async def mute_globally(_, message: Message):
-    await refresh_admin_cache(message.chat.id)
 
     link2 = f"tg://openmessage?user_id="
     link = f"t.me/"
@@ -1414,7 +1413,6 @@ f"""**🔥Người dùng [{user.mention}](tg://openmessage?user_id={user_id})  @
 @adminsOnly("can_restrict_members")
 @capture_err
 async def mute_globally(_, message: Message):
-    await refresh_admin_cache(message.chat.id)
 
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
@@ -1507,7 +1505,6 @@ async def out(_, message: Message):
 @adminsOnly("can_restrict_members")
 @capture_err
 async def unmute_globally(_, message: Message):
-    await refresh_admin_cache(message.chat.id)
 
     user_id, reason = await extract_user_and_reason(message)
     chat_id = message.chat.id
@@ -1590,7 +1587,6 @@ __**Người dùng được xác nhận**__
 @adminsOnly("can_restrict_members")
 @capture_err
 async def huyxacnhan(_, message):
-    await refresh_admin_cache(message.chat.id)
 
     user_id, reason = await extract_user_and_reason(message)
     from_user = message.from_user
@@ -1688,7 +1684,6 @@ async def check(_, message: Message):
 @adminsOnly("can_restrict_members")
 #@capture_err
 async def xacnhan(_, message):
-    await refresh_admin_cache(message.chat.id)
 
     user_id, reason = await extract_user_and_reason(message)
     from_user = message.from_user
