@@ -1163,7 +1163,7 @@ async def link_bio(_, user: ChatMemberUpdated):
             await asyncio.sleep(1)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
-        except Exception:
+        except Exception as e:
             log.error(f"Lỗi khi cấm chat ở nhóm {served_chat['chat_id']}: {e}")
             pass
     
