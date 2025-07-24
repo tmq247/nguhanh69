@@ -1,7 +1,7 @@
 """
 MIT License
 
-Copyright (c) 2023 TheHamkerCat
+Copyright (c) 2024 TheHamkerCat
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@ import asyncio
 import time
 from inspect import getfullargspec
 from os import path
+from pathlib import Path
 
 from aiohttp import ClientSession
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
@@ -40,6 +41,8 @@ if is_config:
     from config import *
 else:
     from sample_config import *
+
+Path("sessions").mkdir(exist_ok=True)
 
 USERBOT_PREFIX = USERBOT_PREFIX
 GBAN_LOG_GROUP_ID = GBAN_LOG_GROUP_ID
@@ -67,13 +70,13 @@ class Log:
         print(f"[-]: {msg}")
         if self.save_to_file:
             with open(self.file_name, "a") as f:
-                f.write(f"[LỖI]({time.ctime(time.time())}): {msg}\n")
+                f.write(f"[ERROR]({time.ctime(time.time())}): {msg}\n")
 
 
 log = Log(True, "bot.log")
 
 # MongoDB client
-log.info("Đang khởi tạo ứng dụng khách MongoDB")
+log.info("Initializing MongoDB client")
 mongo_client = MongoClient(MONGO_URL)
 db = mongo_client.wbb
 
@@ -103,24 +106,21 @@ loop.run_until_complete(load_sudoers())
 
 if not SESSION_STRING:
     app2 = Client(
-        name="userbot",
+        name="sessions/userbot",
         api_id=API_ID,
         api_hash=API_HASH,
         phone_number=PHONE_NUMBER,
     )
 else:
     app2 = Client(
-        name="userbot",
-        api_id=API_ID,
-        api_hash=API_HASH,
-        session_string=SESSION_STRING,
+        name="sessions/userbot", api_id=API_ID, api_hash=API_HASH, session_string=SESSION_STRING
     )
 
 aiohttpsession = ClientSession()
 
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
 
-app = Client("wbb", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
+app = Client("sessions/wbb", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
 log.info("Starting bot client")
 app.start()
