@@ -105,6 +105,7 @@ async def load_sudoers():
 
 
 loop = asyncio.get_event_loop()
+sleep=20
 loop.run_until_complete(load_sudoers())
 
 if not SESSION_STRING:
