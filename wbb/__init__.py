@@ -105,8 +105,8 @@ async def load_sudoers():
             SUDOERS.add(user_id)
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(load_sudoers())
+#loop = asyncio.get_event_loop()
+#loop.run_until_complete(load_sudoers())
 
 if not SESSION_STRING:
     app2 = Client(
