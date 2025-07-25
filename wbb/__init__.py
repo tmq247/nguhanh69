@@ -79,7 +79,7 @@ log = Log(True, "bot.log")
 
 # MongoDB client
 log.info("Initializing MongoDB client")
-mongo_client = MongoClient(MONGO_URL)
+mongo_client = motor.MongoClient(MONGO_URL)
 db = mongo_client.wbb
 
 
