@@ -34,6 +34,8 @@ from pyrogram.types import Message
 from pyromod import listen
 from Python_ARQ import ARQ
 from telegraph import Telegraph
+import pymongo
+import motor
 from pymongo import MongoClient
 
 is_config = path.exists("config.py")
