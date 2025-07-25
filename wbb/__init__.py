@@ -86,8 +86,10 @@ async def load_sudoers():
     global SUDOERS
     log.info("Loading sudoers")
     sudoersdb = db.sudoers
-    sudoers = await sudoersdb.find_one({"sudo": "sudo"})
-    sudoers = [] if not sudoers else sudoers["sudoers"]
+    #sudoers = await sudoersdb.find_one({"sudo": "sudo"})
+    #sudoers = [] if not sudoers else sudoers["sudoers"]
+    sudoers_doc = await sudoersdb.find_one({"sudo": "sudo"})
+    sudoers = sudoers_doc["sudoers"] if sudoers_doc else []
     for user_id in SUDO_USERS_ID:
         SUDOERS.add(user_id)
         if user_id not in sudoers:
