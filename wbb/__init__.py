@@ -1,18 +1,34 @@
 """
 MIT License
+
 Copyright (c) 2024 TheHamkerCat
-... (Giữ nguyên giấy phép)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 """
 import asyncio
 import time
 from inspect import getfullargspec
 from os import path
 from pathlib import Path
-import json
 
 from aiohttp import ClientSession
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
-from pymongo.errors import ConnectionFailure
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyromod import listen
@@ -33,7 +49,6 @@ GBAN_LOG_GROUP_ID = GBAN_LOG_GROUP_ID
 WELCOME_DELAY_KICK_SEC = WELCOME_DELAY_KICK_SEC
 LOG_GROUP_ID = LOG_GROUP_ID
 MESSAGE_DUMP_CHAT = MESSAGE_DUMP_CHAT
-MONGO_URL = MONGO_URL
 MOD_LOAD = []
 MOD_NOLOAD = []
 SUDOERS = filters.user()
@@ -60,18 +75,6 @@ class Log:
 
 log = Log(True, "bot.log")
 
-# Hàm lưu dữ liệu vào tệp txt
-def save_to_txt(data, filename="sudoers_backup.txt"):
-    with open(filename, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-
-# Hàm đọc dữ liệu từ tệp txt
-def read_from_txt(filename="sudoers_backup.txt"):
-    if path.exists(filename):
-        with open(filename, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {"sudo": "sudo", "sudoers": []}
-
 # MongoDB client
 log.info("Initializing MongoDB client")
 mongo_client = MongoClient(MONGO_URL)
@@ -82,51 +85,25 @@ async def load_sudoers():
     global SUDOERS
     log.info("Loading sudoers")
     sudoersdb = db.sudoers
-    try:
-        # Kiểm tra kết nối MongoDB
-        await mongo_client.admin.command("ping")
-        log.info("Kết nối với MongoDB thành công!")
-
-        # Tìm tài liệu sudoers
-        sudoers_doc = await sudoersdb.find_one({"sudo": "sudo"})
-        sudoers = sudoers_doc["sudoers"] if sudoers_doc else []
-
-        # Thêm SUDO_USERS_ID từ config
-        for user_id in SUDO_USERS_ID:
+    sudoers = await sudoersdb.find_one({"sudo": "sudo"})
+    sudoers = [] if not sudoers else sudoers["sudoers"]
+    for user_id in SUDO_USERS_ID:
+        SUDOERS.add(user_id)
+        if user_id not in sudoers:
+            sudoers.append(user_id)
+            await sudoersdb.update_one(
+                {"sudo": "sudo"},
+                {"$set": {"sudoers": sudoers}},
+                upsert=True,
+            )
+    if sudoers:
+        for user_id in sudoers:
             SUDOERS.add(user_id)
-            if user_id not in sudoers:
-                sudoers.append(user_id)
-                await sudoersdb.update_one(
-                    {"sudo": "sudo"},
-                    {"$set": {"sudoers": sudoers}},
-                    upsert=True,
-                )
-
-        # Lưu vào tệp txt làm backup
-        save_to_txt({"sudo": "sudo", "sudoers": sudoers})
-        log.info(f"Đã tải sudoers từ MongoDB: {sudoers}")
-        return sudoers
-
-    except ConnectionFailure as e:
-        log.error(f"Không thể kết nối với MongoDB: {e}")
-        log.info("Chuyển sang sử dụng tệp txt...")
-        # Dự phòng: Đọc từ tệp txt
-        sudoers_doc = read_from_txt()
-        sudoers = sudoers_doc["sudoers"]
-        for user_id in SUDO_USERS_ID:
-            SUDOERS.add(user_id)
-            if user_id not in sudoers:
-                sudoers.append(user_id)
-                sudoers_doc["sudoers"] = sudoers
-                save_to_txt(sudoers_doc)
-        log.info(f"Đã tải sudoers từ tệp txt: {sudoers}")
-        return sudoers
-    finally:
-        # Đóng kết nối MongoDB
-        mongo_client.close()
 
 
-# Khởi tạo bot và userbot
+loop = asyncio.get_event_loop()
+loop.run_until_complete(load_sudoers())
+
 if not SESSION_STRING:
     app2 = Client(
         name="sessions/userbot",
@@ -140,7 +117,9 @@ else:
     )
 
 aiohttpsession = ClientSession()
+
 arq = ARQ(ARQ_API_URL, ARQ_API_KEY, aiohttpsession)
+
 app = Client("sessions/wbb", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 
 log.info("Starting bot client")
@@ -180,22 +159,3 @@ async def eor(msg: Message, **kwargs):
     )
     spec = getfullargspec(func.__wrapped__).args
     return await func(**{k: v for k, v in kwargs.items() if k in spec})
-
-
-# Chạy load_sudoers trong context bất đồng bộ
-async def init_sudoers():
-    await load_sudoers()
-
-# Khởi động chương trình
-if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    if loop.is_running():
-        log.error("Event loop đã chạy, sử dụng coroutine trực tiếp")
-        asyncio.ensure_future(init_sudoers())
-    else:
-        try:
-            loop.run_until_complete(init_sudoers())
-        except RuntimeError as e:
-            log.error(f"Lỗi RuntimeError: {e}")
-        except Exception as e:
-            log.error(f"Đã xảy ra lỗi: {e}")
